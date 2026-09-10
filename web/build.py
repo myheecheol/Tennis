@@ -36,6 +36,52 @@ META = [
 
 FENCE = re.compile(r"^```text\s*$")
 
+# 데모에 싣는 카드 — 난이도 1→3, 역할과 질문 유형이 겹치지 않게 고른다
+DEMO = ["C1-04", "C1-03", "C2-08"]
+QLABEL = {"move": "어디로 움직일까", "target": "어디로 칠까",
+          "both": "위치 + 코스", "readNext": "다음에 무슨 일이"}
+PRINCIPLE = {"P-01": "P-01 로프 원칙", "P-02": "P-02 각도 원칙",
+             "P-03": "P-03 높낮이 원칙", "P-04": "P-04 가운데 원칙",
+             "P-05": "P-05 다운더라인 금지"}
+
+
+def demo_cards():
+    """검증된 카드 데이터를 페이지가 쓰는 모양으로 옮긴다."""
+    src, chapters = {}, {}
+    for f in sorted((ROOT / "data" / "cards").glob("*.json")):
+        d = json.loads(f.read_text(encoding="utf-8"))
+        chapters[d["chapter"]] = d["title"]
+        for c in d["cards"]:
+            src[c["id"]] = c
+
+    out = []
+    for cid in DEMO:
+        c = src[cid]
+        lo = [d for d in c["distractors"] if d["severity"] == "차선"]
+        hi = [d for d in c["distractors"] if d["severity"] == "실수"]
+        opts = [{"zone": d["zone"], "v": d["severity"], "label": d["short"], "why": d["why"]}
+                for d in lo]
+        opts.append({"zone": c["answer"]["zone"], "v": "정답",
+                     "label": c["answer"]["short"], "why": c["answer"]["why"]})
+        opts += [{"zone": d["zone"], "v": d["severity"], "label": d["short"], "why": d["why"]}
+                 for d in hi]
+        # 정답이 늘 가운데 보기가 되지 않도록 카드 id 로 자리를 흔든다
+        shift = sum(ord(ch) for ch in cid) % 3
+        opts = opts[shift:] + opts[:shift]
+
+        s = c["setup"]
+        out.append({
+            "id": c["id"], "ch": chapters[c["chapter"]], "diff": c["difficulty"],
+            "role": c["myRole"], "qtype": c["question"]["type"],
+            "qlabel": QLABEL[c["question"]["type"]], "title": c["title"],
+            "scene": c["scene"], "cue": c["cue"], "ask": c["question"]["text"],
+            "setup": {"me": s["me"]["xy"], "partner": s["partner"]["xy"],
+                      "opp1": s["opp1"]["xy"], "opp2": s["opp2"]["xy"],
+                      "ball": s["ball"]["path"]},
+            "opts": opts, "coach": c["coachLine"],
+            "principle": PRINCIPLE[c["answer"]["principle"]], "next": c["nextBeat"]})
+    return out
+
 
 def blocks(md: str):
     """```text 펜스 안의 원문과, 그 앞의 가장 가까운 ## 제목을 뽑는다."""
@@ -64,11 +110,16 @@ for fname, no, title, desc, attach in META:
         raise SystemExit(f"no ```text block found in {fname}")
     steps.append({"no": no, "title": title, "desc": desc, "attach": attach, "blocks": bs})
 
+cards = demo_cards()
 payload = json.dumps(steps, ensure_ascii=False).replace("</", r"<\/")
-html = (WEB / "template.html").read_text(encoding="utf-8").replace("/*PROMPTS_JSON*/", payload)
+cards_payload = json.dumps(cards, ensure_ascii=False).replace("</", r"<\/")
+html = (WEB / "template.html").read_text(encoding="utf-8")
+html = html.replace("/*PROMPTS_JSON*/", payload).replace("/*CARDS_JSON*/", cards_payload)
 (WEB / "index.html").write_text(html, encoding="utf-8")
 
+assert "/*CARDS_JSON*/" not in html and "/*PROMPTS_JSON*/" not in html, "주입 자리가 남았다"
 print(f"index.html  {len(html):,} bytes")
+print(f"  데모 카드  {', '.join(c['id'] for c in cards)}")
 for s in steps:
     print(f"  {s['no']:<7} {s['title']:<22} blocks={len(s['blocks'])}  "
           f"{sum(len(b['text']) for b in s['blocks']):>5} chars")
