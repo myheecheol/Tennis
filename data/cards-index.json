@@ -1,0 +1,1505 @@
+{
+  "version": 1,
+  "total": 120,
+  "chapters": [
+    {
+      "id": "C1",
+      "title": "네 자리를 안다",
+      "goal": "서브·리턴 상황에서 네 역할 각각의 시작 위치를 알고, 파트너와 한 덩어리로 움직인다.",
+      "newConcepts": [
+        "네 역할의 시작 위치",
+        "로프 원칙 (P-01)",
+        "넷맨의 일 = 가운데",
+        "크로스 기본값"
+      ],
+      "free": true
+    },
+    {
+      "id": "C2",
+      "title": "첫 세 번의 공",
+      "goal": "서브와 리턴 직후 세 번의 공에서, 전진할지 물러설지를 공의 높이로 판단한다.",
+      "newConcepts": [
+        "높낮이 원칙 (P-03)",
+        "포치와 페이크",
+        "스위치",
+        "다운더라인 조건 (P-05)"
+      ],
+      "free": false
+    },
+    {
+      "id": "C3",
+      "title": "네트를 잡는다",
+      "goal": "낮은 공을 보낸 뒤 둘이 함께 네트를 잡고, 각도를 지우며 그 자리를 유지한다.",
+      "newConcepts": [
+        "각도 원칙 (P-02)",
+        "발밑 공략",
+        "투업 간격과 거리",
+        "하이발리 배급"
+      ],
+      "free": false
+    },
+    {
+      "id": "C4",
+      "title": "밀릴 때",
+      "goal": "밀릴 때 무리하지 않고 로브로 리셋하며, 파트너가 끌려나갔을 때 코트를 덮는다.",
+      "newConcepts": [
+        "로브 리셋",
+        "투백",
+        "커버 이동",
+        "스매시 대응 자세"
+      ],
+      "free": false
+    },
+    {
+      "id": "C5",
+      "title": "상대를 읽는다",
+      "goal": "상대 대형을 알아보고 공략을 고르며, 한 포인트를 두세 수 앞까지 설계한다.",
+      "newConcepts": [
+        "대형 인식",
+        "전환 신호",
+        "2수 앞 읽기",
+        "패턴 변주"
+      ],
+      "free": false
+    }
+  ],
+  "cards": [
+    {
+      "id": "C1-01",
+      "chapter": "C1",
+      "title": "서브 넣기 전, 나는 어디에 서나",
+      "myRole": "서버",
+      "question": "move",
+      "difficulty": 1,
+      "prereq": [],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-02",
+      "chapter": "C1",
+      "title": "넷맨의 시작 위치 — 네트에서 몇 걸음",
+      "myRole": "넷맨",
+      "question": "move",
+      "difficulty": 1,
+      "prereq": [
+        "C1-01"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-03",
+      "chapter": "C1",
+      "title": "넷맨일 때, 언제 가로채러 나갈까",
+      "myRole": "넷맨",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C1-02"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C1-04",
+      "chapter": "C1",
+      "title": "리시브 준비 위치 — 어디에 서야 다 닿나",
+      "myRole": "리시버",
+      "question": "move",
+      "difficulty": 1,
+      "prereq": [],
+      "principle": "P-02"
+    },
+    {
+      "id": "C1-05",
+      "chapter": "C1",
+      "title": "리시버 파트너의 자리",
+      "myRole": "리시버 파트너",
+      "question": "move",
+      "difficulty": 1,
+      "prereq": [
+        "C1-04"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-06",
+      "chapter": "C1",
+      "title": "리시버 파트너는 어디를 보고 있나",
+      "myRole": "리시버 파트너",
+      "question": "readNext",
+      "difficulty": 2,
+      "prereq": [
+        "C1-05"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-07",
+      "chapter": "C1",
+      "title": "서브 넣고 나서 앞으로 갈까 남을까",
+      "myRole": "서버",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C1-01"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C1-08",
+      "chapter": "C1",
+      "title": "첫 서브 리턴, 기본 코스는 어디",
+      "myRole": "리시버",
+      "question": "target",
+      "difficulty": 2,
+      "prereq": [
+        "C1-04"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C1-09",
+      "chapter": "C1",
+      "title": "파트너가 사이드로 끌려나갔다 — 내가 잡은 공을 어디로",
+      "myRole": "넷맨",
+      "question": "target",
+      "difficulty": 2,
+      "prereq": [
+        "C1-02"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C1-10",
+      "chapter": "C1",
+      "title": "파트너가 포치 나갔다, 나는?",
+      "myRole": "서버",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C1-07",
+        "C1-03"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-11",
+      "chapter": "C1",
+      "title": "상대가 직선을 노리는 것 같다 — 벌릴까",
+      "myRole": "넷맨",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C1-02"
+      ],
+      "principle": "P-05"
+    },
+    {
+      "id": "C1-12",
+      "chapter": "C1",
+      "title": "상대 넷맨이 움직였다 — 어디로 치나",
+      "myRole": "리시버",
+      "question": "target",
+      "difficulty": 2,
+      "prereq": [
+        "C1-08"
+      ],
+      "principle": "P-05"
+    },
+    {
+      "id": "C1-13",
+      "chapter": "C1",
+      "title": "우리 둘 사이 간격은 몇 미터가 맞나",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C1-01"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-14",
+      "chapter": "C1",
+      "title": "파트너가 뒤로 밀렸다 — 나는 어떻게",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 3,
+      "prereq": [
+        "C1-13"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-15",
+      "chapter": "C1",
+      "title": "포치 나간 뒤 원래 자리로 돌아갈까",
+      "myRole": "넷맨",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C1-03"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-16",
+      "chapter": "C1",
+      "title": "파트너 리턴이 좋았다 — 전진할까",
+      "myRole": "리시버 파트너",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C1-06"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C1-17",
+      "chapter": "C1",
+      "title": "파트너 리턴이 떴다 — 나는?",
+      "myRole": "리시버 파트너",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C1-16"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C1-18",
+      "chapter": "C1",
+      "title": "크로스 딥 리턴이 왔다 — 어디로 보내나",
+      "myRole": "서버",
+      "question": "target",
+      "difficulty": 2,
+      "prereq": [
+        "C1-07"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C1-19",
+      "chapter": "C1",
+      "title": "로브가 내 머리 위로 넘어갔다",
+      "myRole": "넷맨",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C1-15"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-20",
+      "chapter": "C1",
+      "title": "스위치하면 좌우가 바뀐다 — 다음 공은 누가",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 2,
+      "prereq": [
+        "C1-19"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-21",
+      "chapter": "C1",
+      "title": "공이 우리 왼쪽 구석에 있다 — 오른쪽은 비워도 되나",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C1-14"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C1-22",
+      "chapter": "C1",
+      "title": "포치로 잡았다 — 어디로 때리나",
+      "myRole": "넷맨",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C1-03"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C1-23",
+      "chapter": "C1",
+      "title": "한 명 앞 한 명 뒤 대각선 — 왜 위험한가",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 3,
+      "prereq": [
+        "C1-21"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C1-24",
+      "chapter": "C1",
+      "title": "1챕터 종합 — 이 포인트의 다음 수",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 3,
+      "prereq": [
+        "C1-23"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C2-01",
+      "chapter": "C2",
+      "title": "서브 코스 셋 — 와이드·보디·센터",
+      "myRole": "서버",
+      "question": "target",
+      "difficulty": 2,
+      "prereq": [
+        "C1-18"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C2-02",
+      "chapter": "C2",
+      "title": "파트너가 와이드 서브를 넣었다 — 리턴은 어디로 올까",
+      "myRole": "넷맨",
+      "question": "readNext",
+      "difficulty": 3,
+      "prereq": [
+        "C1-03"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C2-03",
+      "chapter": "C2",
+      "title": "보디 서브 뒤 — 포치할까 말까",
+      "myRole": "넷맨",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C2-02"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C2-04",
+      "chapter": "C2",
+      "title": "페이크 포치 — 나가는 척하고 돌아온다",
+      "myRole": "넷맨",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C2-03"
+      ],
+      "principle": "P-05"
+    },
+    {
+      "id": "C2-05",
+      "chapter": "C2",
+      "title": "상대 넷맨이 매번 포치한다 — 어떻게 벌 주나",
+      "myRole": "리시버",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C1-12"
+      ],
+      "principle": "P-05"
+    },
+    {
+      "id": "C2-06",
+      "chapter": "C2",
+      "title": "강한 퍼스트 서브 — 무리하지 않는 리턴",
+      "myRole": "리시버",
+      "question": "target",
+      "difficulty": 2,
+      "prereq": [
+        "C1-08"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C2-07",
+      "chapter": "C2",
+      "title": "퍼스트 서브 리시브 위치를 뒤로 뺄까",
+      "myRole": "리시버",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C2-06"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C2-08",
+      "chapter": "C2",
+      "title": "세컨 서브를 받았다 — 어디로 보낼까",
+      "myRole": "리시버",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C2-07"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C2-09",
+      "chapter": "C2",
+      "title": "세컨 서브 리턴 후 전진 — 어디까지",
+      "myRole": "리시버",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C2-08"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C2-10",
+      "chapter": "C2",
+      "title": "서브앤발리 첫 발 — 어디서 멈추나",
+      "myRole": "서버",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C1-07"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C2-11",
+      "chapter": "C2",
+      "title": "크로스 딥이 들어갔다 — 전진할까 남을까",
+      "myRole": "리시버",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C2-08"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C2-12",
+      "chapter": "C2",
+      "title": "리턴이 낮게 왔다 — 발밑 공을 어디로",
+      "myRole": "서버",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C1-18"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C2-13",
+      "chapter": "C2",
+      "title": "리턴이 떴다 — 이 찬스를 어디로",
+      "myRole": "서버",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C2-12"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C2-14",
+      "chapter": "C2",
+      "title": "우리가 낮게 보냈다 — 한 걸음 더 앞으로",
+      "myRole": "넷맨",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C2-04"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C2-15",
+      "chapter": "C2",
+      "title": "우리가 띄웠다 — 나는 어떻게",
+      "myRole": "넷맨",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C2-14"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C2-16",
+      "chapter": "C2",
+      "title": "상대 넷맨이 포치 나왔다 — 나는 뭘 하나",
+      "myRole": "리시버 파트너",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C1-17"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C2-17",
+      "chapter": "C2",
+      "title": "포치 온 공을 막았다 — 어디로 보내나",
+      "myRole": "리시버 파트너",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C2-16"
+      ],
+      "principle": "P-05"
+    },
+    {
+      "id": "C2-18",
+      "chapter": "C2",
+      "title": "리턴 후 첫 발리 — 위치와 코스",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 4,
+      "prereq": [
+        "C2-11"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C2-19",
+      "chapter": "C2",
+      "title": "리턴이 로브로 왔다 — 스위치 콜",
+      "myRole": "넷맨",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C1-19"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C2-20",
+      "chapter": "C2",
+      "title": "스위치 후 새 자리 — 누가 어디",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C2-19"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C2-21",
+      "chapter": "C2",
+      "title": "호주식 포메이션을 만났다",
+      "myRole": "리시버",
+      "question": "target",
+      "difficulty": 4,
+      "prereq": [
+        "C2-05"
+      ],
+      "principle": "P-05"
+    },
+    {
+      "id": "C2-22",
+      "chapter": "C2",
+      "title": "I 포메이션 — 상대는 어디로 갈까",
+      "myRole": "리시버",
+      "question": "readNext",
+      "difficulty": 4,
+      "prereq": [
+        "C2-21"
+      ],
+      "principle": "P-05"
+    },
+    {
+      "id": "C2-23",
+      "chapter": "C2",
+      "title": "3구까지 설계하기 — 서브 코스와 포치 신호",
+      "myRole": "서버",
+      "question": "both",
+      "difficulty": 4,
+      "prereq": [
+        "C2-13"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C2-24",
+      "chapter": "C2",
+      "title": "2챕터 종합 — 이 랠리의 다음 두 수",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 4,
+      "prereq": [
+        "C2-23"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C3-01",
+      "chapter": "C3",
+      "title": "언제 네트로 나가야 하나 — 신호 하나",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C2-18"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C3-02",
+      "chapter": "C3",
+      "title": "투업일 때 두 사람 간격",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C3-01"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C3-03",
+      "chapter": "C3",
+      "title": "투업일 때 네트에서 거리 — 붙을까 떨어질까",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C3-02"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C3-04",
+      "chapter": "C3",
+      "title": "공이 상대 왼쪽 구석에 있다 — 우리 둘은 어디로",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C3-02"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C3-05",
+      "chapter": "C3",
+      "title": "하이 발리 찬스 — 발밑인가 빈 공간인가",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C3-04"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C3-06",
+      "chapter": "C3",
+      "title": "상대가 둘 다 뒤에 있다 — 어디로",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C3-05"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C3-07",
+      "chapter": "C3",
+      "title": "상대가 둘 다 앞에 있다 — 어디로",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C3-05"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C3-08",
+      "chapter": "C3",
+      "title": "내 발밑으로 낮은 공이 왔다 — 물러설까",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C3-03"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C3-09",
+      "chapter": "C3",
+      "title": "발밑 공을 어디로 — 무리할 수 없는 상황",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C3-08"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C3-10",
+      "chapter": "C3",
+      "title": "낮은 발리 후 나는 어디로",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 4,
+      "prereq": [
+        "C3-09"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C3-11",
+      "chapter": "C3",
+      "title": "로브가 파트너 머리 위 — 누가 쫓아가나",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C3-02"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C3-12",
+      "chapter": "C3",
+      "title": "스매시 커버 — 파트너가 때릴 때 나는",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C3-11"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C3-13",
+      "chapter": "C3",
+      "title": "스매시를 어디로 때리나",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C3-12"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C3-14",
+      "chapter": "C3",
+      "title": "발리 대 발리 접전 — 라켓과 몸의 위치",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C3-03"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C3-15",
+      "chapter": "C3",
+      "title": "발리 접전에서 먼저 무너지는 쪽은",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 4,
+      "prereq": [
+        "C3-14"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C3-16",
+      "chapter": "C3",
+      "title": "두 상대 사이로 — 언제 통하나",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C3-06"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C3-17",
+      "chapter": "C3",
+      "title": "상대가 앵글로 나를 뺐다 — 파트너는",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C3-04"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C3-18",
+      "chapter": "C3",
+      "title": "앵글 커버 후 우리 대형 복구",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 4,
+      "prereq": [
+        "C3-17"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C3-19",
+      "chapter": "C3",
+      "title": "포치로 잡은 공 — 상대가 둘 다 앞이면",
+      "myRole": "넷맨",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C1-22"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C3-20",
+      "chapter": "C3",
+      "title": "네트를 포기해야 할 때 — 후퇴 신호",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C3-10"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C3-21",
+      "chapter": "C3",
+      "title": "상대 넷맨이 가운데로 붙었다 — 직선이 열렸다",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 4,
+      "prereq": [
+        "C3-16"
+      ],
+      "principle": "P-05"
+    },
+    {
+      "id": "C3-22",
+      "chapter": "C3",
+      "title": "짧은 앵글에 끌려나갔다 — 돌아오는 길",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C3-03"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C3-23",
+      "chapter": "C3",
+      "title": "우리가 벌어졌다 — 붙는 순서",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 4,
+      "prereq": [
+        "C3-18"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C3-24",
+      "chapter": "C3",
+      "title": "3챕터 종합 — 네트 전투의 다음 수",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 4,
+      "prereq": [
+        "C3-23"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C4-01",
+      "chapter": "C4",
+      "title": "상대가 네트를 잡았다 — 우리 둘은 어디로",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C3-20"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C4-02",
+      "chapter": "C4",
+      "title": "투백은 언제 쓰나",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 2,
+      "prereq": [
+        "C4-01"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C4-03",
+      "chapter": "C4",
+      "title": "상대 투업 — 1순위 코스는",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 2,
+      "prereq": [
+        "C4-01"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C4-04",
+      "chapter": "C4",
+      "title": "로브를 어느 쪽으로 올리나",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C4-03"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C4-05",
+      "chapter": "C4",
+      "title": "로브를 올린 직후 전진할까",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C4-04"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C4-06",
+      "chapter": "C4",
+      "title": "내 로브가 짧았다 — 다음에 무슨 일이",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 3,
+      "prereq": [
+        "C4-05"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C4-07",
+      "chapter": "C4",
+      "title": "스매시 맞기 직전 — 어디에 서고 라켓은",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C4-02"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C4-08",
+      "chapter": "C4",
+      "title": "스매시를 막았다 — 어디로 보내야 살아나나",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C4-07"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C4-09",
+      "chapter": "C4",
+      "title": "파트너가 코트 밖으로 끌려나갔다",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C4-02"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C4-10",
+      "chapter": "C4",
+      "title": "커버 이동 — 얼마나 따라가나",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C4-09"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C4-11",
+      "chapter": "C4",
+      "title": "낮고 빠르게 치고 싶다 — 왜 안 되나",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C3-09"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C4-12",
+      "chapter": "C4",
+      "title": "상대 발밑으로 보내려면 어디를 겨냥하나",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C4-01"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C4-13",
+      "chapter": "C4",
+      "title": "수비에서 공격으로 넘어가는 한 걸음",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 4,
+      "prereq": [
+        "C4-12"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C4-14",
+      "chapter": "C4",
+      "title": "우리 둘 다 밖으로 밀렸다 — 붙는 방법",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C4-10"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C4-15",
+      "chapter": "C4",
+      "title": "각도가 없다 — 그래도 살리는 코스",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 4,
+      "prereq": [
+        "C4-11"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C4-16",
+      "chapter": "C4",
+      "title": "상대 스매시 각도를 미리 지운다",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C4-07"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C4-17",
+      "chapter": "C4",
+      "title": "상대 넷맨이 스매시를 못 친다 — 그쪽으로",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 4,
+      "prereq": [
+        "C4-04"
+      ],
+      "principle": "P-05"
+    },
+    {
+      "id": "C4-18",
+      "chapter": "C4",
+      "title": "상대가 짧은 공으로 끌어낸다 — 다음은",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 4,
+      "prereq": [
+        "C4-06"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C4-19",
+      "chapter": "C4",
+      "title": "짧은 공에 내가 나갔다 — 파트너는 뭘 하나",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C4-18"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C4-20",
+      "chapter": "C4",
+      "title": "나갔다 돌아올 때 대형 복구",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 4,
+      "prereq": [
+        "C4-19"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C4-21",
+      "chapter": "C4",
+      "title": "완전히 무너졌다 — 최선의 한 수",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 4,
+      "prereq": [
+        "C4-15"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C4-22",
+      "chapter": "C4",
+      "title": "두 번 연속 밀렸다 — 자리를 리셋하는 법",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 5,
+      "prereq": [
+        "C4-14"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C4-23",
+      "chapter": "C4",
+      "title": "수비 → 공격 전환의 정확한 순간",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 5,
+      "prereq": [
+        "C4-13"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C4-24",
+      "chapter": "C4",
+      "title": "4챕터 종합 — 이 수비에서 살아나는 길",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 4,
+      "prereq": [
+        "C4-23"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C5-01",
+      "chapter": "C5",
+      "title": "상대 대형 알아보기 — 셋 중 무엇인가",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 3,
+      "prereq": [
+        "C1-24"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C5-02",
+      "chapter": "C5",
+      "title": "상대 원업원백 공략 — 어디를 때리나",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C5-01"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C5-03",
+      "chapter": "C5",
+      "title": "원업원백을 무너뜨린 뒤 우리 자리",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 3,
+      "prereq": [
+        "C5-02"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C5-04",
+      "chapter": "C5",
+      "title": "상대 투업 공략 — 1순위와 2순위",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C5-01"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C5-05",
+      "chapter": "C5",
+      "title": "상대 투백 공략 — 짧게 끌어낸다",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 3,
+      "prereq": [
+        "C5-01"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C5-06",
+      "chapter": "C5",
+      "title": "짧게 끌어낸 뒤 우리는 전진",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C5-05"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C5-07",
+      "chapter": "C5",
+      "title": "공격 → 수비 전환 신호 세 가지",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 4,
+      "prereq": [
+        "C5-04"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C5-08",
+      "chapter": "C5",
+      "title": "수비 → 공격 전환 신호 세 가지",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 4,
+      "prereq": [
+        "C4-23"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C5-09",
+      "chapter": "C5",
+      "title": "신호를 봤다 — 지금 무엇을 바꾸나",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 4,
+      "prereq": [
+        "C5-07"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C5-10",
+      "chapter": "C5",
+      "title": "상대 둘 중 약한 쪽 — 계속 그쪽인가",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 4,
+      "prereq": [
+        "C5-02"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C5-11",
+      "chapter": "C5",
+      "title": "같은 코스를 세 번 썼다 — 이제 어디로",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 4,
+      "prereq": [
+        "C5-10"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C5-12",
+      "chapter": "C5",
+      "title": "상대가 우리 패턴을 읽었다 — 자리를 바꾼다",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C5-03"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C5-13",
+      "chapter": "C5",
+      "title": "포인트 설계 — 서브·포치·마무리",
+      "myRole": "넷맨",
+      "question": "both",
+      "difficulty": 4,
+      "prereq": [
+        "C2-23"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C5-14",
+      "chapter": "C5",
+      "title": "내가 이렇게 치면 상대는 어디로 칠까",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 5,
+      "prereq": [
+        "C5-13"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C5-15",
+      "chapter": "C5",
+      "title": "상대의 답을 미리 막는 자리",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 5,
+      "prereq": [
+        "C5-14"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C5-16",
+      "chapter": "C5",
+      "title": "넷맨이 예측하고 움직였다 — 반대로",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 4,
+      "prereq": [
+        "C5-11"
+      ],
+      "principle": "P-05"
+    },
+    {
+      "id": "C5-17",
+      "chapter": "C5",
+      "title": "파트너가 계속 뚫린다 — 대형을 바꿀까",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 4,
+      "prereq": [
+        "C5-12"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C5-18",
+      "chapter": "C5",
+      "title": "우리가 호주식을 써볼까",
+      "myRole": "랠리",
+      "question": "move",
+      "difficulty": 5,
+      "prereq": [
+        "C5-17"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C5-19",
+      "chapter": "C5",
+      "title": "바람과 햇빛이 있는 날의 코스 선택",
+      "myRole": "랠리",
+      "question": "target",
+      "difficulty": 5,
+      "prereq": [
+        "C5-16"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C5-20",
+      "chapter": "C5",
+      "title": "한 포인트를 5수로 설계하기",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 5,
+      "prereq": [
+        "C5-09"
+      ],
+      "principle": "P-03"
+    },
+    {
+      "id": "C5-21",
+      "chapter": "C5",
+      "title": "랠리 시뮬레이션 A — 3수 앞",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 5,
+      "prereq": [
+        "C5-20"
+      ],
+      "principle": "P-04"
+    },
+    {
+      "id": "C5-22",
+      "chapter": "C5",
+      "title": "랠리 시뮬레이션 B — 밀리는 흐름 뒤집기",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 5,
+      "prereq": [
+        "C5-21"
+      ],
+      "principle": "P-02"
+    },
+    {
+      "id": "C5-23",
+      "chapter": "C5",
+      "title": "랠리 시뮬레이션 C — 파트너와 한 덩어리로",
+      "myRole": "랠리",
+      "question": "both",
+      "difficulty": 5,
+      "prereq": [
+        "C5-22"
+      ],
+      "principle": "P-01"
+    },
+    {
+      "id": "C5-24",
+      "chapter": "C5",
+      "title": "최종 — 이 포인트를 끝내는 한 수",
+      "myRole": "랠리",
+      "question": "readNext",
+      "difficulty": 5,
+      "prereq": [
+        "C5-23"
+      ],
+      "principle": "P-04"
+    }
+  ]
+}
