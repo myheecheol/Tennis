@@ -67,7 +67,7 @@ CARDS = [
  ("C2-19","넷맨","move",4,["C1-19"],"P-01","리턴이 로브로 왔다 — 스위치 콜"),
  ("C2-20","랠리","move",4,["C2-19"],"P-01","스위치 후 새 자리 — 누가 어디"),
  ("C2-21","리시버","target",4,["C2-05"],"P-05","호주식 포메이션을 만났다"),
- ("C2-22","리시버","readNext",4,["C2-21"],"P-05","I 포메이션 — 상대는 어디로 갈까"),
+ ("C2-22","리시버 파트너","readNext",4,["C2-21"],"P-05","I 포메이션 — 상대는 어디로 갈까"),
  ("C2-23","서버","both",4,["C2-13"],"P-04","3구까지 설계하기 — 서브 코스와 포치 신호"),
  ("C2-24","랠리","readNext",4,["C2-23"],"P-03","2챕터 종합 — 이 랠리의 다음 두 수"),
  # ── C3 · 네트를 잡는다 ────────────────────────────────────────────────
@@ -185,6 +185,13 @@ for cid, role, qt, diff, prereq, pr, title in CARDS:
                               "newConcepts": c[3], "free": c[4]} for c in CHAPTERS],
                 "cards": index}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+ROLES = ("서버", "넷맨", "리시버", "리시버 파트너")
+svc = [c for c in CARDS if c[0][:2] in ("C1", "C2") and c[1] in ROLES]
+rc = collections.Counter(c[1] for c in svc)
+role_warn = [r for r in ROLES if rc[r] / len(svc) < 0.15]
+if role_warn:
+    raise SystemExit("역할 균형 실패 — 15% 미만: " + ", ".join(role_warn))
+
 qt_all = collections.Counter(c[2] for c in CARDS)
 print(f"✅ 검증 통과 · {len(CARDS)}장")
 for ch, title, *_ in CHAPTERS:
@@ -193,6 +200,12 @@ for ch, title, *_ in CHAPTERS:
     q = collections.Counter(r[2] for r in rows)
     print(f"  {ch} {title:<14} {len(rows)}장  난이도 {min(d)}~{max(d)}  "
           f"move {q['move']:>2} target {q['target']:>2} both {q['both']:>2} readNext {q['readNext']:>2}")
+print("  " + "─" * 66)
+print("  서브 게임(C1·C2) 역할 균형 — 실제 코트에서는 네 역할이 같은 빈도로 온다")
+for r in ROLES:
+    pct = rc[r] / len(svc) * 100
+    mark = " ← 부족" if pct < 20 else ""
+    print(f"    {r:<12} {rc[r]:>2}장  {pct:>5.1f}%{mark}")
 print("  " + "─" * 66)
 tot = len(CARDS)
 for k in ("move", "target", "both", "readNext"):

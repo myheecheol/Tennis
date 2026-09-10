@@ -239,10 +239,10 @@ footer code{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
     <h1>복식 무브<br>블루프린트</h1>
     <p class="lede">코트 그림을 보고 <b>내가 어디로 갈지, 공을 어디로 칠지</b> 손가락으로 찍는 게임 — 그 기획서를 뽑아내는 프롬프트 체인과 재료.</p>
     <div class="chips">
+      <span class="chip"><b>120</b> 장 커리큘럼 확정</span>
+      <span class="chip"><b>25</b> 장 완성·검증</span>
       <span class="chip"><b>8</b> 단계 프롬프트</span>
       <span class="chip"><b>24</b> 존 코드</span>
-      <span class="chip"><b>5</b> 대 원칙</span>
-      <span class="chip"><b>100~130</b> 장 카드</span>
     </div>
   </header>
 </div>
@@ -250,8 +250,9 @@ footer code{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
 <nav class="toc"><div class="wrap"><div class="toc-in">
   <a href="#court"><span class="n">01</span>코트 읽는 법</a>
   <a href="#cards"><span class="n">02</span>상황 카드 (직접 풀어보기)</a>
-  <a href="#chain"><span class="n">03</span>프롬프트 체인</a>
-  <a href="#platform"><span class="n">04</span>웹이냐 앱이냐</a>
+  <a href="#status"><span class="n">03</span>설계 현황</a>
+  <a href="#chain"><span class="n">04</span>프롬프트 체인</a>
+  <a href="#platform"><span class="n">05</span>웹이냐 앱이냐</a>
 </div></div></nav>
 
 <div class="wrap">
@@ -306,9 +307,47 @@ footer code{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
   <p class="note" style="margin-top:22px;max-width:60ch">보기가 <b>정답 / 차선 / 실수</b> 세 단계인 게 핵심입니다. 초보자가 실제로 하는 선택만 보기로 넣고, "왜 나쁜가"가 아니라 <b>"얼마나 나쁜가"</b>를 가르칩니다. 허수아비 오답은 학습 가치가 0입니다.</p>
 </section>
 
+<section id="status">
+  <div class="shead">
+    <span class="eyebrow">03 · 진척</span>
+    <h2>설계 현황</h2>
+    <p>프롬프트 체인을 STEP 1부터 7까지 실제로 돌린 결과입니다. 산출물은 전부 저장소에 있고, <b>검증기를 통과한 것만</b> 올라갑니다.</p>
+  </div>
+
+  <div class="scroll-x" style="margin-bottom:26px">
+    <table class="tbl">
+      <thead><tr><th>단계</th><th>산출물</th><th>상태</th></tr></thead>
+      <tbody>
+        <tr><td>STEP 1 커리큘럼</td><td>5챕터 120장. 난이도 곡선, 선행관계, 역할 균형</td><td><b>완료</b> — 자동 검증 통과</td></tr>
+        <tr><td>STEP 2 상황 카드</td><td>1챕터 24장 + C2-08</td><td><b>25장 완성</b> · 나머지 95장 미착수</td></tr>
+        <tr><td>STEP 3 시각화</td><td>코트 렌더러 명세. 좌표·마커·상태 5종·타임라인·접근성</td><td><b>완료</b> — 구현이 먼저, 문서가 뒤따름</td></tr>
+        <tr><td>STEP 4 게임 설계</td><td>코어 루프, 3단 채점, 모드 5개, 부수 체계, 리텐션</td><td><b>완료</b></td></tr>
+        <tr><td>STEP 5 플랫폼</td><td>웹 검증 → Flutter. 가격, 로드맵</td><td><b>완료</b> · 가격은 검증 필요</td></tr>
+        <tr><td>STEP 6 기획서</td><td>PRD 13절 + 부록. 문서 간 모순 4건 정리</td><td><b>완료</b></td></tr>
+        <tr><td>STEP 7 검수</td><td>4인 페르소나 리뷰 · 사실 검증 · 압축</td><td><b>완료</b> — 치명 3건 수정</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h4>검증기가 잡아낸 것</h4>
+      <p>예시 카드에 <b>서브 방향이 뒤집힌 오류</b>가 있었습니다. 서버를 왼쪽에 두고 공은 상대 오른쪽 박스로 보내고 있었죠. 사람 눈으로는 그럴듯해 보입니다. 이제 서브 대각선 규칙, 원업원백 반쪽 규칙, 존 밖 좌표, 마커 겹침을 매번 기계가 검사합니다.</p>
+    </div>
+    <div class="panel">
+      <h4>검수가 잡아낸 것</h4>
+      <p>스스로 정한 절대 규칙 중 <b>"전문 용어를 풀어 쓴다"를 카드 6장에서 어겼습니다.</b> 듀스 코트, 서브앤발리, 스플릿 스텝, 다운더라인… 고치고, 다시는 새지 않게 용어 검사를 검증기에 넣었습니다.</p>
+    </div>
+    <div class="panel">
+      <h4>아직 사람이 해야 하는 것</h4>
+      <p>기계는 <b>문서 안의 모순</b>만 잡습니다. 전술이 실제로 맞는지는 <b>코치 2인의 감수</b>가, 재미있는지는 <b>종이에 인쇄해 동호인 5명에게 풀려보는 것</b>이 유일한 방법입니다. 둘 다 아직 안 했습니다.</p>
+    </div>
+  </div>
+</section>
+
 <section id="chain">
   <div class="shead">
-    <span class="eyebrow">03 · 핵심 산출물</span>
+    <span class="eyebrow">04 · 핵심 산출물</span>
     <h2>프롬프트 체인</h2>
     <p>순서대로 돌립니다. <b>매 단계마다 STEP 0 블록을 다시 붙이는 것</b>이 품질을 지키는 가장 중요한 습관입니다. 대화가 길어지면 AI는 프로젝트 설정을 먼저 잊습니다.</p>
   </div>
@@ -332,7 +371,7 @@ footer code{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
 
 <section id="platform">
   <div class="shead">
-    <span class="eyebrow">04 · 결정</span>
+    <span class="eyebrow">05 · 결정</span>
     <h2>웹이냐 앱이냐</h2>
   </div>
 

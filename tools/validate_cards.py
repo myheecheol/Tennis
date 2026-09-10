@@ -10,6 +10,10 @@ ROWS = {"A": {"N": (.500, .640), "M": (.640, .860), "B": (.860, 1.000), "X": (1.
 PRINCIPLES = {"P-01", "P-02", "P-03", "P-04", "P-05"}
 SEVERITY = {"차선", "실수"}
 MIN_GAP = 0.12          # 마커끼리 최소 거리
+# 초보자가 모르는 말. 카드 안에서 괄호로 풀어 쓰거나, 그 카드가 가르치는 개념(tags)이어야 한다.
+# 크로스·발리·슬라이스·로브·스매시는 레슨에서 매번 듣는 기본 어휘라 제외한다.
+JARGON = ["듀스 코트", "애드 코트", "서브앤발리", "스플릿 스텝", "노맨스랜드",
+          "다운더라인", "원업원백", "투업", "투백", "앵글", "포치", "스위치"]
 EPS = 1e-9
 
 
@@ -117,6 +121,17 @@ def check(cards):
             mx, pxx = s["me"]["xy"][0], s["partner"]["xy"][0]
             if (mx - .5) * (pxx - .5) > 0:
                 w(f"서버와 넷맨이 같은 반쪽에 있다 (me x={mx}, partner x={pxx})")
+
+        # ── 초보자가 모르는 말을 설명 없이 쓰지 않았는가 (절대 규칙 3) ──
+        body = " ".join([c["scene"], c["cue"], a["short"], a["why"], c["coachLine"]]
+                        + [d.get("short", "") + " " + d["why"] for d in ds])
+        flat = body.replace(" (", "(")
+        for term in JARGON:
+            if term not in flat:
+                continue
+            glossed = (term + "(") in flat or ("(" + term + ")") in flat   # 용어(설명) 또는 설명(용어)
+            if not glossed and not any(term in t for t in c.get("tags", [])):
+                w(f"설명 없이 쓴 전문 용어: '{term}'")
 
         # ── 단서는 관찰 가능해야 한다 ──
         for bad in ("약하다", "긴장", "분위기", "잘한다", "실력"):
