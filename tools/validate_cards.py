@@ -7,7 +7,7 @@
   · 베이스라인 뒤(아웃)를 '로브 착지점'으로 쓴 보기
   · 설명 없이 쓴 전문 용어
 """
-import json, sys, pathlib, collections, itertools
+import json, sys, pathlib, collections, itertools, re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
@@ -32,6 +32,23 @@ LIMITS = {"title": 20, "scene": 38, "cue": 26, "question": 14,
 # 크로스·발리·슬라이스·로브·스매시는 레슨에서 매번 듣는 기본 어휘라 제외한다.
 JARGON = ["듀스 코트", "애드 코트", "서브앤발리", "스플릿 스텝", "노맨스랜드",
           "다운더라인", "원업원백", "투업", "투백", "앵글", "포치", "스위치"]
+
+# 말투 — 해요체. 코치가 코트 옆에서 존댓말로 짧게 말한다.
+# 해라체·반말 어미(-다 · -까? · -냐 · -니 · -라 · -자)로 끝나는 문장은 거부한다.
+# 명사로 끝나는 짧은 문장("빠른 퍼스트 서브.")과 보기 라벨("-기")은 괜찮다.
+BANMAL_END = re.compile(r"(다|까|냐|니|라|자)$")
+NOUN_END_OK = re.compile(r"(숫자|혼자|남자|여자|의자|상자)$")
+
+
+def banmal(text):
+    """해라체·반말로 끝나는 문장을 돌려준다."""
+    bad = []
+    for sent in re.split(r"(?<=[.!?…])\s+", text.strip()):
+        core = re.sub(r"[\s.,!?…'\"“”‘’)\]]+$", "", sent)
+        if core and BANMAL_END.search(core) and not NOUN_END_OK.search(core):
+            bad.append(sent)
+    return bad
+
 
 INDEX = {c["id"] for c in json.loads(
     (ROOT / "data" / "cards-index.json").read_text(encoding="utf-8"))["cards"]}
@@ -231,6 +248,15 @@ def check(cards):
             if not o.get("short"):
                 e(f"{label} 보기 라벨(short)이 없다")
 
+        # ── 말투 (해요체) ──
+        spoken = dict(texts)
+        for label, o in [("정답", a)] + [(d.get("severity", "?"), d) for d in ds]:
+            for k in ("short", "why", "caption"):
+                spoken[f"{label}.{k}"] = o.get(k, "")
+        for k, v in spoken.items():
+            for sent in banmal(v):
+                e(f"{k} 반말 어미 — 해요체로: {sent}")
+
         # ── 다음 수 ──
         if c["next"].get("id") not in INDEX:
             e(f"next.id 가 커리큘럼에 없다: {c['next'].get('id')}")
@@ -365,7 +391,7 @@ def check(cards):
             if term in body and (term + "(") not in body and ("(" + term + ")") not in body \
                     and not any(term in tg for tg in c.get("tags", [])):
                 w(f"설명 없이 쓴 전문 용어: '{term}'")
-        for bad in ("약하다", "긴장", "분위기", "잘한다", "실력"):
+        for bad in ("약하", "약해", "긴장", "분위기", "잘하", "잘해", "실력"):
             if bad in c["cue"]:
                 w(f"cue 에 관찰 불가능한 표현: '{bad}'")
 
