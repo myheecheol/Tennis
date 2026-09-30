@@ -55,6 +55,149 @@ def dist(a, b):
     return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** .5
 
 
+PLAYERS = ("me", "partner", "opp1", "opp2")
+CALLS = {"풋폴트", "폴트", "아웃", "네트"}
+ZONE_CENTER_ROWS = {"A": {"N": .57, "M": .75, "B": .93, "X": 1.049},
+                    "E": {"N": .43, "M": .25, "B": .07, "X": -.049}}
+MOVE_TYPES = ("move", "both")
+
+
+def zone_center(z):
+    return [{"L": 1 / 6, "C": .5, "R": 5 / 6}[z[2]], ZONE_CENTER_ROWS[z[0]][z[3]]]
+
+
+def resolve(v, pos):
+    """존 코드 · 선수 이름 · 좌표를 좌표로"""
+    if isinstance(v, list):
+        return v
+    if v in PLAYERS:
+        return list(pos[v])
+    return zone_center(v)
+
+
+def check_play(c, o, severity, e):
+    """보기 하나의 결과 장면이 채점과 맞는지, 공이 말이 되는지 — 엔진과 같은 순서로 따라간다."""
+    tag = f"[{severity} {o['zone']}]"
+    if not o.get("caption"):
+        e(f"{tag} 결과 한 줄(caption)이 없다"); return
+    if len(o["caption"]) > 12:
+        e(f"{tag} caption 이 길다 ({len(o['caption'])}자 > 12): {o['caption']}")
+    play = o.get("play") or []
+    if not 1 <= len(play) <= 4:
+        e(f"{tag} 결과 장면의 공은 1~4개여야 한다 (현재 {len(play)})"); return
+
+    s_ = c["setup"]
+    pos = {k: list(s_[k]["xy"]) for k in PLAYERS}
+    t = c["question"]["type"]
+    rv = c["answer"].get("reveal", {}).get("type")
+    moving = t in MOVE_TYPES or (t == "readNext" and rv in ("move", "oppShot"))
+
+    # 0단계 — 내가 먼저 움직인다
+    if "moves" in o:
+        for k, xy in o["moves"].items():
+            pos[k] = list(xy)
+    elif moving:
+        if "stand" in o:
+            if not in_zone(o["stand"], o["zone"]):
+                e(f"{tag} stand {o['stand']} 가 고른 존 {o['zone']} 밖이다")
+            pos["me"] = list(o["stand"])
+        elif not in_zone(pos["me"], o["zone"]):
+            pos["me"] = zone_center(o["zone"])
+
+    b0 = s_["ball"]
+    if b0["arc"] == "hold":
+        cur = {"pt": b0["from"], "state": "hold"}
+    elif "to" in b0:
+        cur = {"pt": b0["to"], "state": "air"}
+    else:
+        cur = {"pt": b0["bounce"], "state": "ground"}
+
+    if t == "target" and play[0].get("by") != "me":
+        e(f"{tag} 공을 보내는 문제는 첫 공을 내가 친다")
+
+    for k, b in enumerate(play):
+        by = b.get("by")
+        if by not in PLAYERS + ("none",):
+            e(f"{tag} 공{k + 1}: 알 수 없는 by {by}"); return
+        if b.get("arc") not in ARCS - {"hold"}:
+            e(f"{tag} 공{k + 1}: 알 수 없는 arc {b.get('arc')}")
+        if "call" in b and b["call"] not in CALLS:
+            e(f"{tag} 공{k + 1}: 알 수 없는 call {b['call']}")
+        if "reach" in b and b["reach"] not in PLAYERS:
+            e(f"{tag} 공{k + 1}: 알 수 없는 reach {b['reach']}")
+        for key in ("bounce", "to"):
+            v = b.get(key)
+            if isinstance(v, str) and v not in PLAYERS and zone_box(v) is None:
+                e(f"{tag} 공{k + 1}: {key} 를 알 수 없다 ({v})")
+
+        # 출발점 — 엔진과 같은 규칙
+        if "from" in b:
+            start = b["from"]
+        elif by == "none" or cur["state"] == "air":
+            start = cur["pt"]
+        else:
+            start = pos[by]
+        if by != "none":
+            run = ((pos[by][0] - start[0]) * 10.97) ** 2 + ((pos[by][1] - start[1]) * 23.77) ** 2
+            if run ** .5 > 9.0:
+                e(f"{tag} 공{k + 1}: {by} 가 치러 가기엔 너무 멀다 ({run ** .5:.1f}m)")
+            pos[by] = list(start)
+
+        call = b.get("call")
+        bo = resolve(b["bounce"], pos) if "bounce" in b else None
+        if bo and by != "none":
+            if (start[1] - .5) * (bo[1] - .5) > 0:
+                e(f"{tag} 공{k + 1}: 자기 코트에 바운드한다 (출발 y={start[1]:.2f}, 바운드 y={bo[1]:.2f})")
+        if bo:
+            inside = -EPS <= bo[0] <= 1 + EPS and -EPS <= bo[1] <= 1 + EPS
+            if call == "아웃" and inside:
+                e(f"{tag} 공{k + 1}: 아웃인데 바운드가 코트 안이다")
+            if call != "아웃" and not inside:
+                e(f"{tag} 공{k + 1}: 바운드 {bo} 가 코트 밖이다")
+        if b.get("arc") in SERVE_ARCS:
+            behind = start[1] > 1.0 if start[1] > .5 else start[1] < 0.0
+            if not behind and call != "풋폴트":
+                e(f"{tag} 공{k + 1}: 서브를 베이스라인 안에서 넣는다")
+            if bo and call != "폴트":
+                ok_x = 0.111 <= bo[0] <= 0.889 and (start[0] - .5) * (bo[0] - .5) < 0
+                ok_y = (0.223 <= bo[1] <= .5) if bo[1] < .5 else (.5 <= bo[1] <= 0.777)
+                if not (ok_x and ok_y):
+                    e(f"{tag} 공{k + 1}: 서브가 대각선 서비스 박스에 안 들어간다")
+        if t == "target" and k == 0 and bo and not call and not in_zone(bo, o["zone"]):
+            e(f"{tag} 내 공이 고른 존 {o['zone']} 에 떨어지지 않는다 ({bo})")
+
+        # 공이 끝나는 곳과 받는 사람
+        if "to" in b:
+            end = resolve(b["to"], pos)
+            if isinstance(b["to"], list):
+                catcher = b.get("reach") or (play[k + 1]["by"] if k + 1 < len(play) and play[k + 1]["by"] != "none" else None)
+                if catcher:
+                    pos[catcher] = list(end)
+            cur = {"pt": end, "state": "air"}
+        elif bo:
+            cur = {"pt": bo, "state": "ground"}
+
+    # 결과 — 마지막 공으로 판정
+    last = play[-1]
+    by, call, win = last["by"], last.get("call"), last.get("winner")
+    ours = by in ("me", "partner")
+    if call:
+        result = "lost" if ours else "won"
+    elif win:
+        if by == "none":
+            result = "lost" if cur["pt"][1] > .5 else "won"
+        else:
+            result = "won" if ours else "lost"
+    else:
+        result = "play"
+    want = {"정답": "won 이거나 우리가 마지막에 친다", "차선": "랠리가 이어진다", "실수": "포인트를 잃는다"}[severity]
+    ok = ((severity == "실수" and result == "lost")
+          or (severity == "차선" and result == "play")
+          or (severity == "정답" and (result == "won" or (result == "play" and ours))))
+    if not ok:
+        e(f"{tag} 결과가 채점과 안 맞는다 — 장면 결과 '{result}', 기대: {want}")
+
+
 def check(cards):
     errs, warns, info = [], [], []
     ans_zones = collections.Counter()
@@ -189,6 +332,11 @@ def check(cards):
             server = {"넷맨": "partner", "서버": "me"}.get(c["myRole"])
             if server and hitter != server:
                 e(f"{c['myRole']} 카드인데 서브를 {hitter} 가 넣는다")
+
+        # ── 보기마다 결과 장면이 채점과 맞는가 ──
+        check_play(c, a, "정답", e)
+        for d in ds:
+            check_play(c, d, d.get("severity", "?"), e)
 
         # ── 원업원백이면 서버와 넷맨은 반대 반쪽 ──
         if c["myRole"] in ("서버", "넷맨"):

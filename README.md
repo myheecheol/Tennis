@@ -9,7 +9,7 @@ reference/   프롬프트에 붙여 넣는 재료 (도메인·좌표계·예시�
 design/      ← 위 체인을 실행해서 나온 결과물
 data/        커리큘럼 인덱스 · 상황 카드 · 카메라 규격 (기계 검증 대상)
 tools/       생성기 · 검증기 · 3D 코트 기하(court3d.py)
-web/         플레이 가능한 프로토타입 — 3D 잔디 코트, 중계/내 시점, 카드 25장 (PANTONE 15-0343 Greenery)
+web/         플레이 가능한 프로토타입 — 3D 잔디 코트, 중계/내 시점, 고르면 결과가 재생되는 카드 25장 (PANTONE 15-0343 Greenery)
 ```
 
 ---
@@ -20,7 +20,7 @@ web/         플레이 가능한 프로토타입 — 3D 잔디 코트, 중계/�
 |---|---|---|
 | STEP 1 커리큘럼 | `design/01-curriculum.md` · `data/cards-index.json` | ✅ 5챕터 **120장** 확정 |
 | STEP 2 상황 카드 | `data/cards/c1.json` `c2.json` | ✅ **25장** 완성 · 95장 미착수 |
-| STEP 3 시각화 | `design/03-renderer-spec.md` | ✅ **v2: 3D 코트 · 공 궤적 · 두 시점** |
+| STEP 3 시각화 | `design/03-renderer-spec.md` | ✅ **v2: 3D 코트 · 공 궤적 · 두 시점** · v4: 멈춤 → 결과 재생 |
 | STEP 4 게임 설계 | `design/04-game-design.md` | ✅ 완료 |
 | STEP 5 플랫폼 | `reference/platform-recommendation.md` | ✅ 완료 · 가격 검증 필요 |
 | STEP 6 기획서 | `design/PRD.md` | ✅ 완료 |
@@ -59,10 +59,11 @@ setup.ball { kind · arc · from · bounce · to } ← 3D 궤적, 깊게/짧게 
 scene · cue · question{type, text}
 answer { zone · short · why · principle }
 distractors[2] { zone · severity(차선|실수) · short · why }
+  └ 보기마다 결과 장면 { stand? · moves? · caption · play[1~4] }  ← 고르면 재생된다
 coachLine · next{id, text} · tags
 ```
 
-해설은 **한 문장(56자)**, 보기는 14자, 한 줄 요약은 24자 — 검증기가 넘치는 카드를 거부합니다.
+해설은 **한 문장(56자)**, 보기는 14자, 한 줄 요약은 24자, 결과 한 줄은 12자 — 검증기가 넘치는 카드를 거부합니다.
 
 ### 검증기가 잡는 것 — `tools/validate_cards.py`
 
@@ -77,6 +78,7 @@ coachLine · next{id, text} · tags
 - `target` 정답이 상대 코트(`E-`)인가, `move` 정답이 우리 코트(`A-`)인가
 - **초보자가 모르는 말을 괄호 설명 없이 쓰지 않았는가** (12개 용어) / 글자 수 한도
 - 한 배치에서 정답 존이 과하게 반복되지 않는가
+- **결과 장면이 채점과 맞는가** — 실수를 고르면 포인트를 잃고, 정답을 고르면 따거나 우리가 주도권을 쥔다. 장면 속 서브·바운드도 같은 규칙으로 검사
 
 ### 검증기가 못 잡는 것
 

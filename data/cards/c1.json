@@ -58,20 +58,91 @@
         "zone": "A-RX",
         "short": "오른쪽 절반 가운데",
         "principle": "P-01",
-        "why": "파트너가 왼쪽을 맡았으니 오른쪽이 내 몫이다. 단식보다 바깥에 선다."
+        "why": "파트너가 왼쪽을 맡았으니 오른쪽이 내 몫이다. 단식보다 바깥에 선다.",
+        "stand": [
+          0.72,
+          1.02
+        ],
+        "caption": "오른쪽 리턴도 닿는다",
+        "play": [
+          {
+            "by": "me",
+            "arc": "serve",
+            "bounce": [
+              0.3,
+              0.27
+            ],
+            "to": "opp1"
+          },
+          {
+            "by": "opp1",
+            "arc": "normal",
+            "bounce": [
+              0.8,
+              0.9
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": "E-LB"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-CX",
           "severity": "차선",
           "short": "센터마크 바로 옆",
-          "why": "단식 자리다. 서브 각도는 좋지만 오른쪽 사이드가 빈다."
+          "why": "단식 자리다. 서브 각도는 좋지만 오른쪽 사이드가 빈다.",
+          "caption": "오른쪽이 너무 멀다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "serve",
+              "bounce": [
+                0.4,
+                0.27
+              ],
+              "to": "opp1"
+            },
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.93,
+                0.88
+              ],
+              "to": [
+                0.96,
+                0.98
+              ],
+              "reach": "me"
+            }
+          ]
         },
         {
           "zone": "A-RB",
           "severity": "실수",
           "short": "라인 안쪽에서",
-          "why": "풋폴트다. 서브는 반드시 베이스라인 뒤에서 넣는다."
+          "why": "풋폴트다. 서브는 반드시 베이스라인 뒤에서 넣는다.",
+          "stand": [
+            0.72,
+            0.97
+          ],
+          "caption": "풋폴트!",
+          "play": [
+            {
+              "by": "me",
+              "arc": "serve",
+              "bounce": [
+                0.3,
+                0.27
+              ],
+              "call": "풋폴트"
+            }
+          ]
         }
       ],
       "coachLine": "서브는 라인 뒤, 오른쪽 절반의 가운데.",
@@ -142,20 +213,97 @@
         "zone": "A-LN",
         "short": "네트에서 두세 걸음",
         "principle": "P-01",
-        "why": "앞뒤로 다 움직일 수 있는 거리다. 붙으면 로브에, 물러서면 발리에 약하다."
+        "why": "앞뒤로 다 움직일 수 있는 거리다. 붙으면 로브에, 물러서면 발리에 약하다.",
+        "stand": [
+          0.3,
+          0.59
+        ],
+        "caption": "발리로 눌렀다",
+        "play": [
+          {
+            "by": "partner",
+            "arc": "serve",
+            "bounce": [
+              0.3,
+              0.27
+            ],
+            "to": "opp1"
+          },
+          {
+            "by": "opp1",
+            "arc": "normal",
+            "to": [
+              0.38,
+              0.58
+            ],
+            "reach": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-CN",
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-LM",
           "severity": "차선",
           "short": "서비스라인에 그대로",
-          "why": "로브엔 안전하지만 네트를 포기한 자리다."
+          "why": "로브엔 안전하지만 네트를 포기한 자리다.",
+          "caption": "발밑으로 떨어진다",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "serve",
+              "bounce": [
+                0.3,
+                0.27
+              ],
+              "to": "opp1"
+            },
+            {
+              "by": "opp1",
+              "arc": "flat",
+              "bounce": [
+                0.3,
+                0.66
+              ],
+              "to": "me"
+            }
+          ]
         },
         {
           "zone": "A-CN",
           "severity": "실수",
           "short": "처음부터 가운데",
-          "why": "가운데는 서브가 들어간 뒤 나가는 곳이다. 미리 서면 옆이 뚫린다."
+          "why": "가운데는 서브가 들어간 뒤 나가는 곳이다. 미리 서면 옆이 뚫린다.",
+          "stand": [
+            0.5,
+            0.59
+          ],
+          "caption": "옆 줄로 뚫렸다",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "serve",
+              "bounce": [
+                0.3,
+                0.27
+              ],
+              "to": "opp1"
+            },
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.1,
+                0.8
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "가운데는 서는 곳이 아니라 나가는 곳.",
@@ -235,20 +383,63 @@
         "zone": "A-CN",
         "short": "가운데로 두 걸음",
         "principle": "P-04",
-        "why": "밀린 리시버는 크로스로 칠 수밖에 없다. 그 길목이 가운데다."
+        "why": "밀린 리시버는 크로스로 칠 수밖에 없다. 그 길목이 가운데다.",
+        "stand": [
+          0.5,
+          0.57
+        ],
+        "caption": "가로채서 포인트!",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "normal",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-CM",
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-LN",
           "severity": "차선",
           "short": "제자리에서 기다림",
-          "why": "안전하지만, 상대가 편한 크로스만 반복한다."
+          "why": "안전하지만, 상대가 편한 크로스만 반복한다.",
+          "caption": "편한 크로스가 이어진다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.78,
+                0.9
+              ],
+              "to": "partner"
+            }
+          ]
         },
         {
           "zone": "A-LM",
           "severity": "실수",
           "short": "물러서며 직선 막기",
-          "why": "직선은 원래 치기 가장 어렵다. 막으려다 가운데가 빈다."
+          "why": "직선은 원래 치기 가장 어렵다. 막으려다 가운데가 빈다.",
+          "stand": [
+            0.18,
+            0.72
+          ],
+          "caption": "가운데가 뚫렸다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": "A-CM",
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "넷맨은 직선이 아니라 가운데를 먹는다.",
@@ -318,20 +509,78 @@
         "zone": "A-LX",
         "short": "바깥으로 한 걸음",
         "principle": "P-02",
-        "why": "상대가 바깥에 서면 서브 각도도 바깥으로 옮겨간다. 그 가운데에 선다."
+        "why": "상대가 바깥에 서면 서브 각도도 바깥으로 옮겨간다. 그 가운데에 선다.",
+        "stand": [
+          0.22,
+          1.02
+        ],
+        "caption": "와이드 서브도 받는다",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "serve",
+            "bounce": [
+              0.16,
+              0.72
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": "E-RB"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-LB",
           "severity": "차선",
           "short": "바깥, 라인 안쪽",
-          "why": "방향은 맞다. 다만 퍼스트 서브엔 너무 가까워 반응이 늦다."
+          "why": "방향은 맞다. 다만 퍼스트 서브엔 너무 가까워 반응이 늦다.",
+          "stand": [
+            0.22,
+            0.94
+          ],
+          "caption": "늦어서 공이 뜬다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "serve",
+              "bounce": [
+                0.16,
+                0.72
+              ],
+              "to": "me"
+            },
+            {
+              "by": "me",
+              "arc": "high",
+              "to": "opp2"
+            }
+          ]
         },
         {
           "zone": "A-CX",
           "severity": "실수",
           "short": "센터 쪽에 그대로",
-          "why": "와이드 서브 한 방이면 라켓도 못 댄다."
+          "why": "와이드 서브 한 방이면 라켓도 못 댄다.",
+          "caption": "에이스를 내줬다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "serve",
+              "bounce": [
+                0.14,
+                0.73
+              ],
+              "to": [
+                0.0,
+                1.04
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "상대가 넓게 서면, 나도 넓게 선다.",
@@ -403,20 +652,103 @@
         "zone": "A-LM",
         "short": "서비스라인 위",
         "principle": "P-01",
-        "why": "리턴 결과를 모르는 순간이다. 앞뒤로 다 갈 수 있는 곳에 선다."
+        "why": "리턴 결과를 모르는 순간이다. 앞뒤로 다 갈 수 있는 곳에 선다.",
+        "stand": [
+          0.28,
+          0.78
+        ],
+        "caption": "물러서 있어 막았다",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "serve",
+            "bounce": [
+              0.7,
+              0.73
+            ],
+            "to": "partner"
+          },
+          {
+            "by": "partner",
+            "arc": "normal",
+            "to": "opp2"
+          },
+          {
+            "by": "opp2",
+            "arc": "volley",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-CB"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-LN",
           "severity": "차선",
           "short": "네트 앞에 미리",
-          "why": "리턴이 좋으면 최고지만, 뜨면 스매시 과녁이 된다."
+          "why": "리턴이 좋으면 최고지만, 뜨면 스매시 과녁이 된다.",
+          "caption": "스매시를 겨우 막는다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "serve",
+              "bounce": [
+                0.7,
+                0.73
+              ],
+              "to": "partner"
+            },
+            {
+              "by": "partner",
+              "arc": "high",
+              "to": "opp2"
+            },
+            {
+              "by": "opp2",
+              "arc": "smash",
+              "to": "me"
+            }
+          ]
         },
         {
           "zone": "A-LB",
           "severity": "실수",
           "short": "베이스라인으로",
-          "why": "둘 다 뒤에 서면 상대가 마음껏 전진한다."
+          "why": "둘 다 뒤에 서면 상대가 마음껏 전진한다.",
+          "stand": [
+            0.28,
+            0.95
+          ],
+          "caption": "앞이 비어 당했다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "serve",
+              "bounce": [
+                0.7,
+                0.73
+              ],
+              "to": "partner"
+            },
+            {
+              "by": "partner",
+              "arc": "normal",
+              "to": [
+                0.62,
+                0.41
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": "A-LN",
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "모를 땐 앞뒤로 다 갈 수 있는 자리.",
@@ -499,20 +831,74 @@
           "type": "look",
           "by": "opp2"
         },
-        "why": "공은 파트너가 친다. 넷맨이 움직이면 공은 내 앞으로 온다."
+        "why": "공은 파트너가 친다. 넷맨이 움직이면 공은 내 앞으로 온다.",
+        "caption": "포치를 보고 막았다",
+        "play": [
+          {
+            "by": "partner",
+            "arc": "normal",
+            "to": [
+              0.52,
+              0.4
+            ]
+          },
+          {
+            "by": "opp2",
+            "arc": "volley",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-CB"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-RX",
           "severity": "차선",
           "short": "파트너와 공",
-          "why": "본능이지만, 내가 볼 필요가 없는 공이다."
+          "why": "본능이지만, 내가 볼 필요가 없는 공이다.",
+          "caption": "늦었지만 닿는다",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "normal",
+              "to": [
+                0.52,
+                0.4
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "to": "me"
+            }
+          ]
         },
         {
           "zone": "E-LX",
           "severity": "실수",
           "short": "상대 서버",
-          "why": "공은 이미 떠났다. 지나간 사람을 보는 것이다."
+          "why": "공은 이미 떠났다. 지나간 사람을 보는 것이다.",
+          "caption": "포치에 당했다",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "normal",
+              "to": [
+                0.52,
+                0.4
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": "A-CM",
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "공 말고, 움직일 사람을 봐라.",
@@ -592,20 +978,77 @@
         "zone": "A-RX",
         "short": "라인 뒤에 남는다",
         "principle": "P-03",
-        "why": "리턴이 제대로 온다. 제자리에서 세 번째 공을 준비한다."
+        "why": "리턴이 제대로 온다. 제자리에서 세 번째 공을 준비한다.",
+        "caption": "세 번째 공도 편하다",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "normal",
+            "bounce": [
+              0.76,
+              0.9
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": "E-LB"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-RB",
           "severity": "차선",
           "short": "한두 걸음 들어옴",
-          "why": "나쁘진 않지만, 깊은 리턴엔 뒤로 물러나며 쳐야 한다."
+          "why": "나쁘진 않지만, 깊은 리턴엔 뒤로 물러나며 쳐야 한다.",
+          "stand": [
+            0.72,
+            0.93
+          ],
+          "caption": "물러나며 친다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.76,
+                0.95
+              ],
+              "to": [
+                0.76,
+                1.03
+              ],
+              "reach": "me"
+            }
+          ]
         },
         {
           "zone": "A-RM",
           "severity": "실수",
           "short": "서비스라인에서 멈춤",
-          "why": "가장 나쁜 자리다. 리턴이 발밑으로 떨어진다."
+          "why": "가장 나쁜 자리다. 리턴이 발밑으로 떨어진다.",
+          "stand": [
+            0.74,
+            0.76
+          ],
+          "caption": "발밑에 떨어졌다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "flat",
+              "bounce": [
+                0.72,
+                0.79
+              ],
+              "to": [
+                0.74,
+                0.9
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "남든지, 끝까지 가든지. 반쯤은 없다.",
@@ -684,20 +1127,72 @@
         "zone": "E-LB",
         "short": "크로스로 깊게",
         "principle": "P-02",
-        "why": "네트가 가장 낮고 코트가 가장 길다. 넷맨과도 가장 멀다."
+        "why": "네트가 가장 낮고 코트가 가장 길다. 넷맨과도 가장 멀다.",
+        "caption": "서버가 밀린다",
+        "play": [
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": [
+              0.2,
+              0.07
+            ]
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "E-LM",
           "severity": "차선",
           "short": "크로스로 짧게",
-          "why": "방향은 맞다. 짧으면 서버가 들어와 공격한다."
+          "why": "방향은 맞다. 짧으면 서버가 들어와 공격한다.",
+          "caption": "서버가 들어와 공격",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "bounce": [
+                0.22,
+                0.27
+              ],
+              "to": [
+                0.26,
+                0.21
+              ]
+            },
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.6,
+                0.86
+              ],
+              "to": "me"
+            }
+          ]
         },
         {
           "zone": "E-RB",
           "severity": "실수",
           "short": "직선(다운더라인)",
-          "why": "넷맨이 팔만 뻗어도 닿는다. 네트도 가장 높다."
+          "why": "넷맨이 팔만 뻗어도 닿는다. 네트도 가장 높다.",
+          "caption": "넷맨에게 잡혔다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.76,
+                0.37
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": "A-CM",
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "밀렸을 땐 코트를 가장 길게 쓴다.",
@@ -774,20 +1269,76 @@
         "zone": "E-CN",
         "short": "두 사람 사이, 짧게",
         "principle": "P-04",
-        "why": "각도를 주지 않는다. 퍼올린 공으로는 빈 곳을 노릴 수 없다."
+        "why": "각도를 주지 않는다. 퍼올린 공으로는 빈 곳을 노릴 수 없다.",
+        "caption": "짧게 떨어뜨렸다",
+        "play": [
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": [
+              0.5,
+              0.42
+            ],
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "E-CB",
           "severity": "차선",
           "short": "가운데로 깊게",
-          "why": "안전하지만, 상대가 준비할 시간을 번다."
+          "why": "안전하지만, 상대가 준비할 시간을 번다.",
+          "caption": "상대가 시간을 벌었다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "volley",
+              "bounce": [
+                0.5,
+                0.09
+              ],
+              "to": [
+                0.46,
+                0.02
+              ]
+            },
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "to": "me"
+            }
+          ]
         },
         {
           "zone": "E-RB",
           "severity": "실수",
           "short": "구석으로 세게",
-          "why": "각도를 열면 상대도 각도로 돌려준다. 우리 쪽이 비었다."
+          "why": "각도를 열면 상대도 각도로 돌려준다. 우리 쪽이 비었다.",
+          "caption": "빈 쪽으로 돌아왔다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "volley",
+              "bounce": [
+                0.84,
+                0.1
+              ],
+              "to": [
+                0.86,
+                0.03
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "normal",
+              "bounce": [
+                0.2,
+                0.93
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "우리 코트가 비면, 각도부터 지운다.",
@@ -864,20 +1415,109 @@
         "zone": "A-LX",
         "short": "왼쪽으로 건너간다",
         "principle": "P-01",
-        "why": "포치는 둘이 자리를 바꾸는 것이다. 파트너가 비운 쪽을 채운다."
+        "why": "포치는 둘이 자리를 바꾸는 것이다. 파트너가 비운 쪽을 채운다.",
+        "stand": [
+          0.24,
+          1.02
+        ],
+        "caption": "빈자리를 채웠다",
+        "play": [
+          {
+            "by": "partner",
+            "arc": "volley",
+            "bounce": [
+              0.4,
+              0.16
+            ],
+            "to": [
+              0.36,
+              0.08
+            ]
+          },
+          {
+            "by": "opp1",
+            "arc": "normal",
+            "bounce": [
+              0.22,
+              0.9
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": "E-RB"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-CX",
           "severity": "차선",
           "short": "가운데로 조금만",
-          "why": "방향은 맞지만 왼쪽 사이드까지는 못 닿는다."
+          "why": "방향은 맞지만 왼쪽 사이드까지는 못 닿는다.",
+          "stand": [
+            0.5,
+            1.02
+          ],
+          "caption": "겨우 닿는다",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "volley",
+              "bounce": [
+                0.4,
+                0.16
+              ],
+              "to": [
+                0.36,
+                0.08
+              ]
+            },
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.14,
+                0.9
+              ],
+              "to": [
+                0.12,
+                1.0
+              ],
+              "reach": "me"
+            }
+          ]
         },
         {
           "zone": "A-RX",
           "severity": "실수",
           "short": "제자리",
-          "why": "포치가 실패하면 공은 무조건 빈 왼쪽으로 온다."
+          "why": "포치가 실패하면 공은 무조건 빈 왼쪽으로 온다.",
+          "caption": "빈 왼쪽으로 뚫렸다",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "volley",
+              "bounce": [
+                0.4,
+                0.16
+              ],
+              "to": [
+                0.36,
+                0.08
+              ]
+            },
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.18,
+                0.9
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "포치는 둘이 자리를 바꾸는 것.",
@@ -949,20 +1589,98 @@
         "zone": "A-LN",
         "short": "자리를 지킨다",
         "principle": "P-05",
-        "why": "둘 다 아웃이었다. 못 치는 코스를 막으려다 잘 치는 코스를 연다."
+        "why": "둘 다 아웃이었다. 못 치는 코스를 막으려다 잘 치는 코스를 연다.",
+        "caption": "가운데 공을 잡았다",
+        "play": [
+          {
+            "by": "partner",
+            "arc": "serve",
+            "bounce": [
+              0.3,
+              0.27
+            ],
+            "to": "opp1"
+          },
+          {
+            "by": "opp1",
+            "arc": "normal",
+            "to": [
+              0.4,
+              0.58
+            ],
+            "reach": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-CM",
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-CN",
           "severity": "차선",
           "short": "더 가운데로",
-          "why": "압박은 되지만 지금은 근거가 약하다."
+          "why": "압박은 되지만 지금은 근거가 약하다.",
+          "stand": [
+            0.48,
+            0.58
+          ],
+          "caption": "옆 줄을 겨우 막는다",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "serve",
+              "bounce": [
+                0.3,
+                0.27
+              ],
+              "to": "opp1"
+            },
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.12,
+                0.78
+              ],
+              "to": [
+                0.1,
+                0.86
+              ],
+              "reach": "me"
+            }
+          ]
         },
         {
           "zone": "A-LM",
           "severity": "실수",
           "short": "사이드로 물러섬",
-          "why": "실패한 공을 막느라 가운데를 비워준다."
+          "why": "실패한 공을 막느라 가운데를 비워준다.",
+          "stand": [
+            0.2,
+            0.72
+          ],
+          "caption": "가운데가 비었다",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "serve",
+              "bounce": [
+                0.3,
+                0.27
+              ],
+              "to": "opp1"
+            },
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": "A-CM",
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "원하는 코스와 칠 수 있는 코스는 다르다.",
@@ -1041,20 +1759,73 @@
         "zone": "E-RB",
         "short": "비운 쪽 직선으로",
         "principle": "P-05",
-        "why": "넷맨이 자리를 비운 순간, 직선이 가장 짧고 빈 코스가 된다."
+        "why": "넷맨이 자리를 비운 순간, 직선이 가장 짧고 빈 코스가 된다.",
+        "caption": "비운 쪽으로 뚫었다",
+        "play": [
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": [
+              0.84,
+              0.08
+            ],
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "E-RM",
           "severity": "차선",
           "short": "직선으로 짧게",
-          "why": "방향은 맞다. 짧으면 넷맨이 한 발 돌아와 막는다."
+          "why": "방향은 맞다. 짧으면 넷맨이 한 발 돌아와 막는다.",
+          "caption": "넷맨이 돌아와 막았다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "bounce": [
+                0.8,
+                0.3
+              ],
+              "to": [
+                0.74,
+                0.36
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.4,
+                0.84
+              ],
+              "to": "partner"
+            }
+          ]
         },
         {
           "zone": "E-LB",
           "severity": "실수",
           "short": "평소대로 크로스",
-          "why": "넷맨이 지금 뛰어간 곳이 바로 거기다."
+          "why": "넷맨이 지금 뛰어간 곳이 바로 거기다.",
+          "caption": "포치에 걸렸다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.5,
+                0.38
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": "A-CM",
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "직선은 넷맨이 움직인 뒤에만 연다.",
@@ -1130,20 +1901,85 @@
         "zone": "A-CB",
         "short": "가운데 쪽으로",
         "principle": "P-01",
-        "why": "공이 가운데 있으면 상대 각도도 가운데다. 파트너와의 거리도 준다."
+        "why": "공이 가운데 있으면 상대 각도도 가운데다. 파트너와의 거리도 준다.",
+        "stand": [
+          0.52,
+          0.94
+        ],
+        "caption": "가운데를 막았다",
+        "play": [
+          {
+            "by": "opp1",
+            "from": [
+              0.44,
+              0.02
+            ],
+            "arc": "normal",
+            "bounce": [
+              0.52,
+              0.86
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": "E-LB"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-RB",
           "severity": "차선",
           "short": "제자리",
-          "why": "반씩 나눈 셈이다. 가운데 공에 둘이 머뭇거린다."
+          "why": "반씩 나눈 셈이다. 가운데 공에 둘이 머뭇거린다.",
+          "caption": "달려가 겨우 받는다",
+          "play": [
+            {
+              "by": "opp1",
+              "from": [
+                0.44,
+                0.02
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.5,
+                0.86
+              ],
+              "to": [
+                0.52,
+                0.97
+              ],
+              "reach": "me"
+            }
+          ]
         },
         {
           "zone": "A-RM",
           "severity": "실수",
           "short": "앞으로 따라 들어감",
-          "why": "깊은 공 뒤에 따라 들어가면 발밑 공을 맞는다."
+          "why": "깊은 공 뒤에 따라 들어가면 발밑 공을 맞는다.",
+          "stand": [
+            0.84,
+            0.77
+          ],
+          "caption": "발밑 공을 놓쳤다",
+          "play": [
+            {
+              "by": "opp1",
+              "from": [
+                0.44,
+                0.02
+              ],
+              "arc": "flat",
+              "bounce": [
+                0.8,
+                0.8
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "우리 둘은 5미터 줄로 묶여 있다.",
@@ -1218,20 +2054,81 @@
         "zone": "A-RM",
         "short": "서비스라인까지 후퇴",
         "principle": "P-01",
-        "why": "우리 공이 떴다. 네트 앞에 있으면 상대 공격의 과녁이 된다."
+        "why": "우리 공이 떴다. 네트 앞에 있으면 상대 공격의 과녁이 된다.",
+        "stand": [
+          0.74,
+          0.75
+        ],
+        "caption": "물러서 있어 막았다",
+        "play": [
+          {
+            "by": "opp2",
+            "from": [
+              0.47,
+              0.17
+            ],
+            "arc": "smash",
+            "bounce": [
+              0.72,
+              0.68
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": "E-CB"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-RB",
           "severity": "차선",
           "short": "베이스라인까지",
-          "why": "안전하지만 네트를 통째로 내준다."
+          "why": "안전하지만 네트를 통째로 내준다.",
+          "stand": [
+            0.74,
+            0.93
+          ],
+          "caption": "받지만 네트를 내줬다",
+          "play": [
+            {
+              "by": "opp2",
+              "from": [
+                0.47,
+                0.17
+              ],
+              "arc": "smash",
+              "bounce": [
+                0.66,
+                0.8
+              ],
+              "to": "me"
+            }
+          ]
         },
         {
           "zone": "A-RN",
           "severity": "실수",
           "short": "네트 앞 제자리",
-          "why": "뜬 공은 내 발밑으로 내리꽂힌다."
+          "why": "뜬 공은 내 발밑으로 내리꽂힌다.",
+          "caption": "발밑에 내리꽂혔다",
+          "play": [
+            {
+              "by": "opp2",
+              "from": [
+                0.47,
+                0.17
+              ],
+              "arc": "smash",
+              "bounce": [
+                0.7,
+                0.62
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "파트너가 밀리면, 나도 밀린다.",
@@ -1306,20 +2203,82 @@
         "zone": "A-RN",
         "short": "건너온 오른쪽에",
         "principle": "P-01",
-        "why": "파트너가 이미 왼쪽을 채웠다. 돌아가면 둘이 한쪽에 몰린다."
+        "why": "파트너가 이미 왼쪽을 채웠다. 돌아가면 둘이 한쪽에 몰린다.",
+        "stand": [
+          0.74,
+          0.58
+        ],
+        "caption": "오른쪽을 지켰다",
+        "play": [
+          {
+            "by": "opp2",
+            "from": [
+              0.5,
+              0.15
+            ],
+            "arc": "normal",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-LN",
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-CN",
           "severity": "차선",
           "short": "가운데에 머묾",
-          "why": "어느 쪽도 맡지 않은 자리다. 양쪽 다 반 박자 늦는다."
+          "why": "어느 쪽도 맡지 않은 자리다. 양쪽 다 반 박자 늦는다.",
+          "caption": "한 박자 늦었다",
+          "play": [
+            {
+              "by": "opp2",
+              "from": [
+                0.5,
+                0.15
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.86,
+                0.74
+              ],
+              "to": [
+                0.88,
+                0.84
+              ],
+              "reach": "me"
+            }
+          ]
         },
         {
           "zone": "A-LN",
           "severity": "실수",
           "short": "원래 자리로",
-          "why": "파트너와 같은 쪽이 된다. 오른쪽이 통째로 빈다."
+          "why": "파트너와 같은 쪽이 된다. 오른쪽이 통째로 빈다.",
+          "stand": [
+            0.3,
+            0.58
+          ],
+          "caption": "오른쪽이 텅 비었다",
+          "play": [
+            {
+              "by": "opp2",
+              "from": [
+                0.5,
+                0.15
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.84,
+                0.8
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "포치하면 자리가 바뀐다. 돌아가지 않는다.",
@@ -1399,20 +2358,66 @@
         "zone": "A-LN",
         "short": "네트 앞으로 전진",
         "principle": "P-03",
-        "why": "퍼올린 공은 뜬다. 뜬 공은 네트 앞에서 누르는 게 가장 쉽다."
+        "why": "퍼올린 공은 뜬다. 뜬 공은 네트 앞에서 누르는 게 가장 쉽다.",
+        "stand": [
+          0.3,
+          0.6
+        ],
+        "caption": "뜬 공을 눌렀다",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "high",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "smash",
+            "bounce": "E-CN",
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-LM",
           "severity": "차선",
           "short": "제자리에서 본다",
-          "why": "한 발 늦어 위에서 못 누르고 아래에서 받게 된다."
+          "why": "한 발 늦어 위에서 못 누르고 아래에서 받게 된다.",
+          "caption": "아래에서 받아 넘긴다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "high",
+              "bounce": [
+                0.3,
+                0.72
+              ],
+              "to": "me"
+            }
+          ]
         },
         {
           "zone": "A-LB",
           "severity": "실수",
           "short": "뒤로 물러선다",
-          "why": "퍼올리는 사람은 세게 못 친다. 불안만 보고 움직였다."
+          "why": "퍼올리는 사람은 세게 못 친다. 불안만 보고 움직였다.",
+          "stand": [
+            0.28,
+            0.93
+          ],
+          "caption": "짧은 공에 못 닿았다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "high",
+              "bounce": [
+                0.3,
+                0.62
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "상대가 퍼올리면, 나는 올라간다.",
@@ -1487,20 +2492,77 @@
         "zone": "A-LB",
         "short": "물러서며 라켓 세우기",
         "principle": "P-03",
-        "why": "위에서 때리는 공이다. 거리가 있어야 반응할 시간이 생긴다."
+        "why": "위에서 때리는 공이다. 거리가 있어야 반응할 시간이 생긴다.",
+        "stand": [
+          0.26,
+          0.93
+        ],
+        "caption": "거리 덕에 받아냈다",
+        "play": [
+          {
+            "by": "opp2",
+            "arc": "smash",
+            "bounce": [
+              0.3,
+              0.82
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": "E-LB"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-CB",
           "severity": "차선",
           "short": "가운데 뒤로",
-          "why": "물러선 건 맞다. 다만 내 쪽 사이드가 열린다."
+          "why": "물러선 건 맞다. 다만 내 쪽 사이드가 열린다.",
+          "stand": [
+            0.5,
+            0.93
+          ],
+          "caption": "내 쪽이 열려 있었다",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "smash",
+              "bounce": [
+                0.26,
+                0.8
+              ],
+              "to": [
+                0.24,
+                0.9
+              ],
+              "reach": "me"
+            }
+          ]
         },
         {
           "zone": "A-LN",
           "severity": "실수",
           "short": "앞으로 나가 막기",
-          "why": "스매시를 네트 앞에서 막는 건 프로도 어렵다."
+          "why": "스매시를 네트 앞에서 막는 건 프로도 어렵다.",
+          "stand": [
+            0.28,
+            0.6
+          ],
+          "caption": "스매시 과녁이 됐다",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "smash",
+              "bounce": [
+                0.3,
+                0.64
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "우리 공이 뜨면, 나는 물러선다.",
@@ -1580,20 +2642,82 @@
         "zone": "E-LB",
         "short": "다시 크로스로 깊게",
         "principle": "P-02",
-        "why": "넷맨에게서 가장 멀고 실수가 가장 적다. 먼저 바꾸는 쪽이 진다."
+        "why": "넷맨에게서 가장 멀고 실수가 가장 적다. 먼저 바꾸는 쪽이 진다.",
+        "caption": "상대가 먼저 무너졌다",
+        "play": [
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": [
+              0.2,
+              0.07
+            ],
+            "to": [
+              0.18,
+              0.0
+            ]
+          },
+          {
+            "by": "opp1",
+            "arc": "normal",
+            "to": [
+              0.3,
+              0.5
+            ],
+            "toZ": 0.5,
+            "call": "네트"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "E-CB",
           "severity": "차선",
           "short": "가운데로 깊게",
-          "why": "좋은 코스지만, 넷맨이 서 있으면 사정거리 안이다."
+          "why": "좋은 코스지만, 넷맨이 서 있으면 사정거리 안이다.",
+          "caption": "넷맨 손에 걸렸다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.6,
+                0.38
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.36,
+                0.74
+              ],
+              "to": "partner"
+            }
+          ]
         },
         {
           "zone": "E-RN",
           "severity": "실수",
           "short": "넷맨 발밑",
-          "why": "멀리서 노리면 공이 뜬다. 딱 넷맨의 라켓 높이다."
+          "why": "멀리서 노리면 공이 뜬다. 딱 넷맨의 라켓 높이다.",
+          "caption": "뜬 공을 선물했다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "high",
+              "to": [
+                0.78,
+                0.4
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": "A-CM",
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "발밑은 가까이서 노린다. 멀리선 선물.",
@@ -1669,20 +2793,118 @@
         "zone": "A-RN",
         "short": "건너가며 '스위치!'",
         "principle": "P-01",
-        "why": "공은 파트너가 쫓는다. 비는 오른쪽은 내가 채운다. 소리로 알린다."
+        "why": "공은 파트너가 쫓는다. 비는 오른쪽은 내가 채운다. 소리로 알린다.",
+        "stand": [
+          0.72,
+          0.58
+        ],
+        "caption": "빈자리를 채워 막았다",
+        "play": [
+          {
+            "by": "partner",
+            "from": [
+              0.25,
+              1.04
+            ],
+            "arc": "normal",
+            "bounce": [
+              0.7,
+              0.1
+            ],
+            "to": [
+              0.74,
+              0.04
+            ]
+          },
+          {
+            "by": "opp2",
+            "arc": "normal",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-CN",
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-CN",
           "severity": "차선",
           "short": "가운데까지만",
-          "why": "절반만 갔다. 오른쪽 사이드가 여전히 빈다."
+          "why": "절반만 갔다. 오른쪽 사이드가 여전히 빈다.",
+          "stand": [
+            0.5,
+            0.58
+          ],
+          "caption": "절반만 가서 늦었다",
+          "play": [
+            {
+              "by": "partner",
+              "from": [
+                0.25,
+                1.04
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.7,
+                0.1
+              ],
+              "to": [
+                0.74,
+                0.04
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "normal",
+              "bounce": [
+                0.86,
+                0.66
+              ],
+              "to": [
+                0.88,
+                0.74
+              ],
+              "reach": "me"
+            }
+          ]
         },
         {
           "zone": "A-LN",
           "severity": "실수",
           "short": "제자리에서 공 보기",
-          "why": "파트너가 내 뒤로 오면 둘이 왼쪽에 몰린다."
+          "why": "파트너가 내 뒤로 오면 둘이 왼쪽에 몰린다.",
+          "caption": "오른쪽이 비었다",
+          "play": [
+            {
+              "by": "partner",
+              "from": [
+                0.25,
+                1.04
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.7,
+                0.1
+              ],
+              "to": [
+                0.74,
+                0.04
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "normal",
+              "bounce": [
+                0.82,
+                0.72
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "머리를 넘어간 공은 건너가라는 신호.",
@@ -1763,20 +2985,73 @@
           "by": "opp2",
           "arc": "smash"
         },
-        "why": "나는 오른쪽 앞, 파트너는 왼쪽 뒤. 둘 사이가 가장 크게 비었다."
+        "why": "나는 오른쪽 앞, 파트너는 왼쪽 뒤. 둘 사이가 가장 크게 비었다.",
+        "stand": [
+          0.56,
+          0.7
+        ],
+        "caption": "읽고 먼저 갔다",
+        "play": [
+          {
+            "by": "opp2",
+            "arc": "smash",
+            "bounce": [
+              0.52,
+              0.74
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "high",
+            "bounce": "E-CB"
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-LN",
           "severity": "차선",
           "short": "왼쪽 앞에 짧게",
-          "why": "각도로는 맞다. 하지만 세게 칠 공에 드롭을 칠 이유가 없다."
+          "why": "각도로는 맞다. 하지만 세게 칠 공에 드롭을 칠 이유가 없다.",
+          "stand": [
+            0.3,
+            0.6
+          ],
+          "caption": "파트너가 겨우 막는다",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "smash",
+              "bounce": [
+                0.5,
+                0.76
+              ],
+              "to": [
+                0.44,
+                0.86
+              ],
+              "reach": "partner"
+            }
+          ]
         },
         {
           "zone": "A-RN",
           "severity": "실수",
           "short": "내가 선 곳",
-          "why": "사람이 선 곳으로 치는 스매시는 실수일 때뿐이다."
+          "why": "사람이 선 곳으로 치는 스매시는 실수일 때뿐이다.",
+          "caption": "가운데에 꽂혔다",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "smash",
+              "bounce": [
+                0.5,
+                0.76
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "스매시는 사람이 아니라 빈 곳으로 온다.",
@@ -1857,20 +3132,70 @@
         "zone": "A-LN",
         "short": "공 쪽, 왼쪽으로",
         "principle": "P-02",
-        "why": "구석에서 칠 수 있는 각도는 좁다. 그 각도 안에만 서면 된다."
+        "why": "구석에서 칠 수 있는 각도는 좁다. 그 각도 안에만 서면 된다.",
+        "stand": [
+          0.3,
+          0.58
+        ],
+        "caption": "각도 안에서 기다렸다",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "normal",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-LN",
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-CN",
           "severity": "차선",
           "short": "가운데를 지킨다",
-          "why": "틀리진 않지만 실제 각도보다 오른쪽에 치우쳤다."
+          "why": "틀리진 않지만 실제 각도보다 오른쪽에 치우쳤다.",
+          "caption": "반 박자 늦었다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.12,
+                0.74
+              ],
+              "to": [
+                0.16,
+                0.82
+              ],
+              "reach": "me"
+            }
+          ]
         },
         {
           "zone": "A-RN",
           "severity": "실수",
           "short": "빈 오른쪽 막기",
-          "why": "구석에서 오른쪽 깊숙이는 못 보낸다. 없는 위협이다."
+          "why": "구석에서 오른쪽 깊숙이는 못 보낸다. 없는 위협이다.",
+          "stand": [
+            0.72,
+            0.58
+          ],
+          "caption": "없는 위협을 막았다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.14,
+                0.72
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "코트 말고, 칠 수 있는 각도를 지켜라.",
@@ -1946,20 +3271,60 @@
         "zone": "E-CM",
         "short": "두 사람 사이로",
         "principle": "P-04",
-        "why": "지금 가장 큰 빈 곳이다. 둘이 서로 미루는 사이 떨어진다."
+        "why": "지금 가장 큰 빈 곳이다. 둘이 서로 미루는 사이 떨어진다.",
+        "caption": "두 사람 사이로 끝",
+        "play": [
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": [
+              0.46,
+              0.26
+            ],
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "E-RN",
           "severity": "차선",
           "short": "넷맨 발밑",
-          "why": "좋은 코스지만, 더 큰 빈 곳을 두고 사람 쪽을 노렸다."
+          "why": "좋은 코스지만, 더 큰 빈 곳을 두고 사람 쪽을 노렸다.",
+          "caption": "넷맨이 반사로 막았다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "volley",
+              "to": [
+                0.78,
+                0.37
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "to": "partner"
+            }
+          ]
         },
         {
           "zone": "E-LB",
           "severity": "실수",
           "short": "구석으로 세게",
-          "why": "상대가 서 있는 방향이고, 구석은 가장 좁은 과녁이다."
+          "why": "상대가 서 있는 방향이고, 구석은 가장 좁은 과녁이다.",
+          "caption": "구석을 노리다 아웃",
+          "play": [
+            {
+              "by": "me",
+              "arc": "flat",
+              "bounce": [
+                0.1,
+                -0.03
+              ],
+              "call": "아웃"
+            }
+          ]
         }
       ],
       "coachLine": "마무리는 세게가 아니라 두 사람 사이로.",
@@ -2013,20 +3378,24 @@
           ]
         },
         "ball": {
-          "kind": "스트로크",
+          "kind": "우리 스트로크",
           "arc": "normal",
           "from": [
-            0.3,
-            0.1
+            0.24,
+            0.97
           ],
           "bounce": [
-            0.52,
-            0.8
+            0.3,
+            0.2
+          ],
+          "to": [
+            0.3,
+            0.12
           ]
         }
       },
       "scene": "랠리 중 보니, 우리가 대각선으로 서 있다.",
-      "cue": "상대 공이 우리 둘 사이로 온다.",
+      "cue": "우리 둘 사이가 코트에서 가장 넓다.",
       "question": {
         "type": "both",
         "text": "나는 어떻게?"
@@ -2035,20 +3404,70 @@
         "zone": "A-CN",
         "short": "가운데로 좁힌다",
         "principle": "P-01",
-        "why": "대각선은 둘 사이가 가장 길다. 좁히면 가운데 구멍이 닫힌다."
+        "why": "대각선은 둘 사이가 가장 길다. 좁히면 가운데 구멍이 닫힌다.",
+        "stand": [
+          0.54,
+          0.6
+        ],
+        "caption": "가운데를 닫았다",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "normal",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-LN",
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-RM",
           "severity": "차선",
           "short": "내려가 나란히",
-          "why": "대형은 정리되지만 네트를 내준다. 밀릴 때만 쓴다."
+          "why": "대형은 정리되지만 네트를 내준다. 밀릴 때만 쓴다.",
+          "stand": [
+            0.76,
+            0.76
+          ],
+          "caption": "네트를 내주고 버틴다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.52,
+                0.66
+              ],
+              "to": [
+                0.56,
+                0.74
+              ],
+              "reach": "me"
+            }
+          ]
         },
         {
           "zone": "A-RN",
           "severity": "실수",
           "short": "제자리에서 기다림",
-          "why": "파트너는 뒤에서 치느라 못 올라온다. 구멍이 계속 열려 있다."
+          "why": "파트너는 뒤에서 치느라 못 올라온다. 구멍이 계속 열려 있다.",
+          "caption": "대각선 구멍이 뚫렸다",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.5,
+                0.78
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "대각선이면, 움직일 수 있는 사람이 먼저.",
@@ -2127,20 +3546,55 @@
         "reveal": {
           "type": "move"
         },
-        "why": "뜬 가운데 공은 네트에 가까운 사람이 위에서 누른다."
+        "why": "뜬 가운데 공은 네트에 가까운 사람이 위에서 누른다.",
+        "stand": [
+          0.5,
+          0.6
+        ],
+        "caption": "앞사람이 끝냈다",
+        "play": [
+          {
+            "by": "me",
+            "arc": "smash",
+            "bounce": "E-CM",
+            "winner": true
+          }
+        ]
       },
       "distractors": [
         {
           "zone": "A-CM",
           "severity": "차선",
           "short": "파트너가 올라와서",
-          "why": "달려오며 치는 공은 발이 안 맞는다. 나는 놀고 있다."
+          "why": "달려오며 치는 공은 발이 안 맞는다. 나는 놀고 있다.",
+          "moves": {},
+          "caption": "달려와 겨우 넘겼다",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "normal",
+              "to": "opp2"
+            }
+          ]
         },
         {
           "zone": "A-RN",
           "severity": "실수",
           "short": "서로 쳐다본다",
-          "why": "가장 흔한 실점이다. 미리 정하면 사라진다."
+          "why": "가장 흔한 실점이다. 미리 정하면 사라진다.",
+          "moves": {},
+          "caption": "둘 다 보다 놓쳤다",
+          "play": [
+            {
+              "by": "none",
+              "arc": "normal",
+              "bounce": [
+                0.5,
+                0.66
+              ],
+              "winner": true
+            }
+          ]
         }
       ],
       "coachLine": "뜬 가운데 공은 앞사람 것이다.",

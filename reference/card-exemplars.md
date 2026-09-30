@@ -93,20 +93,63 @@
     "zone": "A-CN",
     "short": "가운데로 두 걸음",
     "principle": "P-04",
-    "why": "밀린 리시버는 크로스로 칠 수밖에 없다. 그 길목이 가운데다."
+    "why": "밀린 리시버는 크로스로 칠 수밖에 없다. 그 길목이 가운데다.",
+    "stand": [
+      0.5,
+      0.57
+    ],
+    "caption": "가로채서 포인트!",
+    "play": [
+      {
+        "by": "opp1",
+        "arc": "normal",
+        "to": "me"
+      },
+      {
+        "by": "me",
+        "arc": "volley",
+        "bounce": "E-CM",
+        "winner": true
+      }
+    ]
   },
   "distractors": [
     {
       "zone": "A-LN",
       "severity": "차선",
       "short": "제자리에서 기다림",
-      "why": "안전하지만, 상대가 편한 크로스만 반복한다."
+      "why": "안전하지만, 상대가 편한 크로스만 반복한다.",
+      "caption": "편한 크로스가 이어진다",
+      "play": [
+        {
+          "by": "opp1",
+          "arc": "normal",
+          "bounce": [
+            0.78,
+            0.9
+          ],
+          "to": "partner"
+        }
+      ]
     },
     {
       "zone": "A-LM",
       "severity": "실수",
       "short": "물러서며 직선 막기",
-      "why": "직선은 원래 치기 가장 어렵다. 막으려다 가운데가 빈다."
+      "why": "직선은 원래 치기 가장 어렵다. 막으려다 가운데가 빈다.",
+      "stand": [
+        0.18,
+        0.72
+      ],
+      "caption": "가운데가 뚫렸다",
+      "play": [
+        {
+          "by": "opp1",
+          "arc": "normal",
+          "bounce": "A-CM",
+          "winner": true
+        }
+      ]
     }
   ],
   "coachLine": "넷맨은 직선이 아니라 가운데를 먹는다.",
@@ -209,20 +252,83 @@
     "zone": "E-LB",
     "short": "크로스로 깊게",
     "principle": "P-02",
-    "why": "찬스라도 무리하지 않는다. 깊게 보내면 서버가 밀리고 우리가 앞선다."
+    "why": "찬스라도 무리하지 않는다. 깊게 보내면 서버가 밀리고 우리가 앞선다.",
+    "caption": "서버를 밀어냈다",
+    "play": [
+      {
+        "by": "me",
+        "arc": "normal",
+        "bounce": [
+          0.2,
+          0.07
+        ],
+        "to": [
+          0.24,
+          0.0
+        ]
+      },
+      {
+        "by": "opp1",
+        "arc": "high",
+        "to": "partner"
+      },
+      {
+        "by": "partner",
+        "arc": "volley",
+        "bounce": "E-CN",
+        "winner": true
+      }
+    ]
   },
   "distractors": [
     {
       "zone": "E-CB",
       "severity": "차선",
       "short": "두 사람 사이 깊게",
-      "why": "좋은 코스지만 넷맨이 서 있으면 사정거리 안이다."
+      "why": "좋은 코스지만 넷맨이 서 있으면 사정거리 안이다.",
+      "caption": "넷맨 사정거리였다",
+      "play": [
+        {
+          "by": "me",
+          "arc": "normal",
+          "to": [
+            0.58,
+            0.38
+          ]
+        },
+        {
+          "by": "opp2",
+          "arc": "volley",
+          "bounce": [
+            0.4,
+            0.84
+          ],
+          "to": "partner"
+        }
+      ]
     },
     {
       "zone": "E-RB",
       "severity": "실수",
       "short": "직선(다운더라인)",
-      "why": "넷맨이 팔만 뻗어도 닿는다. 네트도 가장 높다."
+      "why": "넷맨이 팔만 뻗어도 닿는다. 네트도 가장 높다.",
+      "caption": "넷맨이 팔만 뻗었다",
+      "play": [
+        {
+          "by": "me",
+          "arc": "normal",
+          "to": [
+            0.76,
+            0.38
+          ]
+        },
+        {
+          "by": "opp2",
+          "arc": "volley",
+          "bounce": "A-CM",
+          "winner": true
+        }
+      ]
     }
   ],
   "coachLine": "가운데는 넷맨이 없을 때 정답이다.",

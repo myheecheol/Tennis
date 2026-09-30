@@ -4,29 +4,160 @@
   "note": "작성 중 — 현재 C2-08 한 장만 완성됐다. 프롬프트 예시(few-shot 앵커)로도 쓰인다.",
   "cards": [
     {
-      "id": "C2-08", "chapter": "C2", "title": "세컨 서브 리턴 코스",
-      "difficulty": 3, "prereq": ["C2-07"], "myRole": "리시버", "phase": "리턴",
+      "id": "C2-08",
+      "chapter": "C2",
+      "title": "세컨 서브 리턴 코스",
+      "difficulty": 3,
+      "prereq": [
+        "C2-07"
+      ],
+      "myRole": "리시버",
+      "phase": "리턴",
       "setup": {
-        "me": {"zone": "A-RB", "xy": [0.76, 0.93]},
-        "partner": {"zone": "A-LM", "xy": [0.28, 0.78]},
-        "opp1": {"zone": "E-LX", "xy": [0.30, -0.02]},
-        "opp2": {"zone": "E-RM", "xy": [0.72, 0.29]},
-        "ball": {"kind": "세컨 서브", "arc": "serve2", "from": [0.30, -0.02], "bounce": [0.64, 0.70], "to": [0.74, 0.89]}
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.76,
+            0.93
+          ]
+        },
+        "partner": {
+          "zone": "A-LM",
+          "xy": [
+            0.28,
+            0.78
+          ]
+        },
+        "opp1": {
+          "zone": "E-LX",
+          "xy": [
+            0.3,
+            -0.02
+          ]
+        },
+        "opp2": {
+          "zone": "E-RM",
+          "xy": [
+            0.72,
+            0.29
+          ]
+        },
+        "ball": {
+          "kind": "세컨 서브",
+          "arc": "serve2",
+          "from": [
+            0.3,
+            -0.02
+          ],
+          "bounce": [
+            0.64,
+            0.7
+          ],
+          "to": [
+            0.74,
+            0.89
+          ]
+        }
       },
       "scene": "세컨 서브가 짧고 느리게 들어왔다.",
       "cue": "상대 넷맨은 박스 한가운데 그대로다.",
-      "question": {"type": "target", "text": "어디로 보낼까?"},
-      "answer": {"zone": "E-LB", "short": "크로스로 깊게", "principle": "P-02",
-        "why": "찬스라도 무리하지 않는다. 깊게 보내면 서버가 밀리고 우리가 앞선다."},
+      "question": {
+        "type": "target",
+        "text": "어디로 보낼까?"
+      },
+      "answer": {
+        "zone": "E-LB",
+        "short": "크로스로 깊게",
+        "principle": "P-02",
+        "why": "찬스라도 무리하지 않는다. 깊게 보내면 서버가 밀리고 우리가 앞선다.",
+        "caption": "서버를 밀어냈다",
+        "play": [
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": [
+              0.2,
+              0.07
+            ],
+            "to": [
+              0.24,
+              0.0
+            ]
+          },
+          {
+            "by": "opp1",
+            "arc": "high",
+            "to": "partner"
+          },
+          {
+            "by": "partner",
+            "arc": "volley",
+            "bounce": "E-CN",
+            "winner": true
+          }
+        ]
+      },
       "distractors": [
-        {"zone": "E-CB", "severity": "차선", "short": "두 사람 사이 깊게",
-         "why": "좋은 코스지만 넷맨이 서 있으면 사정거리 안이다."},
-        {"zone": "E-RB", "severity": "실수", "short": "직선(다운더라인)",
-         "why": "넷맨이 팔만 뻗어도 닿는다. 네트도 가장 높다."}
+        {
+          "zone": "E-CB",
+          "severity": "차선",
+          "short": "두 사람 사이 깊게",
+          "why": "좋은 코스지만 넷맨이 서 있으면 사정거리 안이다.",
+          "caption": "넷맨 사정거리였다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.58,
+                0.38
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.4,
+                0.84
+              ],
+              "to": "partner"
+            }
+          ]
+        },
+        {
+          "zone": "E-RB",
+          "severity": "실수",
+          "short": "직선(다운더라인)",
+          "why": "넷맨이 팔만 뻗어도 닿는다. 네트도 가장 높다.",
+          "caption": "넷맨이 팔만 뻗었다",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.76,
+                0.38
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": "A-CM",
+              "winner": true
+            }
+          ]
+        }
       ],
       "coachLine": "가운데는 넷맨이 없을 때 정답이다.",
-      "next": {"id": "C2-11", "text": "깊게 들어갔다, 나갈까"},
-      "tags": ["리턴", "크로스", "세컨서브"]
+      "next": {
+        "id": "C2-11",
+        "text": "깊게 들어갔다, 나갈까"
+      },
+      "tags": [
+        "리턴",
+        "크로스",
+        "세컨서브"
+      ]
     }
   ]
 }
