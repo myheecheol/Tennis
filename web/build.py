@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""prompts/*.md 의 ```text 블록을 뽑아 web/template.html 에 주입해 index.html 을 만든다."""
+"""페이지를 만든다. 공용 엔진(web/src/court.js · court.css)과 검증된 카드 · 카메라 규격을 각 템플릿에 넣는다.
+   index.html — 블루프린트 페이지 (prompts/*.md 의 ```text 블록도 함께)"""
 import json, re, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -79,12 +80,23 @@ def blob(obj):
     return json.dumps(obj, ensure_ascii=False).replace("</", r"<\/")
 
 
-html = (WEB / "template.html").read_text(encoding="utf-8")
-for key, obj in (("PROMPTS_JSON", steps), ("CARDS_JSON", cards), ("CAMERAS_JSON", cams)):
-    html = html.replace("/*" + key + "*/", blob(obj))
-(WEB / "index.html").write_text(html, encoding="utf-8")
+COURT_JS = (WEB / "src" / "court.js").read_text(encoding="utf-8")
+COURT_CSS = (WEB / "src" / "court.css").read_text(encoding="utf-8")
+assert "</script" not in COURT_JS.lower(), "엔진 안에 </script 가 있으면 페이지가 깨진다"
 
-assert "_JSON*/" not in html, "주입 자리가 남았다"
+
+def page(template, out, data):
+    html = (WEB / template).read_text(encoding="utf-8")
+    html = html.replace("/*COURT_CSS*/", COURT_CSS).replace("/*COURT_JS*/", COURT_JS)
+    for key, obj in data:
+        html = html.replace("/*" + key + "*/", blob(obj))
+    assert "_JSON*/" not in html and "/*COURT_" not in html, f"{out}: 주입 자리가 남았다"
+    (WEB / out).write_text(html, encoding="utf-8")
+    return html
+
+
+html = page("template.html", "index.html",
+            (("PROMPTS_JSON", steps), ("CARDS_JSON", cards), ("CAMERAS_JSON", cams)))
 print(f"index.html  {len(html):,} bytes")
 print(f"  카드 {len(cards)}장  {cards[0]['id']} … {cards[-1]['id']}")
 for s in steps:
