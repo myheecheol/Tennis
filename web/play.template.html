@@ -1,0 +1,632 @@
+<title>복식 무브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;800;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/*COURT_CSS*/
+/* 검증판 게임 — 레이아웃: 폰은 한 줄 기둥, 넓으면 코트 | 패널. 색·글꼴은 court.css 의 토큰.
+   잔디 줄무늬(오늘의 코트) · 형광 노랑(나, 주 버튼 글자) · 남색(상대) · 동호인 부수 사다리 */
+:root{--night:#16240D;--night-2:#23361A;--on-night:#F3F8EA;--grass-hi:#AFCF7B;--grass-lo:#6E9A38}
+html,body{min-height:100%}
+.app{max-width:980px;margin-inline:auto;padding-inline:16px;padding-block:16px 56px}
+.eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em;color:var(--muted);font-weight:500}
+.note{font-size:12.5px;color:var(--muted);line-height:1.6}
+
+/* ── 윗줄 ── */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(243,248,234,.93);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.bar-in{max-width:980px;margin-inline:auto;padding:9px 16px;min-height:54px;display:flex;align-items:center}
+.brand-row{flex:1;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:900;font-size:18px;letter-spacing:-.02em;color:var(--ink)}
+.rank-chip{display:inline-flex;align-items:baseline;gap:7px;font-family:var(--f-display);font-weight:800;font-size:13px;padding:5px 11px;border-radius:999px;background:var(--night);color:var(--optic);white-space:nowrap}
+.rank-chip small{font-family:var(--f-mono);font-weight:500;font-size:10px;letter-spacing:.08em;color:#C9D8B6}
+.sbar{flex:1;display:flex;align-items:center;gap:12px;min-width:0}
+.x{flex:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--rule-2);background:var(--surface);color:var(--ink-2);cursor:pointer;font-size:15px;line-height:1}
+.x:hover{border-color:var(--greenery);background:var(--greenery-soft)}
+.x:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:2px}
+.sdots{flex:1;display:flex;gap:4px;min-width:0}
+.sdots i{flex:1;height:7px;border-radius:4px;background:#DDE7CF}
+.sdots i.cur{background:var(--ink)}
+.sdots i.정답{background:var(--good)} .sdots i.차선{background:#D9A12E} .sdots i.실수{background:#D0573B}
+.scount{flex:none;font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.screen{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.card h2{font-size:15px;font-weight:800}
+.cta{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;border:0;border-radius:14px;padding:12px 20px;background:var(--night);color:var(--optic);font-family:var(--f-display);font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 8px 18px -10px rgba(22,36,13,.7)}
+.cta:hover{background:#0E1808}
+.cta:focus-visible{outline:3px solid var(--greenery-deep);outline-offset:3px}
+.linkish{align-self:flex-start;border:0;background:none;padding:2px 0;color:var(--greenery-deep);font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+/* ── 홈: 오늘의 코트 ── */
+.today{position:relative;display:grid;grid-template-columns:minmax(0,1fr) clamp(108px,30vw,210px);gap:14px;align-items:center;border-radius:20px;padding:18px;color:#12200A;overflow:hidden;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.09) 0 58px,rgba(255,255,255,0) 58px 116px),linear-gradient(160deg,var(--grass-hi) 0%,var(--greenery) 55%,var(--grass-lo) 100%);box-shadow:var(--shadow)}
+.today.solo{grid-template-columns:1fr}
+.today-text{display:flex;flex-direction:column;gap:9px;min-width:0}
+.today .eyebrow{color:#2C4318}
+.today h1{font-weight:900;font-size:clamp(23px,5.6vw,34px);letter-spacing:-.03em;line-height:1.18}
+.today-sub{font-size:14px;color:#223513;max-width:36ch}
+.today-court{display:flex;flex-direction:column;gap:7px;min-width:0}
+.today-court .shot{border-radius:12px;overflow:hidden;background:var(--greenery);line-height:0;box-shadow:0 0 0 2px rgba(255,255,255,.5),0 10px 20px -12px rgba(22,36,13,.6)}
+.today-court svg{width:100%;height:auto;display:block;pointer-events:none}
+.today-tag{font-family:var(--f-display);font-weight:800;font-size:11.5px;line-height:1.35;color:#12200A;text-align:center}
+.today-tag small{display:block;font-family:var(--f-mono);font-weight:500;font-size:10.5px;color:#2C4318}
+
+/* 진도 */
+.prog-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.prog-n{font-family:var(--f-display);font-weight:900;font-size:26px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.prog-n small{font-family:var(--f-body);font-weight:500;font-size:14px;color:var(--muted);margin-left:4px}
+.prog-meta{display:flex;gap:12px;font-size:13px;color:var(--ink-2)}
+.cells{display:flex;gap:8px}
+.cgrp{display:grid;gap:3px}
+.cells i{height:12px;border-radius:3px;background:#DDE7CF}
+.cells i.정답{background:var(--good)} .cells i.차선{background:#D9A12E} .cells i.실수{background:#D0573B}
+.cells i.next{box-shadow:inset 0 0 0 2px var(--ink)}
+.cgrp-l{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);margin-top:2px}
+
+/* 전술 부수 */
+.rank-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.rank-big{font-family:var(--f-display);font-weight:900;font-size:24px;letter-spacing:-.02em}
+.ladder{list-style:none;margin:0;padding:0;display:flex;gap:4px}
+.ladder li{flex:1;text-align:center;font-family:var(--f-display);font-weight:800;font-size:12px;padding:7px 0;border-radius:9px;background:var(--surface-2);color:var(--muted)}
+.ladder li.past{background:var(--greenery-soft);color:var(--greenery-deep)}
+.ladder li.on{background:var(--night);color:var(--optic)}
+.rank-next{font-size:13.5px;color:var(--ink-2)}
+
+/* 다 풀었을 때 */
+.wait{background:var(--night);color:var(--on-night);border-color:var(--night)}
+.wait h2{color:var(--optic);font-size:18px}
+.wait p{font-size:14px;color:#D6E3C6}
+.wait .cta{background:var(--optic);color:var(--night)}
+.wait .done-mark{font-family:var(--f-display);font-weight:800;color:var(--optic)}
+
+/* 챕터 */
+.chs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.ch{width:100%;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;padding:10px 12px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);cursor:pointer}
+button.ch:hover{border-color:var(--greenery);background:var(--greenery-soft)}
+button.ch:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:2px}
+.ch .n{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;background:var(--greenery);color:#12200A}
+.ch .t{display:flex;flex-direction:column;min-width:0}
+.ch .t b{font-size:14.5px}
+.ch .t small{font-size:12px;color:var(--muted);line-height:1.45}
+.ch .c.go{font-family:var(--f-display);font-size:18px;color:var(--greenery-deep)}
+.ch .c{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ch.lock{cursor:default;background:var(--sunk)}
+.ch.lock .n{background:var(--surface-2);color:var(--muted)}
+.foot{font-size:12px;color:var(--muted);line-height:1.6;padding-inline:2px}
+
+/* ── 카드 플레이 ── */
+.player{background:var(--surface);border:1px solid var(--rule);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.p-body{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr)}
+@media (max-width:780px){.p-body{grid-template-columns:1fr}}
+.p-kicker{display:flex;gap:8px;align-items:center;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.p-kicker .role{color:#12200A;background:var(--greenery-soft);padding:2px 8px;border-radius:6px;font-family:var(--f-display);font-weight:800}
+.hint{font-size:13px;color:var(--greenery-deep);font-weight:700}
+.report{align-self:flex-start;border:0;background:none;padding:2px 0;color:var(--muted);font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.report:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:2px}
+.rep-form{display:flex;flex-direction:column;gap:7px;padding:12px;border:1px solid var(--rule);border-radius:12px;background:var(--sunk)}
+.rep-q{font-weight:700;font-size:13.5px}
+.rep-form label{display:flex;gap:8px;align-items:center;font-size:13.5px;cursor:pointer}
+.rep-form input{accent-color:var(--greenery-deep)}
+.taste-cta{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:14px;background:var(--night);color:var(--on-night)}
+.taste-cta b{font-family:var(--f-display);font-size:18px;color:var(--optic)}
+.taste-cta span{font-size:13.5px;color:#D6E3C6}
+.taste-cta .cta{background:var(--optic);color:var(--night);margin-top:4px}
+
+/* ── 한 판 끝 ── */
+.done h1{font-family:var(--f-display);font-weight:900;font-size:clamp(26px,6vw,34px);letter-spacing:-.025em}
+.tally{display:flex;gap:8px;flex-wrap:wrap}
+.tally span{font-family:var(--f-display);font-weight:800;font-size:15px;padding:8px 14px;border-radius:12px;font-variant-numeric:tabular-nums}
+.tally .정답{background:var(--good-soft);color:var(--good)} .tally .차선{background:var(--warn-soft);color:var(--warn)} .tally .실수{background:var(--bad-soft);color:var(--bad)}
+.xp{font-family:var(--f-mono);font-size:12.5px;color:var(--muted)}
+.rankup{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:14px;background:var(--night);color:var(--on-night)}
+.rankup b{font-family:var(--f-display);font-size:18px;color:var(--optic)}
+.rankup span{font-size:13.5px;color:#D6E3C6}
+
+/* ── 챕터 목록 ── */
+.ch-head{display:flex;gap:12px;align-items:center}
+.ch-head h2{font-size:21px;font-weight:900;letter-spacing:-.02em}
+.ch-goal{font-size:14px;color:var(--ink-2);max-width:60ch}
+.clist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.crow{width:100%;display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;padding:10px 12px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);cursor:pointer}
+button.crow:hover{border-color:var(--greenery);background:var(--greenery-soft)}
+button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:2px}
+.crow.lock{cursor:default;background:var(--sunk);color:var(--ink-2)}
+.crow .st{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:13px;background:var(--surface-2);color:var(--muted)}
+.crow .st.정답{background:var(--good);color:#fff} .crow .st.차선{background:#D9A12E;color:#fff} .crow .st.실수{background:#D0573B;color:#fff}
+.crow .st.next{background:var(--night);color:var(--optic)}
+.crow .ct{display:flex;flex-direction:column;min-width:0}
+.crow .ct b{font-size:14px}
+.crow .ct small{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.crow .go{font-size:12px;color:var(--greenery-deep);font-weight:700;white-space:nowrap}
+.clist .more{font-size:12.5px;color:var(--muted);padding:8px 4px}
+
+/* ── 검증 지표 ── */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.kpi b{font-family:var(--f-display);font-size:26px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.kpi span{font-size:12.5px;color:var(--muted);line-height:1.4}
+.kpi.ok b{color:var(--good)}
+.klist{display:flex;flex-direction:column;gap:6px}
+.krow{display:grid;grid-template-columns:52px minmax(0,1fr) 44px 30px;gap:10px;align-items:center;font-size:12.5px}
+.kid{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-2)}
+.kbar{display:flex;height:12px;border-radius:6px;overflow:hidden;background:#EEF3E6}
+.kbar i{display:block;height:100%}
+.kbar .g{background:var(--good)} .kbar .s{background:#D9A12E} .kbar .m{background:#D0573B}
+.kn,.kr{font-family:var(--f-mono);font-size:11.5px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.kr{color:var(--bad)}
+.klegend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.klegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+.toast{position:fixed;left:16px;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));margin:0 auto;width:fit-content;max-width:calc(100% - 32px);z-index:30;padding:10px 16px;border-radius:12px;background:var(--night);color:var(--on-night);font-size:13.5px;box-shadow:0 12px 26px -12px rgba(22,36,13,.7)}
+</style>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand-row" id="bar-home">
+      <span class="brand"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="9.6" fill="#E4FF3D" stroke="#16240D" stroke-opacity=".35"/><path d="M3.4 7.2 Q11 11 6.2 19M18.6 14.8 Q11 11 15.8 3" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>복식 무브</span>
+      <span class="rank-chip" id="bar-rank"><small>전술 부수</small><span id="bar-rank-t">신인부</span></span>
+    </div>
+    <div class="sbar" id="bar-play" hidden>
+      <button class="x" id="b-x" data-act="exit" aria-label="나가기">✕</button>
+      <div class="sdots" id="sdots" aria-hidden="true"></div>
+      <span class="scount" id="scount"></span>
+    </div>
+  </div>
+</header>
+
+<main class="app">
+  <section class="screen" id="s-home" aria-label="홈" hidden>
+    <div class="today" id="today">
+      <div class="today-text">
+        <p class="eyebrow" id="t-eye">오늘의 코트</p>
+        <h1 id="t-head">오늘의 코트</h1>
+        <p class="today-sub" id="t-sub"></p>
+        <button class="cta" id="t-cta" data-act="start">시작하기</button>
+      </div>
+      <div class="today-court" id="t-court">
+        <div class="shot"><svg id="preview" class="court" viewBox="0 0 400 500" aria-hidden="true" focusable="false"></svg></div>
+        <p class="today-tag" id="t-tag"></p>
+      </div>
+    </div>
+
+    <div class="card wait" id="c-wait" hidden>
+      <h2 id="w-head"></h2>
+      <p id="w-body"></p>
+      <div id="w-act"></div>
+    </div>
+
+    <div class="card" id="c-prog">
+      <div class="prog-head">
+        <span class="prog-n" id="p-n">0<small>/ 30장</small></span>
+        <span class="prog-meta"><span id="p-acc"></span><span id="p-streak"></span></span>
+      </div>
+      <div class="cells" id="p-cells"></div>
+    </div>
+
+    <div class="card" id="c-rank">
+      <div class="rank-top"><span class="eyebrow">전술 부수</span><span class="rank-big" id="r-now">신인부</span></div>
+      <ol class="ladder" id="r-ladder" aria-label="부수 단계"></ol>
+      <p class="rank-next" id="r-next"></p>
+      <p class="note">전술 부수는 이 앱 안의 등급이에요. 동호회 부수와는 달라요.</p>
+    </div>
+
+    <div class="card">
+      <h2>챕터</h2>
+      <ul class="chs" id="ch-rows"></ul>
+    </div>
+
+    <button class="linkish" id="h-stats" data-act="stats" hidden>검증 지표 보기</button>
+    <p class="foot">복식 초보를 위한 검증판이에요. 어떤 카드에서 무엇을 골랐는지만 모아 카드를 고치는 데 써요. 이름이나 연락처는 모으지 않아요.</p>
+  </section>
+
+  <section class="screen" id="s-play" aria-label="카드" hidden>
+    <div class="player">
+      <div class="p-body">
+        <div class="p-stage">
+          <svg id="stage" class="court" viewBox="0 0 400 500" role="img"></svg>
+          <div class="p-say" id="p-say" role="status" aria-live="polite" hidden></div>
+          <div class="p-ctrl">
+            <div class="seg" role="group" aria-label="시점">
+              <button id="v-top" data-view="top" aria-pressed="true">중계</button>
+              <button id="v-me" data-view="me" aria-pressed="false">내 시점</button>
+            </div>
+            <button class="replay" id="replay" aria-label="공 궤적 다시 보기">▶ 다시</button>
+          </div>
+        </div>
+        <div class="p-panel">
+          <div class="p-kicker"><span class="role" id="p-role"></span><span id="p-id"></span></div>
+          <h3 id="p-title"></h3>
+          <p class="scene" id="p-scene"></p>
+          <p class="cue"><span class="k">단서</span><span id="p-cue"></span></p>
+          <p class="ask" id="p-ask"></p>
+          <p class="hint" id="p-hint" hidden>코트를 눌러 답하세요</p>
+          <div class="opts" id="p-opts"></div>
+          <div class="verdict" id="p-verdict" hidden></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen done" id="s-done" aria-label="한 판 결과" hidden>
+    <p class="eyebrow" id="d-eye">오늘의 코트</p>
+    <h1 id="d-head">오늘의 코트 끝!</h1>
+    <div class="tally" id="d-tally"></div>
+    <p class="xp" id="d-xp"></p>
+    <div class="card">
+      <p class="eyebrow">오늘 기억할 한 줄</p>
+      <p class="coach" id="d-coach"></p>
+      <p class="note" id="d-from"></p>
+    </div>
+    <div class="rankup" id="d-rank" hidden></div>
+    <div class="acts" id="d-acts"></div>
+  </section>
+
+  <section class="screen" id="s-chapter" aria-label="챕터" hidden>
+    <div class="ch-head">
+      <button class="x" data-act="home" aria-label="홈으로">‹</button>
+      <div><p class="eyebrow" id="chs-eye"></p><h2 id="chs-title"></h2></div>
+    </div>
+    <p class="ch-goal" id="chs-goal"></p>
+    <ol class="clist" id="chs-list"></ol>
+  </section>
+
+  <section class="screen" id="s-stats" aria-label="검증 지표" hidden>
+    <div class="ch-head">
+      <button class="x" data-act="home" aria-label="홈으로">‹</button>
+      <div><p class="eyebrow">PHASE 1 검증</p><h2>검증 지표</h2></div>
+    </div>
+    <p class="note">만든 사람에게만 보이는 화면이에요. 참여한 사람마다 기록이 하나씩 모여요.</p>
+    <div class="screen" id="st-body"></div>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script id="card-data" type="application/json">/*CARDS_JSON*/</script>
+<script id="cam-data" type="application/json">/*CAMERAS_JSON*/</script>
+<script id="chapter-data" type="application/json">/*CHAPTERS_JSON*/</script>
+<script id="config-data" type="application/json">/*CONFIG_JSON*/</script>
+<script>/*COURT_JS*/</script>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id);};
+var CARDS=JSON.parse($('card-data').textContent),CHS=JSON.parse($('chapter-data').textContent),CFG=JSON.parse($('config-data').textContent);
+Court.init(JSON.parse($('cam-data').textContent));
+var KEYS=Court.KEYS,optsOf=Court.optsOf,correctIdx=Court.correctIdx,esc=Court.esc;
+var BY={},ORDER=[];CARDS.forEach(function(c){BY[c.id]=c;ORDER.push(c.id);});
+var TOTAL=ORDER.length,TASTE=BY[CFG.tasteCard]?CFG.tasteCard:ORDER[ORDER.length-1];
+var XP={정답:10,차선:4,실수:0},IV={실수:[1,3,7,21],차선:[3,14]};
+var VERD={정답:'✓ 정답',차선:'△ 차선',실수:'✕ 실수'},MARK={정답:'✓',차선:'△',실수:'✕'};
+var RANKS=['신인부','5부','4부','3부','2부','1부'],WEEK=['일','월','화','수','목','금','토'];
+var REASONS=['전술이 틀린 것 같아요','다른 답도 맞는 것 같아요','그림이 헷갈려요','글이 어려워요'];
+
+/* ═════════ 날짜 ═════════ */
+function ymd(d){d=d||new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
+function parseYmd(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+function addDays(s,n){var d=parseYmd(s);d.setDate(d.getDate()+n);return ymd(d);}
+function iso(){return new Date().toISOString();}
+function rid(){var s='';for(var i=0;i<12;i++)s+='abcdefghijklmnopqrstuvwxyz0123456789'.charAt(Math.floor(Math.random()*36));return 'p_'+s;}
+
+/* ═════════ 저장 — 이 브라우저에 ═════════ */
+var KEY='dmb-game-v1';
+function fresh(){return {v:1,uid:rid(),created:iso(),opens:0,onboarded:false,taste:null,cards:{},xp:0,days:[],sessions:0,
+  rank:'신인부',rankUp:null,session:null,reports:[],wait:null,ev:[]};}
+var S=(function(){try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.v===1&&s.cards)return s;}catch(e){}return fresh();})();
+if(S.session&&S.session.ids.some(function(id){return !BY[id];}))S.session=null;   // 카드가 바뀌었으면 하던 판은 버린다
+function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function save(){saveLocal();Remote.push();}
+
+/* ═════════ 기록 — Phase 1 지표 ═════════
+   1) 이 브라우저: 최근 이벤트 200개 (S.ev)
+   2) claude.ai 아티팩트: 참여자마다 문서 하나 players/<id> — 만든 사람만 전체를 읽는다
+   3) 설정한 주소(endpoint): 이벤트 묶음을 POST — claude.ai 밖에서 호스팅할 때 (design/08-phase1.md) */
+var Log={q:[],tm:null,
+  track:function(e,d){var ev={t:iso(),e:e};if(d)for(var k in d)if(d[k]!=null)ev[k]=d[k];
+    S.ev.push(ev);if(S.ev.length>200)S.ev.splice(0,S.ev.length-200);
+    if(CFG.endpoint){this.q.push(ev);var self=this;clearTimeout(this.tm);this.tm=setTimeout(function(){self.flush(false);},1500);}},
+  flush:function(beacon){if(!CFG.endpoint||!this.q.length)return;var batch=this.q.splice(0),body=JSON.stringify({u:S.uid,events:batch});
+    try{if(beacon&&navigator.sendBeacon){navigator.sendBeacon(CFG.endpoint,body);return;}
+      fetch(CFG.endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body,keepalive:true})
+        .catch(function(){Log.q=batch.concat(Log.q);});
+    }catch(err){this.q=batch.concat(this.q);}}
+};
+window.addEventListener('pagehide',function(){Log.flush(true);});
+
+var Remote={ref:null,col:null,busy:false,dirty:false,retried:false,owner:false,
+  start:function(){var cl=window.claude;if(!cl||typeof cl.use!=='function')return;
+    Promise.all([cl.use('db'),cl.use('user')]).then(function(r){var db=r[0],user=r[1];if(!db||!user)return null;
+      return Promise.all([user.id(),user.isOwner()]).then(function(v){
+        if(v[1]){Remote.owner=true;Remote.col=db.collection('players');if(screen==='home')renderHome();}
+        if(!v[0])return null;
+        Remote.ref=db.doc('players/'+v[0]);
+        return Remote.ref.get().then(function(snap){
+          var ahead=mergeRemote(snap.exists?snap.data():null);
+          if(ahead){Remote.dirty=true;Remote.flush();}
+        });
+      });
+    }).catch(function(){Remote.ref=null;});
+  },
+  push:function(){this.dirty=true;this.flush();},
+  flush:function(){var self=this;if(!this.ref||this.busy||!this.dirty)return;this.dirty=false;this.busy=true;
+    this.ref.set(docBody()).then(function(){self.busy=false;self.retried=false;self.flush();},function(e){self.busy=false;var code=e&&e.code;
+      if(code==='unavailable'&&!self.retried){self.retried=true;self.dirty=true;setTimeout(function(){self.flush();},700+Math.random()*1300);return;}
+      if(code==='resource_exhausted'){self.dirty=true;return;}   // 다음 답에서 다시 쓴다
+      self.ref=null;});   // 쓸 수 없는 참여자(보기 전용) — 이 브라우저에만 남긴다
+  }
+};
+function cardDoc(r){return {f:r.f,l:r.l,n:r.n,ms:r.ms,o:r.o,at:r.at,view:r.view||'top',due:r.due||null,track:r.track||null,box:r.box||0};}
+function docBody(){var cards={};Object.keys(S.cards).forEach(function(id){if(BY[id])cards[id]=cardDoc(S.cards[id]);});
+  return {v:1,first:S.created,last:iso(),days:S.days.slice(-120),sessions:S.sessions,xp:S.xp,rank:S.rank,onboarded:S.onboarded,
+    taste:S.taste,cards:cards,answered:answeredIds().length,total:TOTAL,reports:S.reports.slice(-30),wait:S.wait,ev:S.ev.slice(-200)};}
+/* 다른 기기에서 푼 기록을 합친다. 이 브라우저에만 있는 기록이 있으면 true */
+function mergeRemote(d){
+  if(!d||!d.cards)return answeredIds().length>0||!!S.taste;
+  var ahead=false,changed=false;
+  Object.keys(d.cards).forEach(function(id){if(!BY[id])return;var r=d.cards[id],l=S.cards[id];
+    if(!l||(r.at>l.at)){S.cards[id]={f:r.f,l:r.l,n:r.n||1,ms:r.ms||0,o:r.o,at:r.at,view:r.view||'top',due:r.due||null,track:r.track||null,box:r.box||0};changed=true;}});
+  Object.keys(S.cards).forEach(function(id){var r=d.cards[id];if(!r||S.cards[id].at>r.at)ahead=true;});
+  (d.days||[]).forEach(function(x){if(S.days.indexOf(x)<0){S.days.push(x);changed=true;}});S.days.sort();
+  if(d.xp>S.xp){S.xp=d.xp;changed=true;}else if(S.xp>(d.xp||0))ahead=true;
+  if(d.sessions>S.sessions){S.sessions=d.sessions;changed=true;}
+  if(d.first&&d.first<S.created){S.created=d.first;changed=true;}
+  if(d.onboarded&&!S.onboarded){S.onboarded=true;changed=true;}
+  if(d.taste&&!S.taste){S.taste=d.taste;changed=true;}
+  if(d.wait&&!S.wait){S.wait=d.wait;changed=true;}else if(S.wait&&!d.wait)ahead=true;
+  var seen={};S.reports.forEach(function(x){seen[x.c+x.at]=1;});(d.reports||[]).forEach(function(x){if(!seen[x.c+x.at]){S.reports.push(x);changed=true;}});
+  if(S.reports.length>(d.reports||[]).length)ahead=true;
+  S.rank=rankNow();
+  if(changed){saveLocal();if(screen==='home')renderHome();}
+  return ahead;
+}
+
+/* ═════════ 진도 ═════════ */
+function answeredIds(){return ORDER.filter(function(id){return S.cards[id];});}
+function chIds(ch){return ORDER.filter(function(id){return id.indexOf(ch+'-')===0;});}
+function acc(ids){var n=0,g=0;ids.forEach(function(id){var r=S.cards[id];if(r){n++;if(r.l==='정답')g++;}});return n?g/n:0;}
+function newIds(n){return ORDER.filter(function(id){return !S.cards[id];}).slice(0,n);}
+function dueIds(n){var t=ymd();return ORDER.filter(function(id){var r=S.cards[id];return r&&r.due&&r.due<=t;})
+  .sort(function(a,b){var x=S.cards[a].due,y=S.cards[b].due;return x<y?-1:x>y?1:ORDER.indexOf(a)-ORDER.indexOf(b);}).slice(0,n);}
+function nextDue(){var m=null;ORDER.forEach(function(id){var r=S.cards[id];if(r&&r.due&&(!m||r.due<m))m=r.due;});return m;}
+function rankNow(){var c1=chIds('C1');return c1.length&&c1.every(function(id){return S.cards[id];})&&acc(c1)>=.7?'5부':'신인부';}
+/* 연속 학습일 — 주말은 쉬어도 끊기지 않는다 */
+function streak(){var set={};S.days.forEach(function(x){set[x]=1;});var d=ymd(),n=0;if(!set[d])d=addDays(d,-1);
+  for(var k=0;k<400;k++){var wd=parseYmd(d).getDay();if(set[d])n++;else if(wd!==0&&wd!==6)break;d=addDays(d,-1);}return n;}
+function markDay(){var t=ymd();if(S.days.indexOf(t)<0)S.days.push(t);}
+function record(id,v,o,ms,view,isReview){
+  var r=S.cards[id],t=ymd(),first=!r;
+  if(first)r=S.cards[id]={f:v,l:v,n:0,ms:ms,o:o,at:iso(),view:view,due:null,track:null,box:0};
+  r.n++;r.l=v;r.o=o;r.at=iso();r.view=view;
+  if(v==='정답'){if(r.track){r.box++;if(r.box>=IV[r.track].length){r.track=null;r.due=null;r.box=0;}else r.due=addDays(t,IV[r.track][r.box]);}else r.due=null;}
+  else{r.track=v;r.box=0;r.due=addDays(t,IV[v][0]);}   // 간격 반복: 실수 1·3·7·21일, 차선 3·14일
+  S.xp+=XP[v];markDay();
+  Log.track('answer',{c:id,v:v,o:o,ms:ms,view:view,rev:isReview?1:0,sid:S.session?S.session.sid:null});
+  var rk=rankNow();if(rk!==S.rank){S.rank=rk;S.rankUp=rk;Log.track('rank',{rank:rk});}
+  if(first&&answeredIds().length===TOTAL)Log.track('complete');
+  save();
+}
+
+/* ═════════ 화면 ═════════ */
+var screen='home';
+var stage=new Court.Stage($('stage'),$('p-say')),preview=new Court.Stage($('preview'),document.createElement('div'));
+function showScreen(name){screen=name;['home','play','done','chapter','stats'].forEach(function(n){$('s-'+n).hidden=n!==name;});
+  $('bar-rank-t').textContent=S.rank;
+  $('bar-home').hidden=name==='play';$('bar-play').hidden=name!=='play';
+  if(name!=='play')stage.stop();if(name!=='home')preview.stop();
+  try{window.scrollTo(0,0);}catch(e){}}
+var tt=null;function toast(msg){var el=$('toast');el.textContent=msg;el.hidden=false;clearTimeout(tt);tt=setTimeout(function(){el.hidden=true;},2800);}
+
+/* ── 홈 ── */
+function goHome(){renderHome();showScreen('home');}
+function renderHome(){
+  var done=answeredIds(),rev=dueIds(CFG.reviewPerSession),nw=newIds(CFG.newPerSession),ss=S.session,now=new Date(),first=null;
+  $('bar-rank-t').textContent=S.rank;
+  $('t-eye').textContent='오늘의 코트 · '+(now.getMonth()+1)+'월 '+now.getDate()+'일 ('+WEEK[now.getDay()]+')';
+  var cta=$('t-cta');cta.hidden=false;
+  if(ss){first=ss.ids[ss.i];$('t-head').innerHTML='하던 코트가<br>남았어요';
+    $('t-sub').textContent=(ss.i+1)+'번째 카드부터 이어서 해요. 모두 '+ss.ids.length+'장이에요.';cta.textContent='이어서 하기';}
+  else if(nw.length||rev.length){first=rev.concat(nw)[0];
+    $('t-head').innerHTML=[nw.length?'새 카드 '+nw.length+'장':'',rev.length?'복습 '+rev.length+'장':''].filter(Boolean).join('<br>');
+    $('t-sub').textContent='약 '+Math.max(1,Math.round((nw.length+rev.length)*.6))+'분 · 공이 멈추면 고르고, 고른 대로 공과 사람이 움직여요.';
+    cta.textContent=done.length?'시작하기':'첫 카드 시작하기';}
+  else{var nd=nextDue();$('t-head').innerHTML='오늘 할 카드를<br>다 풀었어요';
+    $('t-sub').textContent=nd?'다음 복습은 '+(+nd.slice(5,7))+'월 '+(+nd.slice(8))+'일에 열려요.':'새 카드가 나오면 여기에 올라와요.';cta.hidden=true;}
+  // 오늘의 첫 장면
+  var tc=$('t-court');$('today').classList.toggle('solo',!first);tc.hidden=!first;
+  if(first){var fc=BY[first];preview.show(fc,{view:'top',pick:-1,mode:'still'});
+    Array.prototype.forEach.call($('preview').querySelectorAll('[tabindex]'),function(el){el.removeAttribute('tabindex');el.removeAttribute('role');});
+    $('t-tag').innerHTML='<small>첫 장면 · '+esc(fc.myRole)+'</small>'+esc(fc.title);}
+  // 진도
+  $('p-n').innerHTML=done.length+'<small>/ '+TOTAL+'장</small>';
+  $('p-acc').textContent=done.length?'정답률 '+Math.round(acc(done)*100)+'%':'';
+  var sk=streak();$('p-streak').textContent=sk>=2?'연속 '+sk+'일째':'';
+  var nx=newIds(1)[0],cells='';
+  CHS.forEach(function(ch){var ids=chIds(ch.id);if(!ids.length)return;
+    cells+='<div style="flex:'+ids.length+'"><div class="cgrp" style="grid-template-columns:repeat('+ids.length+',1fr)">';
+    ids.forEach(function(id){var r=S.cards[id];cells+='<i class="'+(r?r.l:(id===nx?'next':''))+'" title="'+id+'"></i>';});
+    cells+='</div><div class="cgrp-l">'+ch.id.replace('C','')+'챕터</div></div>';});
+  $('p-cells').innerHTML=cells;
+  // 전술 부수
+  $('r-now').textContent=S.rank;var ri=RANKS.indexOf(S.rank);
+  $('r-ladder').innerHTML=RANKS.map(function(r,i){return '<li class="'+(i===ri?'on':i<ri?'past':'')+'">'+r+'</li>';}).join('');
+  if(S.rank==='신인부'){var c1=chIds('C1'),d1=c1.filter(function(id){return S.cards[id];}).length;
+    $('r-next').textContent='5부까지 — 1챕터 '+d1+'/'+c1.length+'장'+(d1?', 정답률 '+Math.round(acc(c1)*100)+'% (70% 이상)':', 정답률 70% 이상');}
+  else $('r-next').textContent='4부는 2챕터 카드가 모두 나온 뒤에 열려요.';
+  // 다 풀었을 때
+  var all=done.length>=TOTAL,w=$('c-wait');w.hidden=!all;
+  if(all){$('w-head').textContent=TOTAL+'장을 모두 풀었어요';
+    $('w-body').textContent='2챕터 나머지 카드와 3~5챕터를 만들고 있어요. 기다린다고 알려 주시면 우선순위를 정하는 데 써요.';
+    $('w-act').innerHTML=S.wait?'<p class="done-mark">기다린다고 전했어요 ✓ 새 카드는 이 링크에 올라와요.</p>':'<button class="cta" data-act="wait">다음 카드 기다릴게요</button>';}
+  // 챕터
+  var rows='';CHS.forEach(function(ch,i){var ids=chIds(ch.id),d=ids.filter(function(id){return S.cards[id];}).length;
+    if(ids.length)rows+='<li><button class="ch" data-act="chapter" data-ch="'+ch.id+'"><span class="n">'+(i+1)+'</span><span class="t"><b>'+esc(ch.title)+'</b><small>'+d+'/'+ids.length+'장 풀었어요'+(ids.length<ch.total?' · 나머지 '+(ch.total-ids.length)+'장은 준비 중':'')+'</small></span><span class="c go" aria-hidden="true">›</span></button></li>';
+    else rows+='<li><div class="ch lock"><span class="n">'+(i+1)+'</span><span class="t"><b>'+esc(ch.title)+'</b><small>'+ch.total+'장 · 준비 중</small></span><span class="c"></span></div></li>';});
+  $('ch-rows').innerHTML=rows;
+  $('h-stats').hidden=!Remote.owner;
+}
+
+/* ── 카드 한 장 ── */
+var mode=null,cur=null,pick=-1,revealed=false,shown=null,views={},openedAt=0,repOpen=false,backCh=null;
+function viewOf(c){return views[c.id]||c.view||'top';}
+function openCard(c,m,p,rev){
+  mode=m;cur=c;pick=p;revealed=!!rev;shown=null;repOpen=false;
+  $('p-role').textContent=c.myRole;$('p-id').textContent=c.id+(m==='session'&&S.session.rev[S.session.i]?' · 복습':'');$('p-title').textContent=c.title;
+  $('p-scene').textContent=c.scene;$('p-cue').textContent=c.cue;$('p-ask').textContent=c.question.text;
+  showScreen('play');renderBar();renderPanel();openedAt=performance.now();
+  stage.show(c,{view:viewOf(c),pick:pick,mode:pick>=0?'still':'intro'},onReveal);
+}
+function onReveal(){if(!revealed){revealed=true;renderPanel();}}
+function renderBar(){
+  var x=$('b-x'),h='';
+  if(mode==='session'){var ss=S.session;ss.ids.forEach(function(id,i){var r=ss.res[i];h+='<i class="'+(r?r.v:'')+(i===ss.i?' cur':'')+'"></i>';});
+    $('scount').textContent=(ss.i+1)+' / '+ss.ids.length;x.textContent='✕';x.setAttribute('aria-label','오늘의 코트 나가기');}
+  else if(mode==='taste'){$('scount').textContent='맛보기 · 1분';x.textContent='✕';x.setAttribute('aria-label','맛보기 건너뛰기');}
+  else{$('scount').textContent=cur.id+' 다시 보기';x.textContent='‹';x.setAttribute('aria-label','목록으로');}
+  $('sdots').innerHTML=h;
+  var isMe=viewOf(cur)==='me';$('v-top').setAttribute('aria-pressed',!isMe);$('v-me').setAttribute('aria-pressed',isMe);
+}
+function reportForm(){var h='<form class="rep-form" id="rep-form"><p class="rep-q">무엇이 이상했나요?</p>';
+  REASONS.forEach(function(r,i){h+='<label for="rep-'+i+'"><input type="radio" name="rep" id="rep-'+i+'" value="'+i+'"'+(i===0?' checked':'')+'>'+r+'</label>';});
+  return h+'<div class="acts"><button class="btn primary" type="submit">보내기</button><button class="btn" type="button" data-act="report-cancel">닫기</button></div></form>';}
+function renderPanel(){
+  var c=cur,opts=optsOf(c),h='';
+  opts.forEach(function(o,i){var cls='opt';if(pick>=0){if(revealed){cls+=' v-'+o.v;if(i!==pick&&o.v!=='정답')cls+=' dim';}if(i===pick)cls+=' picked';}
+    h+='<button class="'+cls+'" data-opt="'+i+'"'+(pick>=0?' disabled':'')+'><span class="k">'+KEYS[i]+'</span><span>'+esc(o.short)+'</span></button>';});
+  $('p-opts').innerHTML=h;
+  $('p-hint').hidden=!(mode==='taste'&&pick<0);
+  var v=$('p-verdict');
+  if(pick<0||!revealed){v.hidden=true;v.innerHTML='';return;}
+  var p=opts[pick],ci=correctIdx(c),a=opts[ci];
+  var out='<div class="vline"><span class="badge '+p.v+'">'+VERD[p.v]+'</span><span>'+esc(p.why)+'</span></div>';
+  if(p.v!=='정답')out+='<div class="vline"><span class="badge 정답">정답</span><span><b>'+esc(a.short)+'</b> — '+esc(a.why)+'</span></div>';
+  out+='<p class="coach">“'+esc(c.coachLine)+'”</p>';
+  if(mode==='taste')out+='<div class="taste-cta"><b>이런 상황이 '+TOTAL+'개 있어요</b><span>하루 몇 장씩, 코트에서 바로 떠오르게 연습해요.</span><button class="cta" data-act="taste-start">시작하기</button></div>';
+  var acts='';
+  if(mode==='session'){var last=S.session.i>=S.session.ids.length-1;acts+='<button class="btn primary" data-act="'+(last?'finish':'next')+'">'+(last?'결과 보기':'다음 카드 →')+'</button>';}
+  if(mode==='review')acts+='<button class="btn primary" data-act="retry">다시 풀기</button><button class="btn" data-act="back">목록으로</button>';
+  if(p.v!=='정답'){var sc=shown!=null&&shown!==pick;acts+='<button class="btn" data-act="scene" data-i="'+(sc?pick:ci)+'">'+(sc?'내 선택 다시 보기':'정답 장면 보기 ▶')+'</button>';}
+  if(acts)out+='<div class="acts">'+acts+'</div>';
+  if(mode!=='taste')out+=repOpen?reportForm():'<button class="report" data-act="report">이 카드 이상해요</button>';
+  v.innerHTML=out;v.hidden=false;
+}
+function choose(i){
+  if(pick>=0||!cur)return;
+  var c=cur,o=optsOf(c)[i],ms=Math.round(performance.now()-openedAt),view=viewOf(c);
+  pick=i;revealed=false;
+  if(mode==='taste'){S.taste={v:o.v,o:i,ms:ms,at:iso()};markDay();Log.track('taste',{c:c.id,v:o.v,o:i,ms:ms,view:view});save();}
+  else if(mode==='session'){var ss=S.session;ss.res[ss.i]={id:c.id,v:o.v,o:i};ss.xp+=XP[o.v];record(c.id,o.v,i,ms,view,ss.rev[ss.i]);}
+  else record(c.id,o.v,i,ms,view,true);
+  renderBar();renderPanel();
+  stage.show(c,{view:view,pick:i,mode:'out'},onReveal);
+}
+
+/* ── 오늘의 코트 한 판 ── */
+function startSession(){
+  var rev=dueIds(CFG.reviewPerSession),nw=newIds(CFG.newPerSession),ids=rev.concat(nw);
+  if(!ids.length)return goHome();
+  S.session={sid:'s'+Date.now().toString(36),ids:ids,rev:ids.map(function(id,i){return i<rev.length;}),i:0,res:[],started:iso(),xp:0};
+  Log.track('session_start',{sid:S.session.sid,n:nw.length,rev:rev.length});save();openSessionCard();
+}
+function openSessionCard(){var ss=S.session,r=ss.res[ss.i];openCard(BY[ss.ids[ss.i]],'session',r?r.o:-1,!!r);}
+var lastSum=null;
+function finishSession(){
+  var ss=S.session,cnt={정답:0,차선:0,실수:0};ss.res.forEach(function(r){cnt[r.v]++;});
+  S.sessions++;Log.track('session_end',{sid:ss.sid,n:ss.res.length,g:cnt.정답,s:cnt.차선,m:cnt.실수});
+  lastSum={cnt:cnt,xp:ss.xp,res:ss.res.slice()};S.session=null;save();renderDone();showScreen('done');
+}
+function renderDone(){
+  var sm=lastSum,cnt=sm.cnt;
+  $('d-head').textContent=newIds(1).length?'오늘의 코트 끝!':TOTAL+'장을 모두 풀었어요!';
+  $('d-tally').innerHTML='<span class="정답">✓ 성공 '+cnt.정답+'</span><span class="차선">△ 아쉬움 '+cnt.차선+'</span><span class="실수">✕ 실패 '+cnt.실수+'</span>';
+  $('d-xp').textContent='경험치 +'+sm.xp+' · 모두 '+S.xp;
+  var pr=null;sm.res.forEach(function(r){if(!pr&&r.v!=='정답')pr=r;});if(!pr)pr=sm.res[sm.res.length-1];
+  var c=BY[pr.id];$('d-coach').textContent='“'+c.coachLine+'”';$('d-from').textContent=c.id+' · '+c.title;
+  var rk=$('d-rank');
+  if(S.rankUp){rk.innerHTML='<b>전술 부수 '+esc(S.rankUp)+'가 됐어요</b><span>네 역할의 자리를 알아요. 전술 부수는 이 앱 안의 등급이에요 — 동호회 부수와는 달라요.</span>';rk.hidden=false;S.rankUp=null;saveLocal();}
+  else rk.hidden=true;
+  $('d-acts').innerHTML=(newIds(1).length||dueIds(1).length?'<button class="cta" data-act="more">한 판 더</button>':'')+'<button class="btn" data-act="home">홈으로</button>';
+}
+
+/* ── 챕터 · 다시 보기 ── */
+function openChapter(ch){
+  backCh=ch;var meta=CHS.filter(function(x){return x.id===ch;})[0],ids=chIds(ch),d=ids.filter(function(id){return S.cards[id];}).length,nx=newIds(1)[0],h='';
+  $('chs-eye').textContent=ch.replace('C','')+'챕터 · '+d+'/'+ids.length+'장';$('chs-title').textContent=meta.title;$('chs-goal').textContent=meta.goal;
+  ids.forEach(function(id){var c=BY[id],r=S.cards[id],sub=id+' · '+esc(c.myRole);
+    if(r)h+='<li><button class="crow" data-act="open" data-card="'+id+'"><span class="st '+r.l+'">'+MARK[r.l]+'</span><span class="ct"><b>'+esc(c.title)+'</b><small>'+sub+'</small></span><span class="go">다시 보기</span></button></li>';
+    else h+='<li><div class="crow lock"><span class="st'+(id===nx?' next':'')+'">'+(id===nx?'▶':'')+'</span><span class="ct"><b>'+esc(c.title)+'</b><small>'+sub+'</small></span><span class="go">'+(id===nx?'다음 차례':'')+'</span></div></li>';});
+  if(meta.total>ids.length)h+='<li class="more">이 챕터의 나머지 '+(meta.total-ids.length)+'장을 만들고 있어요.</li>';
+  $('chs-list').innerHTML=h;showScreen('chapter');
+}
+function openReview(id){var r=S.cards[id],c=BY[id],os=optsOf(c),o=r.o;   // 저장된 보기 번호가 결과와 안 맞으면(보기 순서가 바뀐 경우) 결과로 찾는다
+  if(o==null||!os[o]||os[o].v!==r.l){o=0;os.forEach(function(x,i){if(x.v===r.l)o=i;});}openCard(c,'review',o,true);}
+
+/* ── 검증 지표 (만든 사람만) ── */
+function kpi(n,label,ok){return '<div class="kpi'+(ok?' ok':'')+'"><b>'+n+'</b><span>'+label+'</span></div>';}
+function showStats(){showScreen('stats');var b=$('st-body');
+  if(!Remote.col){b.innerHTML='<p class="note">기록 저장소에 연결되지 않았어요.</p>';return;}
+  b.innerHTML='<p class="note">불러오는 중이에요…</p>';
+  Remote.col.get().then(function(q){renderStats(q.docs.map(function(d){return d.data();}).filter(Boolean));},
+    function(){b.innerHTML='<p class="note">기록을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>';});}
+function renderStats(ps){
+  var st=ps.filter(function(p){return (p.answered||0)>0;}),fin=st.filter(function(p){return p.answered>=TOTAL;}),
+      wait=ps.filter(function(p){return p.wait;}).length,reps=0,tasted=ps.filter(function(p){return p.taste;}).length;
+  ps.forEach(function(p){reps+=(p.reports||[]).length;});
+  var d7=st.filter(function(p){var ds=p.days||[],f=ds[0];return f&&ds.some(function(x){return x>=addDays(f,7);});}).length;
+  var rate=st.length?Math.round(fin.length/st.length*100):0;
+  var h='<div class="kpis">'+kpi(tasted,'맛보기를 푼 사람')+kpi(st.length,'오늘의 코트를 시작한 사람')+kpi(rate+'%','30장 완주 · 목표 60%',st.length&&rate>=60)
+      +kpi(wait,'다음 카드 기다림 · 목표 3명',wait>=3)+kpi(d7,'7일 뒤에도 온 사람')+kpi(reps,'이 카드 이상해요')+'</div>';
+  h+='<div class="card"><h2>카드별 첫 선택</h2><p class="klegend"><span><i style="background:var(--good)"></i>정답</span><span><i style="background:#D9A12E"></i>차선</span><span><i style="background:#D0573B"></i>실수</span><span>오른쪽: 정답률 · 신고</span></p><div class="klist">';
+  ORDER.forEach(function(id){var n=0,g=0,s=0,m=0,rp=0;
+    ps.forEach(function(p){var r=p.cards&&p.cards[id];if(r){n++;if(r.f==='정답')g++;else if(r.f==='차선')s++;else m++;}(p.reports||[]).forEach(function(x){if(x.c===id)rp++;});});
+    h+='<div class="krow"><span class="kid">'+id+'</span><span class="kbar" title="정답 '+g+' · 차선 '+s+' · 실수 '+m+'">'
+      +(n?'<i class="g" style="width:'+(g/n*100)+'%"></i><i class="s" style="width:'+(s/n*100)+'%"></i><i class="m" style="width:'+(m/n*100)+'%"></i>':'')
+      +'</span><span class="kn">'+(n?Math.round(g/n*100)+'%':'—')+'</span><span class="kr">'+(rp||'')+'</span></div>';});
+  h+='</div><p class="note">목표 정답률은 70~80%예요. 한 카드의 신고가 2%를 넘으면 코치 재검토 대상이에요.</p></div>';
+  $('st-body').innerHTML=h;
+}
+
+/* ═════════ 조작 ═════════ */
+document.addEventListener('click',function(e){
+  var t=e.target.closest?e.target.closest('[data-opt],[data-act],[data-view],#replay,#stage'):null;if(!t)return;
+  if(t.hasAttribute('data-opt')){if($('s-play').contains(t))choose(+t.getAttribute('data-opt'));return;}
+  if(t.id==='stage')return stage.skip();   // 재생 중 코트를 누르면 끝으로
+  if(t.id==='replay')return stage.show(cur,{view:viewOf(cur),pick:pick,shown:shown,mode:pick>=0?'replay':'intro'},onReveal);
+  if(t.hasAttribute('data-view')){views[cur.id]=t.getAttribute('data-view');renderBar();return stage.show(cur,{view:viewOf(cur),pick:pick,shown:shown,mode:'still'},onReveal);}
+  var a=t.getAttribute('data-act');
+  if(a==='start'){if(S.session)openSessionCard();else startSession();return;}
+  if(a==='more')return startSession();
+  if(a==='next'){S.session.i++;saveLocal();return openSessionCard();}
+  if(a==='finish')return finishSession();
+  if(a==='home')return goHome();
+  if(a==='exit'){
+    if(mode==='session'){Log.track('exit',{sid:S.session.sid,i:S.session.i});saveLocal();return goHome();}
+    if(mode==='taste'){S.onboarded=true;Log.track('taste_skip');save();return goHome();}
+    return openChapter(backCh);}
+  if(a==='taste-start'){S.onboarded=true;Log.track('onboarded');saveLocal();return startSession();}
+  if(a==='chapter')return openChapter(t.getAttribute('data-ch'));
+  if(a==='open')return openReview(t.getAttribute('data-card'));
+  if(a==='retry')return openCard(cur,'review',-1,false);
+  if(a==='back')return openChapter(backCh);
+  if(a==='scene'){shown=+t.getAttribute('data-i');Log.track('scene',{c:cur.id});renderPanel();return stage.show(cur,{view:viewOf(cur),pick:pick,shown:shown,mode:'out'},onReveal);}
+  if(a==='report'){repOpen=true;renderPanel();var r0=$('rep-0');if(r0)r0.focus();return;}
+  if(a==='report-cancel'){repOpen=false;return renderPanel();}
+  if(a==='wait'){S.wait=iso();Log.track('wait');save();renderHome();return toast('전했어요. 새 카드는 이 링크에 올라와요.');}
+  if(a==='stats')return showStats();
+});
+document.addEventListener('submit',function(e){
+  if(!e.target||e.target.id!=='rep-form')return;e.preventDefault();
+  var sel=e.target.querySelector('input[name="rep"]:checked'),r=REASONS[sel?+sel.value:0];
+  S.reports.push({c:cur.id,r:r,at:iso()});if(S.reports.length>30)S.reports.splice(0,S.reports.length-30);Log.track('report',{c:cur.id,r:r});save();
+  repOpen=false;renderPanel();toast('고마워요. 이 카드를 다시 살펴볼게요.');
+});
+document.addEventListener('keydown',function(e){
+  var z=e.target.closest?e.target.closest('.zone'):null;
+  if(z&&$('s-play').contains(z)&&(e.key==='Enter'||e.key===' ')){e.preventDefault();choose(+z.getAttribute('data-opt'));}
+});
+
+/* ═════════ 시작 ═════════ */
+S.opens=(S.opens||0)+1;S.rank=rankNow();Log.track('open',{n:S.opens});saveLocal();
+if(!S.onboarded&&!S.taste&&!answeredIds().length)openCard(BY[TASTE],'taste',-1,false);
+else goHome();
+Remote.start();
+})();
+</script>

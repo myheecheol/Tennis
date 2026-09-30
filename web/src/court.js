@@ -256,7 +256,8 @@ var KEYS=['A','B','C'],PL=['me','partner','opp1','opp2'];
 function optsOf(c){
   var lo=c.distractors.filter(function(d){return d.severity==='차선';})[0],hi=c.distractors.filter(function(d){return d.severity==='실수';})[0];
   var o=[{zone:lo.zone,v:'차선',short:lo.short,why:lo.why,src:lo},{zone:c.answer.zone,v:'정답',short:c.answer.short,why:c.answer.why,src:c.answer},{zone:hi.zone,v:'실수',short:hi.short,why:hi.why,src:hi}];
-  var sh=0;for(var i=0;i<c.id.length;i++)sh+=c.id.charCodeAt(i);sh%=3;   // 정답이 늘 B 가 되지 않게
+  // 정답 자리를 카드마다 흩는다 — 글자 합은 이어진 카드에서 B·A·C 로 돌아 외워졌다. FNV-1a 해시로 섞는다
+  var h=2166136261;for(var i=0;i<c.id.length;i++){h^=c.id.charCodeAt(i);h=Math.imul(h,16777619)>>>0;}var sh=h%3;
   return o.slice(sh).concat(o.slice(0,sh));
 }
 function correctIdx(c){var o=optsOf(c);for(var i=0;i<3;i++)if(o[i].v==='정답')return i;return -1;}

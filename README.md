@@ -8,9 +8,12 @@ prompts/     기획서를 뽑는 프롬프트 체인 (STEP 0~7 + 원샷)
 reference/   프롬프트에 붙여 넣는 재료 (도메인·좌표계·예시·플랫폼)
 design/      ← 위 체인을 실행해서 나온 결과물
 data/        커리큘럼 인덱스 · 상황 카드 · 카메라 규격 (기계 검증 대상)
-tools/       생성기 · 검증기 · 3D 코트 기하(court3d.py)
-web/         플레이 가능한 프로토타입 — 3D 잔디 코트, 중계/내 시점, 고르면 결과가 재생되는 카드 25장 (PANTONE 15-0343 Greenery)
+tools/       생성기 · 검증기 · 3D 코트 기하(court3d.py) · 웹 스모크 테스트 · 검증판 기록 받기(phase1/)
+web/         play.html — Phase 1 검증판 게임 (카드 30장 · 오늘의 코트 · 복습 · 기록)
+             index.html — 설계 페이지 (카드 플레이어 · 프롬프트 체인) · src/ — 두 페이지가 같이 쓰는 코트 엔진
 ```
+
+**게임 해 보기** → <https://claude.ai/artifact/8UWWX27bebLhTStCb9W59p> (Phase 1 검증판 · 운영법은 `design/08-phase1.md`)
 
 ---
 
@@ -19,16 +22,17 @@ web/         플레이 가능한 프로토타입 — 3D 잔디 코트, 중계/�
 | 단계 | 산출물 | 상태 |
 |---|---|---|
 | STEP 1 커리큘럼 | `design/01-curriculum.md` · `data/cards-index.json` | ✅ 5챕터 **120장** 확정 |
-| STEP 2 상황 카드 | `data/cards/c1.json` `c2.json` | ✅ **25장** 완성 · 95장 미착수 |
+| STEP 2 상황 카드 | `data/cards/c1.json` `c2.json` | ✅ **30장** 완성 (1챕터 24 + 2챕터 6) · 90장은 Phase 2 |
 | STEP 3 시각화 | `design/03-renderer-spec.md` | ✅ **v2: 3D 코트 · 공 궤적 · 두 시점** · v4: 멈춤 → 결과 재생 |
 | STEP 4 게임 설계 | `design/04-game-design.md` | ✅ 완료 |
 | STEP 5 플랫폼 | `reference/platform-recommendation.md` | ✅ 완료 · 가격 검증 필요 |
 | STEP 6 기획서 | `design/PRD.md` | ✅ 완료 |
 | STEP 7 검수 | `design/07-review.md` | ✅ 치명 3건 수정 |
-| — | **코치 감수 / 종이 테스트** | ⬜ **미착수 — 여기가 진짜 관문** |
+| Phase 1 제작 | `web/play.html` · `design/08-phase1.md` | ✅ 검증판 게임 · 기록 · 검증 지표 화면 |
+| — | **코치 감수 / 30명 검증** | ⬜ **미착수 — 여기가 진짜 관문** (검증판으로 돌린다) |
 
 ```bash
-bash tools/check.sh   # 전체 검증 + 생성물 갱신. 커밋 전에 돌린다
+bash tools/check.sh   # 전체 검증 + 생성물 갱신 + 웹 스모크 테스트. 커밋 전에 돌린다
 ```
 
 ---
@@ -42,6 +46,7 @@ bash tools/check.sh   # 전체 검증 + 생성물 갱신. 커밋 전에 돌린�
 | `03-renderer-spec.md` | 코트 렌더러 명세. 좌표 변환, 마커 3중 인코딩, 화면 상태 5종, 애니메이션 타임라인, 접근성 |
 | `04-game-design.md` | 코어 루프, 정답/차선/실수 3단 채점, 모드 5개, 동호인 부수 체계, 리텐션, 이번 주 미션 |
 | `07-review.md` | 코치·게임 디렉터·개발자·사용자 4인 리뷰. 사실 검증. 압축 3종 |
+| `08-phase1.md` | **Phase 1 검증판** — 한 판의 흐름, 규칙, 모으는 기록, 검증을 돌리는 두 가지 길, 통과 기준 계산 |
 
 ---
 

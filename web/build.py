@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """페이지를 만든다. 공용 엔진(web/src/court.js · court.css)과 검증된 카드 · 카메라 규격을 각 템플릿에 넣는다.
-   index.html — 블루프린트 페이지 (prompts/*.md 의 ```text 블록도 함께)"""
+   index.html — 블루프린트 페이지 (prompts/*.md 의 ```text 블록도 함께)
+   play.html  — Phase 1 검증판 게임 (챕터 정보 · play.config.json 설정도 함께)"""
 import json, re, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -98,6 +99,14 @@ def page(template, out, data):
 html = page("template.html", "index.html",
             (("PROMPTS_JSON", steps), ("CARDS_JSON", cards), ("CAMERAS_JSON", cams)))
 print(f"index.html  {len(html):,} bytes")
+
+index = json.loads((ROOT / "data" / "cards-index.json").read_text(encoding="utf-8"))
+chapters = [{"id": ch["id"], "title": ch["title"], "goal": ch["goal"], "free": ch["free"],
+             "total": sum(1 for c in index["cards"] if c["chapter"] == ch["id"])} for ch in index["chapters"]]
+config = json.loads((WEB / "play.config.json").read_text(encoding="utf-8"))
+play = page("play.template.html", "play.html",
+            (("CARDS_JSON", cards), ("CAMERAS_JSON", cams), ("CHAPTERS_JSON", chapters), ("CONFIG_JSON", config)))
+print(f"play.html   {len(play):,} bytes  (검증판 · 카드 {len(cards)}장 · 기록 주소 {'있음' if config.get('endpoint') else '없음'})")
 print(f"  카드 {len(cards)}장  {cards[0]['id']} … {cards[-1]['id']}")
 for s in steps:
     print(f"  {s['no']:<7} {s['title']:<22} blocks={len(s['blocks'])}  "

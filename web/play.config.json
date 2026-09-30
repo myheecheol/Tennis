@@ -1,0 +1,7 @@
+{
+  "_note": "검증판 게임(web/play.html) 설정. build.py 가 페이지에 넣는다. endpoint 는 claude.ai 밖에서 호스팅할 때만 쓴다 — design/08-phase1.md 참고.",
+  "endpoint": "",
+  "newPerSession": 5,
+  "reviewPerSession": 3,
+  "tasteCard": "C1-24"
+}

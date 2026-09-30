@@ -198,10 +198,11 @@ footer code{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
       <tbody>
         <tr><td>커리큘럼</td><td>5챕터 120장</td><td>확정</td></tr>
         <tr><td>상황 카드</td><td>1챕터 24장 + 2챕터 6장</td><td>30장 완성 · 90장 남음</td></tr>
+        <tr><td>검증판 게임</td><td>오늘의 코트 · 복습 · 전술 부수 · 기록 · 검증 지표</td><td>완성 — 사람 검증만 남음</td></tr>
         <tr><td>화면</td><td>3D 코트 · 공 궤적 · 중계/내 시점</td><td>완료</td></tr>
         <tr><td>게임 설계</td><td>3단 채점 · 모드 5개 · 부수 체계</td><td>완료</td></tr>
         <tr><td>기획서</td><td>PRD + 4인 검수</td><td>완료</td></tr>
-        <tr><td>사람 검증</td><td>코치 감수 · 종이 테스트</td><td><b>아직</b></td></tr>
+        <tr><td>사람 검증</td><td>코치 감수 · 30명 검증</td><td><b>아직</b></td></tr>
       </tbody>
     </table>
   </div>
@@ -250,9 +251,9 @@ var KEYS=Court.KEYS,optsOf=Court.optsOf,correctIdx=Court.correctIdx,esc=Court.es
 
 /* ═════════ 플레이어 상태 ═════════ */
 var idx=0,views={},answers={},shown={},revealed={};
-try{var sv=JSON.parse(localStorage.getItem('dmb-player')||'{}');if(sv.answers)answers=sv.answers;if(typeof sv.idx==='number')idx=clamp(sv.idx,0,CARDS.length-1);}catch(e){}
+try{var sv=JSON.parse(localStorage.getItem('dmb-player-v2')||'{}');if(sv.answers)answers=sv.answers;if(typeof sv.idx==='number')idx=clamp(sv.idx,0,CARDS.length-1);}catch(e){}
 Object.keys(answers).forEach(function(k){revealed[k]=true;});
-function save(){try{localStorage.setItem('dmb-player',JSON.stringify({idx:idx,answers:answers}));}catch(e){}}
+function save(){try{localStorage.setItem('dmb-player-v2',JSON.stringify({idx:idx,answers:answers}));}catch(e){}}
 function viewOf(c){return views[c.id]||c.view||'top';}
 
 /* ═════════ 카드 한 장 ═════════ */
