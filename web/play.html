@@ -167,23 +167,74 @@ button.ch:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:2p
 .ch.lock .n{background:var(--surface-2);color:var(--muted)}
 .foot{font-size:12px;color:var(--muted);line-height:1.6;padding-inline:2px}
 
-/* ── 카드 플레이 ── */
-.player{background:var(--surface);border:1px solid var(--rule);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
-.p-body{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr)}
-@media (max-width:780px){.p-body{grid-template-columns:1fr}}
-.p-kicker{display:flex;gap:8px;align-items:center;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
-.p-kicker .role{color:#12200A;background:var(--greenery-soft);padding:2px 8px;border-radius:6px;font-family:var(--f-display);font-weight:800}
-.hint{font-size:13px;color:var(--greenery-deep);font-weight:700}
+/* ── 카드 한 장 — 한 화면: 코트(4:5) 위에 글이 뜨고, 코트 아래 붙은 줄에서 고른다 ── */
+.gs{--dock:136px;width:min(100%,600px,calc((100vh - 84px - var(--dock)) * .8));margin-inline:auto;border-radius:18px;overflow:hidden;background:var(--night);box-shadow:var(--shadow)}
+@supports (height:100dvh){.gs{width:min(100%,600px,calc((100dvh - 84px - var(--dock)) * .8))}}
+.gs-court{position:relative;background:var(--greenery);line-height:0;aspect-ratio:4/5}
+.gs-court svg{width:100%;height:100%;display:block;font-family:var(--f-display);touch-action:manipulation}
+/* 제목 화면: 코트를 어둡게 덮고 〈제목〉 */
+.gs-dim{position:absolute;inset:0;z-index:3;background:rgba(10,18,6,.76);opacity:0;pointer-events:none;transition:opacity .5s ease}
+.gs-title{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:0 24px;text-align:center;line-height:1.3;
+  opacity:0;pointer-events:none;transform:scale(.96);transition:opacity .45s ease,transform .7s ease}
+.gs[data-phase="title"] .gs-dim{opacity:1;pointer-events:auto;cursor:pointer}
+.gs[data-phase="scene"] .gs-dim{opacity:.55;pointer-events:auto;cursor:pointer}
+.gs[data-phase="title"] .gs-title,.gs[data-phase="scene"] .gs-scene{opacity:1;transform:none}
+.gs-title .kick{display:flex;gap:7px;align-items:center;font-family:var(--f-mono);font-size:12px;color:#C9D8B6}
+.gs-title .role{font-family:var(--f-display);font-weight:800;color:var(--night);background:var(--optic);padding:2px 8px;border-radius:6px}
+.gs-title .rev{font-family:var(--f-display);font-weight:800;color:var(--optic);border:1px solid rgba(228,255,61,.55);padding:1px 7px;border-radius:6px}
+.gs-title b{font-family:var(--f-display);font-weight:900;font-size:clamp(22px,6.2vw,30px);letter-spacing:-.02em;color:#fff;text-wrap:balance}
+.gs-title .tap,.gs-scene .tap{font-size:12px;color:#9FB38C}
+/* 상황 글 — 공이 멈춘 코트 위 가운데 */
+.gs-scene{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:0 22px;text-align:center;line-height:1.45;
+  opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .4s ease,transform .5s ease}
+.gs-scene p{font-family:var(--f-display);font-weight:800;font-size:clamp(17px,4.8vw,21px);color:#fff;text-wrap:balance;padding:12px 16px;border-radius:14px;background:rgba(14,26,8,.72);
+  box-shadow:0 12px 26px -14px rgba(0,0,0,.7)}
+/* 질문 띠 — 코트 위쪽 비워 둔 자리에 한 줄 */
+.gs-cap{position:absolute;left:10px;right:10px;top:46px;z-index:2;margin:0 auto;width:fit-content;max-width:calc(100% - 20px);display:flex;align-items:center;
+  text-align:center;padding:6px 15px;border-radius:999px;background:rgba(14,26,8,.86);color:#F3F8EA;line-height:1.3;box-shadow:0 10px 24px -12px rgba(0,0,0,.6);pointer-events:none}
+.gs-cap.pop{animation:pop .34s cubic-bezier(.2,1.4,.4,1)}
+.cap-q{font-family:var(--f-display);font-weight:900;font-size:16.5px;color:var(--optic)}
+/* 해설: 결과가 끝나면 코트 아래에서 올라온다. 접으면 코트가 다 보인다 */
+.gs-sheet{position:absolute;left:0;right:0;bottom:0;z-index:5;max-height:70%;display:flex;flex-direction:column;background:var(--surface);border-radius:16px 16px 0 0;
+  box-shadow:0 -12px 28px -14px rgba(0,0,0,.55);line-height:1.5;animation:rise .38s cubic-bezier(.2,.9,.3,1)}
+.gs-sheet.closed{animation:none;box-shadow:none;background:rgba(255,255,255,.94)}
+@keyframes rise{from{transform:translateY(35%);opacity:0}to{transform:none;opacity:1}}
+.sh-handle{flex:none;border:0;background:none;padding:8px 14px 5px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer}
+.sh-handle:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:-2px}
+.sh-body{overflow:auto;padding:2px 16px 14px;display:flex;flex-direction:column;gap:9px}
+.sh-body .vline{font-size:13.5px}
+.sh-body .coach{font-size:15px;padding:9px 12px}
+.sh-taste{font-size:13.5px;font-weight:700;color:var(--greenery-deep)}
+/* 코트 아래 줄: 보기 셋 → 다음 동작 */
+.gs-dock{min-height:var(--dock);display:flex;flex-direction:column;justify-content:center;gap:7px;padding:8px;background:var(--night);line-height:1.3}
+.gs-cue{display:flex;gap:7px;align-items:baseline;padding:0 3px;font-size:12.5px;color:#D6E3C6;transition:opacity .3s}
+.gs-cue b{flex:none;font-family:var(--f-display);font-weight:800;font-size:10.5px;color:var(--night);background:#C9E29B;border-radius:5px;padding:1px 6px}
+.gs-cue.hint{color:#9FB38C;font-size:11.5px}
+.gs:not([data-phase="ask"]):not([data-phase="out"]) .gs-cue{opacity:0}
+.gs-opts{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gs-dock .opt{flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:4px;padding:8px 9px;border-radius:12px;border:1px solid rgba(255,255,255,.16);
+  background:#23361A;color:#F3F8EA;font-size:12.5px;line-height:1.35;min-width:0;transition:opacity .25s,border-color .12s,background .12s}
+.gs-dock .opt .k{width:20px;height:20px;font-size:11.5px;background:var(--optic);color:var(--night)}
+.gs-dock .opt .t{word-break:keep-all;overflow-wrap:anywhere}
+.gs-dock .opt:hover:not([disabled]){background:#2E4622;border-color:var(--optic)}
+.gs-dock .opt:focus-visible{outline:2px solid var(--optic);outline-offset:2px}
+.gs-dock .opt[disabled]{opacity:.42;cursor:default}
+.gs-dock .opt.picked{opacity:1;border-color:var(--optic);box-shadow:inset 0 0 0 1px var(--optic)}
+.gs-dock .opt.dim{opacity:.28}
+.gs-acts{flex:none;display:flex;gap:6px}
+.gs-next{padding:0 3px;font-size:12.5px;color:#C9D8B6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gs-next b{font-family:var(--f-display);font-weight:800;color:#F3F8EA}
+.gs-acts .btn{flex:1;min-width:0;min-height:54px;border-radius:12px;font-size:13.5px;padding:8px 10px;background:#23361A;border-color:rgba(255,255,255,.16);color:#F3F8EA}
+.gs-acts .btn:hover{background:#2E4622;border-color:var(--optic);color:#fff}
+.gs-acts .btn.primary{flex:1.7;background:var(--optic);border-color:var(--optic);color:var(--night);font-family:var(--f-display);font-weight:900;font-size:15px}
+.gs-acts .btn.primary:hover{background:#EEFF7A}
+.gs-acts .btn:focus-visible{outline:2px solid var(--optic);outline-offset:2px}
 .report{align-self:flex-start;border:0;background:none;padding:2px 0;color:var(--muted);font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .report:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:2px}
 .rep-form{display:flex;flex-direction:column;gap:7px;padding:12px;border:1px solid var(--rule);border-radius:12px;background:var(--sunk)}
 .rep-q{font-weight:700;font-size:13.5px}
 .rep-form label{display:flex;gap:8px;align-items:center;font-size:13.5px;cursor:pointer}
 .rep-form input{accent-color:var(--greenery-deep)}
-.taste-cta{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:14px;background:var(--night);color:var(--on-night)}
-.taste-cta b{font-family:var(--f-display);font-size:18px;color:var(--optic)}
-.taste-cta span{font-size:13.5px;color:#D6E3C6}
-.taste-cta .cta{background:var(--optic);color:var(--night);margin-top:4px}
 
 /* ── 한 판 끝 ── */
 .done h1{font-family:var(--f-display);font-weight:900;font-size:clamp(26px,6vw,34px);letter-spacing:-.025em}
@@ -293,30 +344,28 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
   </section>
 
   <section class="screen" id="s-play" aria-label="카드" hidden>
-    <div class="player">
-      <div class="p-body">
-        <div class="p-stage">
-          <svg id="stage" class="court" viewBox="0 0 400 500" role="img"></svg>
-          <div class="p-say" id="p-say" role="status" aria-live="polite" hidden></div>
-          <div class="p-ctrl">
-            <div class="seg" role="group" aria-label="시점">
-              <button id="v-top" data-view="top" aria-pressed="true">중계</button>
-              <button id="v-me" data-view="me" aria-pressed="false">내 시점</button>
-            </div>
-            <button class="replay" id="replay" aria-label="공 궤적 다시 보기">▶ 다시</button>
+    <div class="gs" id="gs" data-phase="">
+      <div class="gs-court" id="gs-court">
+        <svg id="stage" class="court" viewBox="0 0 400 500" role="img"></svg>
+        <div class="p-ctrl">
+          <div class="seg" role="group" aria-label="시점">
+            <button id="v-top" data-view="top" aria-pressed="true">중계</button>
+            <button id="v-me" data-view="me" aria-pressed="false">내 시점</button>
           </div>
+          <button class="replay" id="replay" aria-label="장면 다시 보기">▶ 다시</button>
         </div>
-        <div class="p-panel">
-          <div class="p-kicker"><span class="role" id="p-role"></span><span id="p-id"></span></div>
-          <h3 id="p-title"></h3>
-          <p class="scene" id="p-scene"></p>
-          <p class="cue"><span class="k">단서</span><span id="p-cue"></span></p>
-          <p class="ask" id="p-ask"></p>
-          <p class="hint" id="p-hint" hidden>코트를 눌러 답하세요</p>
-          <div class="opts" id="p-opts"></div>
-          <div class="verdict" id="p-verdict" hidden></div>
+        <div class="gs-cap" id="gs-cap" role="status" aria-live="polite" hidden></div>
+        <div class="p-say" id="p-say" role="status" aria-live="polite" hidden></div>
+        <div class="gs-dim" id="gs-dim"></div>
+        <div class="gs-title" id="gs-title" aria-hidden="true">
+          <span class="kick" id="gs-kick"><span class="role" id="gs-role"></span><span id="p-id"></span><span class="rev" id="gs-rev" hidden>복습</span></span>
+          <b id="gs-name"></b>
+          <span class="tap">화면을 누르면 바로 시작해요</span>
         </div>
+        <div class="gs-scene" id="gs-scene" aria-hidden="true"><p id="gs-scene-t" aria-live="polite"></p><span class="tap">누르면 넘어가요</span></div>
+        <div class="gs-sheet" id="p-verdict" hidden></div>
       </div>
+      <div class="gs-dock" id="gs-dock"></div>
     </div>
   </section>
 
@@ -806,7 +855,9 @@ Stage.prototype.run=function(T,ctx,onEnd){
 };
 /* 카드 한 장을 무대에 올린다.
    o.view 'top'|'me' · o.pick 고른 보기(-1 = 아직) · o.shown 보여 줄 보기(정답 장면 보기) ·
-   o.mode 'intro'(도입 재생 후 멈춤) | 'out'(결과 재생) | 'replay'(도입+결과) | 'still'(끝 장면만)
+   o.mode 'intro'(도입 재생 후 멈춤) | 'out'(결과 재생) | 'replay'(도입+결과) | 'still'(끝 장면만) |
+          'pose'(도입 직전 — 선수만 서 있고 공은 아직. 제목 화면 뒤에 깔린다)
+   o.freezeSay 멈출 때 배지 글 — false 면 배지 없이 멈춘다(페이지가 질문을 직접 띄울 때) · o.onFreeze 멈춘 뒤 부른다
    done(res) — 결과 장면이 끝났을 때. res = {v: 정답|차선|실수, caption, zone} */
 Stage.prototype.show=function(c,o,done){
   var self=this,pick=o.pick==null?-1:o.pick,isMe=o.view==='me',cam=isMe?meCam(c.setup.me.xy):BCAM;
@@ -817,8 +868,9 @@ Stage.prototype.show=function(c,o,done){
   var corZone=optsOf(c)[correctIdx(c)].zone,ctx={c:c,cam:cam,isMe:isMe,correct:corZone,follow:isMe&&pick>=0,camKey:camKey(c.setup.me.xy)};
   var TI=buildIntro(c);
   if(pick<0){
+    if(o.mode==='pose'){this.paint(TI,0,false,ctx);return;}
     var fz={c:c,cam:cam,isMe:isMe,freeze:true};
-    var freeze=function(){self.paint(TI,TI.dur,true,fz);self.say('',FREEZE_SAY);if(o.onFreeze)o.onFreeze();};
+    var freeze=function(){self.paint(TI,TI.dur,true,fz);if(o.freezeSay!==false)self.say('',o.freezeSay||FREEZE_SAY);if(o.onFreeze)o.onFreeze();};
     if(o.mode==='still')freeze();else this.run(TI,ctx,freeze);
     return;
   }
@@ -958,7 +1010,7 @@ var stage=new Court.Stage($('stage'),$('p-say')),preview=new Court.Stage($('prev
 function showScreen(name){screen=name;['home','play','done','chapter','stats'].forEach(function(n){$('s-'+n).hidden=n!==name;});
   $('bar-rank-t').textContent=S.rank;
   $('bar-home').hidden=name==='play';$('bar-play').hidden=name!=='play';
-  if(name!=='play')stage.stop();if(name!=='home')preview.stop();
+  if(name!=='play'){stage.stop();clearLater();}if(name!=='home')preview.stop();
   try{window.scrollTo(0,0);}catch(e){}}
 var tt=null;function toast(msg){var el=$('toast');el.textContent=msg;el.hidden=false;clearTimeout(tt);tt=setTimeout(function(){el.hidden=true;},2800);}
 
@@ -1011,17 +1063,35 @@ function renderHome(){
   $('h-stats').hidden=!Remote.owner;
 }
 
-/* ── 카드 한 장 ── */
+/* ── 카드 한 장 — 코트 한 화면에서 다 본다 ──
+   제목(어둡게) → 도입 공 → 상황 글 → 질문 · 단서 · 보기 → 결과 재생 → 해설이 코트 위로 올라온다.
+   코트를 누르면 다음 단계로 건너뛴다. 움직임 줄이기면 바로 질문부터. */
 var mode=null,cur=null,pick=-1,revealed=false,shown=null,views={},openedAt=0,repOpen=false,backCh=null;
+var phase='',tms=[],sheetOpen=true,REDUCED=Court.reduced(),TITLE_MS=1600;
 function viewOf(c){return views[c.id]||c.view||'top';}
+function later(ms,fn){tms.push(setTimeout(fn,ms));}
+function clearLater(){tms.forEach(clearTimeout);tms=[];}
+function sceneMs(c){return Math.min(6000,1200+c.scene.length*110);}   // 읽을 시간 — 38자면 약 5초
 function openCard(c,m,p,rev){
-  mode=m;cur=c;pick=p;revealed=!!rev;shown=null;repOpen=false;
-  $('p-role').textContent=c.myRole;$('p-id').textContent=c.id+(m==='session'&&S.session.rev[S.session.i]?' · 복습':'');$('p-title').textContent=c.title;
-  $('p-scene').textContent=c.scene;$('p-cue').textContent=c.cue;$('p-ask').textContent=c.question.text;
-  showScreen('play');renderBar();renderPanel();openedAt=performance.now();
-  stage.show(c,{view:viewOf(c),pick:pick,mode:pick>=0?'still':'intro'},onReveal);
+  clearLater();mode=m;cur=c;pick=p;revealed=!!rev;shown=null;repOpen=false;sheetOpen=true;
+  $('gs-role').textContent=c.myRole;$('p-id').textContent=c.id;$('gs-rev').hidden=!(m==='session'&&S.session.rev[S.session.i]);
+  $('gs-name').textContent='〈'+c.title+'〉';$('gs-scene-t').textContent='';
+  showScreen('play');renderBar();
+  if(p>=0){setPhase('verdict');stage.show(c,{view:viewOf(c),pick:p,mode:'still'},onReveal);return;}
+  if(REDUCED)return askNow();
+  setPhase('title');stage.show(c,{view:viewOf(c),pick:-1,mode:'pose'});
+  later(TITLE_MS,startIntro);
 }
-function onReveal(){if(!revealed){revealed=true;renderPanel();}}
+function startIntro(){clearLater();setPhase('intro');
+  stage.show(cur,{view:viewOf(cur),pick:-1,mode:'intro',freezeSay:false,onFreeze:onFrozen});}
+function onFrozen(){if(phase!=='intro')return;setPhase('scene');later(sceneMs(cur),ask);}
+function ask(){clearLater();if(pick>=0||phase==='ask')return;setPhase('ask');openedAt=performance.now();}
+function askNow(){clearLater();setPhase('ask');openedAt=performance.now();stage.show(cur,{view:viewOf(cur),pick:-1,mode:'still',freezeSay:false});}
+function advance(){if(phase==='title')return startIntro();if(phase==='intro'||phase==='out')return stage.skip();if(phase==='scene')return ask();}
+function onReveal(){revealed=true;sheetOpen=true;setPhase('verdict');}
+function setPhase(p){phase=p;$('gs').setAttribute('data-phase',p);$('gs-title').setAttribute('aria-hidden',p==='title'?'false':'true');
+  $('gs-scene').setAttribute('aria-hidden',p==='scene'?'false':'true');if(p==='scene')$('gs-scene-t').textContent=cur.scene;   // 이때 바뀌어야 화면 낭독기가 읽는다
+  renderCap();renderDock();renderSheet();}
 function renderBar(){
   var x=$('b-x'),h='';
   if(mode==='session'){var ss=S.session;ss.ids.forEach(function(id,i){var r=ss.res[i];h+='<i class="'+(r?r.v:'')+(i===ss.i?' cur':'')+'"></i>';});
@@ -1031,38 +1101,60 @@ function renderBar(){
   $('sdots').innerHTML=h;
   var isMe=viewOf(cur)==='me';$('v-top').setAttribute('aria-pressed',!isMe);$('v-me').setAttribute('aria-pressed',isMe);
 }
+function renderCap(){
+  var el=$('gs-cap'),c=cur,h='';
+  if(phase==='ask')h='<p class="cap-q">'+esc(c.question.text)+'</p>';
+  if(el.innerHTML!==h){el.innerHTML=h;if(h&&!REDUCED){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');}}
+  el.hidden=!h;
+}
+function renderDock(){
+  var d=$('gs-dock'),h='';
+  if(phase==='verdict'&&pick>=0){
+    var p=optsOf(cur)[pick],ci=correctIdx(cur),a='';
+    if(mode==='session'){var last=S.session.i>=S.session.ids.length-1;a+='<button class="btn primary" data-act="'+(last?'finish':'next')+'">'+(last?'결과 보기':'다음 카드 →')+'</button>';}
+    else if(mode==='taste')a+='<button class="btn primary" data-act="taste-start">시작하기 →</button>';
+    else a+='<button class="btn primary" data-act="retry">다시 풀기</button><button class="btn" data-act="back">목록으로</button>';
+    if(p.v!=='정답'){var sc=shown!=null&&shown!==pick;a+='<button class="btn" data-act="scene" data-i="'+(sc?pick:ci)+'">'+(sc?'내 선택 ▶':'정답 장면 ▶')+'</button>';}
+    var nx='';   // 다음에 무엇이 오는지 한 줄 — "한 판 더"를 누르게 만드는 자리
+    if(mode==='session'){var ss=S.session,n=ss.ids[ss.i+1];nx=n?'다음 · <b>'+esc(BY[n].title)+'</b>':'마지막 카드였어요 — 오늘의 결과를 볼까요?';}
+    else if(mode==='taste')nx='이런 상황이 <b>'+TOTAL+'개</b> 있어요 · 하루 몇 장씩';
+    h=(nx?'<p class="gs-next">'+nx+'</p>':'')+'<div class="gs-acts">'+a+'</div>';
+  }else{
+    var on=phase==='ask'&&pick<0;
+    optsOf(cur).forEach(function(o,i){var cls='opt'+(i===pick?' picked':(pick>=0?' dim':''));
+      h+='<button class="'+cls+'" data-opt="'+i+'"'+(on?'':' disabled')+'><span class="k">'+KEYS[i]+'</span><span class="t">'+esc(o.short)+'</span></button>';});
+    h='<p class="gs-cue"><b>단서</b><span>'+esc(cur.cue)+'</span></p>'
+      +(mode==='taste'&&pick<0?'<p class="gs-cue hint">코트의 A·B·C 나 아래 보기를 눌러 답하세요</p>':'')
+      +'<div class="gs-opts" id="p-opts">'+h+'</div>';
+  }
+  d.innerHTML=h;
+}
 function reportForm(){var h='<form class="rep-form" id="rep-form"><p class="rep-q">무엇이 이상했나요?</p>';
   REASONS.forEach(function(r,i){h+='<label for="rep-'+i+'"><input type="radio" name="rep" id="rep-'+i+'" value="'+i+'"'+(i===0?' checked':'')+'>'+r+'</label>';});
   return h+'<div class="acts"><button class="btn primary" type="submit">보내기</button><button class="btn" type="button" data-act="report-cancel">닫기</button></div></form>';}
-function renderPanel(){
-  var c=cur,opts=optsOf(c),h='';
-  opts.forEach(function(o,i){var cls='opt';if(pick>=0){if(revealed){cls+=' v-'+o.v;if(i!==pick&&o.v!=='정답')cls+=' dim';}if(i===pick)cls+=' picked';}
-    h+='<button class="'+cls+'" data-opt="'+i+'"'+(pick>=0?' disabled':'')+'><span class="k">'+KEYS[i]+'</span><span>'+esc(o.short)+'</span></button>';});
-  $('p-opts').innerHTML=h;
-  $('p-hint').hidden=!(mode==='taste'&&pick<0);
-  var v=$('p-verdict');
-  if(pick<0||!revealed){v.hidden=true;v.innerHTML='';return;}
-  var p=opts[pick],ci=correctIdx(c),a=opts[ci];
-  var out='<div class="vline"><span class="badge '+p.v+'">'+VERD[p.v]+'</span><span>'+esc(p.why)+'</span></div>';
-  if(p.v!=='정답')out+='<div class="vline"><span class="badge 정답">정답</span><span><b>'+esc(a.short)+'</b> — '+esc(a.why)+'</span></div>';
-  out+='<p class="coach">“'+esc(c.coachLine)+'”</p>';
-  if(mode==='taste')out+='<div class="taste-cta"><b>이런 상황이 '+TOTAL+'개 있어요</b><span>하루 몇 장씩, 코트에서 바로 떠오르게 연습해요.</span><button class="cta" data-act="taste-start">시작하기</button></div>';
-  var acts='';
-  if(mode==='session'){var last=S.session.i>=S.session.ids.length-1;acts+='<button class="btn primary" data-act="'+(last?'finish':'next')+'">'+(last?'결과 보기':'다음 카드 →')+'</button>';}
-  if(mode==='review')acts+='<button class="btn primary" data-act="retry">다시 풀기</button><button class="btn" data-act="back">목록으로</button>';
-  if(p.v!=='정답'){var sc=shown!=null&&shown!==pick;acts+='<button class="btn" data-act="scene" data-i="'+(sc?pick:ci)+'">'+(sc?'내 선택 다시 보기':'정답 장면 보기 ▶')+'</button>';}
-  if(acts)out+='<div class="acts">'+acts+'</div>';
-  if(mode!=='taste')out+=repOpen?reportForm():'<button class="report" data-act="report">이 카드 이상해요</button>';
-  v.innerHTML=out;v.hidden=false;
+function renderSheet(){
+  var sh=$('p-verdict');
+  if(phase!=='verdict'||pick<0||!revealed){sh.hidden=true;sh.innerHTML='';return;}
+  var c=cur,opts=optsOf(c),p=opts[pick],ci=correctIdx(c),a=opts[ci];
+  var h='<button class="sh-handle" data-act="sheet" aria-expanded="'+sheetOpen+'">'+(sheetOpen?'코트 보기 ▾':'해설 보기 ▴')+'</button>';
+  if(sheetOpen){
+    h+='<div class="sh-body"><div class="vline"><span class="badge '+p.v+'">'+VERD[p.v]+'</span><span><b>'+esc(p.short)+'</b> — '+esc(p.why)+'</span></div>';
+    if(p.v!=='정답')h+='<div class="vline"><span class="badge 정답">정답</span><span><b>'+esc(a.short)+'</b> — '+esc(a.why)+'</span></div>';
+    h+='<p class="coach">“'+esc(c.coachLine)+'”</p>';
+    if(mode==='taste')h+='<p class="sh-taste">이런 상황이 '+TOTAL+'개 있어요. 하루 몇 장씩, 코트에서 바로 떠오르게 연습해요.</p>';
+    else h+=repOpen?reportForm():'<button class="report" data-act="report">이 카드 이상해요</button>';
+    h+='</div>';
+  }
+  sh.innerHTML=h;sh.classList.toggle('closed',!sheetOpen);sh.hidden=false;
 }
 function choose(i){
-  if(pick>=0||!cur)return;
+  if(pick>=0||!cur||phase!=='ask')return;
   var c=cur,o=optsOf(c)[i],ms=Math.round(performance.now()-openedAt),view=viewOf(c);
   pick=i;revealed=false;
   if(mode==='taste'){S.taste={v:o.v,o:i,ms:ms,at:iso()};markDay();Log.track('taste',{c:c.id,v:o.v,o:i,ms:ms,view:view});save();}
   else if(mode==='session'){var ss=S.session;ss.res[ss.i]={id:c.id,v:o.v,o:i};ss.xp+=XP[o.v];record(c.id,o.v,i,ms,view,ss.rev[ss.i]);}
   else record(c.id,o.v,i,ms,view,true);
-  renderBar();renderPanel();
+  renderBar();setPhase('out');
   stage.show(c,{view:view,pick:i,mode:'out'},onReveal);
 }
 
@@ -1133,11 +1225,15 @@ function renderStats(ps){
 
 /* ═════════ 조작 ═════════ */
 document.addEventListener('click',function(e){
-  var t=e.target.closest?e.target.closest('[data-opt],[data-act],[data-view],#replay,#stage'):null;if(!t)return;
-  if(t.hasAttribute('data-opt')){if($('s-play').contains(t))choose(+t.getAttribute('data-opt'));return;}
-  if(t.id==='stage')return stage.skip();   // 재생 중 코트를 누르면 끝으로
-  if(t.id==='replay')return stage.show(cur,{view:viewOf(cur),pick:pick,shown:shown,mode:pick>=0?'replay':'intro'},onReveal);
-  if(t.hasAttribute('data-view')){views[cur.id]=t.getAttribute('data-view');renderBar();return stage.show(cur,{view:viewOf(cur),pick:pick,shown:shown,mode:'still'},onReveal);}
+  var t=e.target.closest?e.target.closest('[data-opt],[data-act],[data-view],#replay,#gs-court'):null;if(!t)return;
+  if(t.hasAttribute('data-opt')){if(!$('s-play').contains(t))return;if(phase==='ask')choose(+t.getAttribute('data-opt'));else advance();return;}
+  if(t.id==='replay'){
+    if(pick<0){sheetOpen=true;return startIntro();}
+    sheetOpen=false;setPhase('out');return stage.show(cur,{view:viewOf(cur),pick:pick,shown:shown,mode:'replay'},onReveal);}
+  if(t.hasAttribute('data-view')){views[cur.id]=t.getAttribute('data-view');renderBar();
+    if(pick<0)return askNow();
+    return stage.show(cur,{view:viewOf(cur),pick:pick,shown:shown,mode:'still'},onReveal);}
+  if(t.id==='gs-court')return advance();   // 코트를 누르면 다음 단계로
   var a=t.getAttribute('data-act');
   if(a==='start'){if(S.session)openSessionCard();else startSession();return;}
   if(a==='more')return startSession();
@@ -1153,9 +1249,11 @@ document.addEventListener('click',function(e){
   if(a==='open')return openReview(t.getAttribute('data-card'));
   if(a==='retry')return openCard(cur,'review',-1,false);
   if(a==='back')return openChapter(backCh);
-  if(a==='scene'){shown=+t.getAttribute('data-i');Log.track('scene',{c:cur.id});renderPanel();return stage.show(cur,{view:viewOf(cur),pick:pick,shown:shown,mode:'out'},onReveal);}
-  if(a==='report'){repOpen=true;renderPanel();var r0=$('rep-0');if(r0)r0.focus();return;}
-  if(a==='report-cancel'){repOpen=false;return renderPanel();}
+  if(a==='sheet'){sheetOpen=!sheetOpen;return renderSheet();}
+  if(a==='scene'){shown=+t.getAttribute('data-i');Log.track('scene',{c:cur.id});sheetOpen=false;setPhase('out');
+    return stage.show(cur,{view:viewOf(cur),pick:pick,shown:shown,mode:'out'},onReveal);}
+  if(a==='report'){repOpen=true;renderSheet();var r0=$('rep-0');if(r0)r0.focus();return;}
+  if(a==='report-cancel'){repOpen=false;return renderSheet();}
   if(a==='wait'){S.wait=iso();Log.track('wait');save();renderHome();return toast('전했어요. 새 카드는 이 링크에 올라와요.');}
   if(a==='stats')return showStats();
 });
@@ -1163,11 +1261,11 @@ document.addEventListener('submit',function(e){
   if(!e.target||e.target.id!=='rep-form')return;e.preventDefault();
   var sel=e.target.querySelector('input[name="rep"]:checked'),r=REASONS[sel?+sel.value:0];
   S.reports.push({c:cur.id,r:r,at:iso()});if(S.reports.length>30)S.reports.splice(0,S.reports.length-30);Log.track('report',{c:cur.id,r:r});save();
-  repOpen=false;renderPanel();toast('고마워요. 이 카드를 다시 살펴볼게요.');
+  repOpen=false;renderSheet();toast('고마워요. 이 카드를 다시 살펴볼게요.');
 });
 document.addEventListener('keydown',function(e){
   var z=e.target.closest?e.target.closest('.zone'):null;
-  if(z&&$('s-play').contains(z)&&(e.key==='Enter'||e.key===' ')){e.preventDefault();choose(+z.getAttribute('data-opt'));}
+  if(z&&$('s-play').contains(z)&&(e.key==='Enter'||e.key===' ')){e.preventDefault();if(phase==='ask')choose(+z.getAttribute('data-opt'));else advance();}
 });
 
 /* ═════════ 시작 ═════════ */

@@ -45,7 +45,9 @@ GAME_PROBE = r"""<script>
 var LOG=[];function q(s){return document.querySelector(s);}
 function vis(){var r=[];['home','play','done','chapter','stats'].forEach(function(n){var el=q('#s-'+n);if(el&&!el.hidden)r.push(n);});return r.join(',');}
 function snap(tag){var say=q('#p-say'),t=q('#toast');
+  var cap=q('#gs-cap');
   LOG.push({tag:tag,screen:vis(),count:q('#bar-play').hidden?'':q('#scount').textContent,dots:document.querySelectorAll('#sdots i').length,
+    phase:q('#gs').getAttribute('data-phase'),cap:cap.hidden?null:cap.textContent,rev:!q('#gs-rev').hidden,sheet:!q('#p-verdict').hidden,
     head:q('#t-head').textContent,say:say.hidden?null:say.textContent,prog:q('#p-n').textContent,rank:q('#bar-rank-t').textContent,
     rankup:q('#d-rank').hidden?null:q('#d-rank').textContent,tally:q('#s-done').hidden?null:q('#d-tally').textContent,
     wait:!q('#c-wait').hidden,owner:!q('#h-stats').hidden,stats:q('#s-stats').hidden?null:q('#st-body').textContent.slice(0,200),
@@ -133,8 +135,10 @@ def main():
                [[120, "g.pick('실수')"], [120, "g.click('[data-act=finish]')"], [150, "g.snap('done')"],
                 [150, "g.click('[data-act=home]')"], [150, "g.snap('home')"]])
     s0, t, s1, d, h = (last(log, k) for k in ("start", "taste", "s1", "done", "home"))
-    check("처음 온 사람은 맛보기 카드부터 (멈춤 배지)", s0 and s0["screen"] == "play" and s0["count"] == "맛보기 · 1분" and "어떻게 할까요" in (s0["say"] or ""), s0)
-    check("맛보기 결과 배지", t and t["say"] and t["say"][0] in "✓△✕", t)
+    q24 = next(c for c in CARDS if c["id"] == "C1-24")["question"]["text"]
+    check("처음 온 사람은 맛보기 카드부터 — 코트 위 질문 띠", s0 and s0["screen"] == "play" and s0["count"] == "맛보기 · 1분"
+          and s0["phase"] == "ask" and q24 in (s0["cap"] or ""), s0)
+    check("맛보기 결과 배지 + 해설 시트", t and t["say"] and t["say"][0] in "✓△✕" and t["phase"] == "verdict" and t["sheet"], t)
     check("시작하기 → 오늘의 코트 5장", s1 and s1["count"] == "1 / 5" and s1["dots"] == 5, s1)
     check("한 판 결과 — 성공 4 · 실패 1", d and d["screen"] == "done" and "성공 4" in d["tally"] and "실패 1" in d["tally"], d)
     check("홈 진도 5/30", h and h["prog"].startswith("5/"), h)
@@ -148,7 +152,7 @@ def main():
                [[150, "g.click('#b-x')"], [150, "g.snap('exit')"], [150, "g.click('#t-cta')"], [150, "g.snap('resume')"]], st)
     h, s1, ex, rs = (last(log, k) for k in ("home", "s1", "exit", "resume"))
     check("복습 2장 + 새 카드 5장", h and "새 카드 5장" in h["head"] and "복습 2장" in h["head"], h)
-    check("복습 카드가 먼저, '복습' 표시", s1 and s1["count"] == "1 / 7" and "복습" in s1["tag"], s1)
+    check("복습 카드가 먼저, '복습' 표시", s1 and s1["count"] == "1 / 7" and s1["rev"], s1)
     check("나가면 '하던 코트가 남았어요'", ex and ex["screen"] == "home" and "하던 코트가" in ex["head"], ex)
     check("이어서 하기 → 3번째 카드", rs and rs["count"] == "3 / 7" and not rs["err"], rs)
 

@@ -762,7 +762,9 @@ Stage.prototype.run=function(T,ctx,onEnd){
 };
 /* 카드 한 장을 무대에 올린다.
    o.view 'top'|'me' · o.pick 고른 보기(-1 = 아직) · o.shown 보여 줄 보기(정답 장면 보기) ·
-   o.mode 'intro'(도입 재생 후 멈춤) | 'out'(결과 재생) | 'replay'(도입+결과) | 'still'(끝 장면만)
+   o.mode 'intro'(도입 재생 후 멈춤) | 'out'(결과 재생) | 'replay'(도입+결과) | 'still'(끝 장면만) |
+          'pose'(도입 직전 — 선수만 서 있고 공은 아직. 제목 화면 뒤에 깔린다)
+   o.freezeSay 멈출 때 배지 글 — false 면 배지 없이 멈춘다(페이지가 질문을 직접 띄울 때) · o.onFreeze 멈춘 뒤 부른다
    done(res) — 결과 장면이 끝났을 때. res = {v: 정답|차선|실수, caption, zone} */
 Stage.prototype.show=function(c,o,done){
   var self=this,pick=o.pick==null?-1:o.pick,isMe=o.view==='me',cam=isMe?meCam(c.setup.me.xy):BCAM;
@@ -773,8 +775,9 @@ Stage.prototype.show=function(c,o,done){
   var corZone=optsOf(c)[correctIdx(c)].zone,ctx={c:c,cam:cam,isMe:isMe,correct:corZone,follow:isMe&&pick>=0,camKey:camKey(c.setup.me.xy)};
   var TI=buildIntro(c);
   if(pick<0){
+    if(o.mode==='pose'){this.paint(TI,0,false,ctx);return;}
     var fz={c:c,cam:cam,isMe:isMe,freeze:true};
-    var freeze=function(){self.paint(TI,TI.dur,true,fz);self.say('',FREEZE_SAY);if(o.onFreeze)o.onFreeze();};
+    var freeze=function(){self.paint(TI,TI.dur,true,fz);if(o.freezeSay!==false)self.say('',o.freezeSay||FREEZE_SAY);if(o.onFreeze)o.onFreeze();};
     if(o.mode==='still')freeze();else this.run(TI,ctx,freeze);
     return;
   }
