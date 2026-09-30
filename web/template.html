@@ -199,7 +199,7 @@ footer code{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
     <h1>복식 무브 블루프린트</h1>
     <p class="lede">공이 날아오다 멈추면, 내가 갈 곳이나 공 보낼 곳을 골라요. 고른 대로 공과 사람이 움직여 결과를 보여 줘요.</p>
     <div class="chips">
-      <span class="chip"><b>25</b>장 플레이</span>
+      <span class="chip"><b id="n-play">30</b>장 플레이</span>
       <span class="chip"><b>120</b>장 커리큘럼</span>
       <span class="chip">중계 · 내 시점</span>
     </div>
@@ -267,7 +267,7 @@ footer code{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
       <thead><tr><th>단계</th><th>산출물</th><th>상태</th></tr></thead>
       <tbody>
         <tr><td>커리큘럼</td><td>5챕터 120장</td><td>확정</td></tr>
-        <tr><td>상황 카드</td><td>1챕터 24장 + C2-08</td><td>25장 완성 · 95장 남음</td></tr>
+        <tr><td>상황 카드</td><td>1챕터 24장 + 2챕터 6장</td><td>30장 완성 · 90장 남음</td></tr>
         <tr><td>화면</td><td>3D 코트 · 공 궤적 · 중계/내 시점</td><td>완료</td></tr>
         <tr><td>게임 설계</td><td>3단 채점 · 모드 5개 · 부수 체계</td><td>완료</td></tr>
         <tr><td>기획서</td><td>PRD + 4인 검수</td><td>완료</td></tr>
@@ -874,6 +874,7 @@ document.addEventListener('click',function(e){
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok,fb);else fb();
 });
 
+$('n-play').textContent=CARDS.length;
 legend();renderSteps();render(answers[CARDS[idx].id]!=null?'still':'intro');
 })();
 </script>

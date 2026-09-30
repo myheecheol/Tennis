@@ -1,8 +1,501 @@
 {
   "chapter": "C2",
   "title": "첫 세 번의 공",
-  "note": "작성 중 — 현재 C2-08 한 장만 완성됐다. 프롬프트 예시(few-shot 앵커)로도 쓰인다.",
+  "note": "Phase 1 검증판에 들어가는 6장 (C2-01·02·07·08·09·16). 나머지 18장은 Phase 2. C2-08 은 프롬프트 예시(few-shot 앵커)로도 쓰인다.",
   "cards": [
+    {
+      "id": "C2-01",
+      "chapter": "C2",
+      "title": "서브, 어디로 넣을까요",
+      "difficulty": 2,
+      "prereq": [
+        "C1-18"
+      ],
+      "myRole": "서버",
+      "phase": "서브",
+      "setup": {
+        "me": {
+          "zone": "A-RX",
+          "xy": [
+            0.72,
+            1.02
+          ]
+        },
+        "partner": {
+          "zone": "A-LN",
+          "xy": [
+            0.3,
+            0.59
+          ]
+        },
+        "opp1": {
+          "zone": "E-LB",
+          "xy": [
+            0.22,
+            0.02
+          ]
+        },
+        "opp2": {
+          "zone": "E-RM",
+          "xy": [
+            0.7,
+            0.27
+          ]
+        },
+        "ball": {
+          "kind": "서브 준비",
+          "arc": "hold",
+          "from": [
+            0.72,
+            1.02
+          ]
+        }
+      },
+      "scene": "오른쪽에서 넣는 서브예요. 파트너는 왼쪽 네트 앞에 있어요.",
+      "cue": "파트너는 박스 한가운데, 가운데를 노려요.",
+      "question": {
+        "type": "target",
+        "text": "어디로 넣을까요?"
+      },
+      "answer": {
+        "zone": "E-CM",
+        "short": "센터로 깊게",
+        "principle": "P-02",
+        "why": "리턴 각도가 가장 좁아져요. 가운데로 오는 리턴은 파트너가 가로채요.",
+        "caption": "파트너가 가로챘어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "serve",
+            "bounce": [
+              0.45,
+              0.27
+            ],
+            "to": [
+              0.4,
+              0.03
+            ],
+            "reach": "opp1"
+          },
+          {
+            "by": "opp1",
+            "arc": "normal",
+            "to": [
+              0.44,
+              0.58
+            ]
+          },
+          {
+            "by": "partner",
+            "arc": "volley",
+            "bounce": [
+              0.2,
+              0.33
+            ],
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "E-LM",
+          "severity": "차선",
+          "short": "바깥으로 와이드",
+          "why": "리시버를 끌어내지만, 리턴 각도도 같이 넓어져요.",
+          "caption": "리턴 각도가 열렸어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "serve",
+              "bounce": [
+                0.16,
+                0.28
+              ],
+              "to": [
+                0.06,
+                0.08
+              ],
+              "reach": "opp1"
+            },
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.88,
+                0.84
+              ],
+              "to": [
+                0.93,
+                0.95
+              ],
+              "reach": "me"
+            }
+          ]
+        },
+        {
+          "zone": "E-LN",
+          "severity": "실수",
+          "short": "짧고 느리게 안전하게",
+          "why": "넣기만 하려는 짧은 서브는 리시버가 들어와 때려요.",
+          "caption": "짧아서 공격당했어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "serve2",
+              "bounce": [
+                0.3,
+                0.42
+              ],
+              "to": [
+                0.3,
+                0.3
+              ],
+              "reach": "opp1"
+            },
+            {
+              "by": "opp1",
+              "arc": "flat",
+              "bounce": [
+                0.56,
+                0.8
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "센터 서브는 파트너에게 공을 모아 줘요.",
+      "next": {
+        "id": "C2-02",
+        "text": "와이드면 리턴은 어디로 올까요"
+      },
+      "tags": [
+        "서버",
+        "서브 코스",
+        "센터"
+      ]
+    },
+    {
+      "id": "C2-02",
+      "chapter": "C2",
+      "title": "와이드 서브, 리턴은 어디로 올까요",
+      "difficulty": 3,
+      "prereq": [
+        "C1-03"
+      ],
+      "myRole": "넷맨",
+      "phase": "서브+1",
+      "view": "me",
+      "setup": {
+        "me": {
+          "zone": "A-RN",
+          "xy": [
+            0.7,
+            0.59
+          ]
+        },
+        "partner": {
+          "zone": "A-LX",
+          "xy": [
+            0.28,
+            1.02
+          ]
+        },
+        "opp1": {
+          "zone": "E-LM",
+          "xy": [
+            0.28,
+            0.27
+          ]
+        },
+        "opp2": {
+          "zone": "E-RB",
+          "xy": [
+            0.78,
+            0.02
+          ]
+        },
+        "ball": {
+          "kind": "와이드 서브",
+          "arc": "serve",
+          "from": [
+            0.28,
+            1.02
+          ],
+          "bounce": [
+            0.84,
+            0.27
+          ]
+        }
+      },
+      "scene": "파트너가 왼쪽에서 와이드 서브를 넣었어요.",
+      "cue": "리시버가 바깥으로 끌려가고 있어요.",
+      "question": {
+        "type": "readNext",
+        "text": "리턴은 어디로 올까요?"
+      },
+      "answer": {
+        "zone": "A-CN",
+        "short": "크로스, 가운데로",
+        "principle": "P-04",
+        "reveal": {
+          "type": "oppShot",
+          "by": "opp2",
+          "arc": "normal"
+        },
+        "why": "끌려간 리시버는 크로스밖에 못 쳐요. 그 공은 가운데를 지나가요.",
+        "stand": [
+          0.6,
+          0.57
+        ],
+        "caption": "미리 읽고 가로챘어요",
+        "play": [
+          {
+            "by": "opp2",
+            "from": [
+              0.95,
+              0.06
+            ],
+            "arc": "normal",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": [
+              0.62,
+              0.22
+            ],
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RM",
+          "severity": "차선",
+          "short": "로브, 내 머리 위로",
+          "why": "올 수는 있어요. 하지만 미리 물러서면 가로챌 기회를 버려요.",
+          "stand": [
+            0.72,
+            0.75
+          ],
+          "caption": "크로스가 넘어갔어요",
+          "play": [
+            {
+              "by": "opp2",
+              "from": [
+                0.95,
+                0.06
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.3,
+                0.84
+              ],
+              "to": "partner"
+            }
+          ]
+        },
+        {
+          "zone": "A-RN",
+          "severity": "실수",
+          "short": "직선, 내 옆으로",
+          "why": "끌려간 자리에서 직선은 가장 어려워요. 옆을 막으면 가운데가 비어요.",
+          "stand": [
+            0.84,
+            0.58
+          ],
+          "caption": "가운데로 빠져나갔어요",
+          "play": [
+            {
+              "by": "opp2",
+              "from": [
+                0.95,
+                0.06
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.36,
+                0.72
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "끌려간 리시버의 공은 가운데로 와요.",
+      "next": {
+        "id": "C2-03",
+        "text": "보디 서브라면 포치할까요"
+      },
+      "tags": [
+        "넷맨",
+        "포치",
+        "읽기"
+      ]
+    },
+    {
+      "id": "C2-07",
+      "chapter": "C2",
+      "title": "퍼스트 서브, 리시브를 뒤로 뺄까요",
+      "difficulty": 2,
+      "prereq": [
+        "C2-06"
+      ],
+      "myRole": "리시버",
+      "phase": "리턴",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.76,
+            0.95
+          ]
+        },
+        "partner": {
+          "zone": "A-LM",
+          "xy": [
+            0.28,
+            0.78
+          ]
+        },
+        "opp1": {
+          "zone": "E-LX",
+          "xy": [
+            0.3,
+            -0.02
+          ]
+        },
+        "opp2": {
+          "zone": "E-RM",
+          "xy": [
+            0.72,
+            0.29
+          ]
+        },
+        "ball": {
+          "kind": "서브 준비",
+          "arc": "hold",
+          "from": [
+            0.3,
+            -0.02
+          ]
+        }
+      },
+      "scene": "상대 퍼스트 서브가 빨라요. 벌써 두 번 놓쳤어요.",
+      "cue": "공이 라켓에 닿기 전에 지나가요.",
+      "question": {
+        "type": "move",
+        "text": "어디서 받을까요?"
+      },
+      "answer": {
+        "zone": "A-RX",
+        "short": "한두 걸음 뒤로",
+        "principle": "P-02",
+        "why": "빠른 서브엔 거리가 곧 시간이에요. 뒤로 물러서면 라켓을 댈 시간이 생겨요.",
+        "stand": [
+          0.78,
+          1.05
+        ],
+        "caption": "제대로 받아 넘겼어요",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "serve",
+            "bounce": [
+              0.68,
+              0.73
+            ],
+            "to": [
+              0.76,
+              1.03
+            ]
+          },
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": [
+              0.22,
+              0.08
+            ]
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RB",
+          "severity": "차선",
+          "short": "베이스라인 그대로",
+          "why": "받을 수는 있어요. 하지만 늦게 맞아 공이 떠요.",
+          "caption": "늦어서 공이 떴어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "serve",
+              "bounce": [
+                0.7,
+                0.74
+              ],
+              "to": [
+                0.8,
+                0.95
+              ],
+              "toZ": 0.8
+            },
+            {
+              "by": "me",
+              "arc": "high",
+              "to": [
+                0.66,
+                0.36
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.4,
+                0.84
+              ],
+              "to": "partner"
+            }
+          ]
+        },
+        {
+          "zone": "A-RM",
+          "severity": "실수",
+          "short": "한 걸음 앞으로",
+          "why": "세컨 서브 때의 자리예요. 빠른 서브에 다가서면 더 빨리 지나가요.",
+          "stand": [
+            0.74,
+            0.82
+          ],
+          "caption": "라켓도 못 댔어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "serve",
+              "bounce": [
+                0.7,
+                0.72
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "빠른 서브는 뒤에서, 느린 서브는 앞에서.",
+      "next": {
+        "id": "C2-08",
+        "text": "세컨 서브라면요?"
+      },
+      "tags": [
+        "리턴",
+        "리시브 위치",
+        "퍼스트 서브"
+      ]
+    },
     {
       "id": "C2-08",
       "chapter": "C2",
@@ -150,13 +643,306 @@
       ],
       "coachLine": "가운데는 넷맨이 없을 때 정답이에요.",
       "next": {
-        "id": "C2-11",
-        "text": "깊게 들어갔어요, 나갈까요"
+        "id": "C2-09",
+        "text": "깊게 보냈어요, 어디까지 갈까요"
       },
       "tags": [
         "리턴",
         "크로스",
         "세컨서브"
+      ]
+    },
+    {
+      "id": "C2-09",
+      "chapter": "C2",
+      "title": "세컨 리턴 후 전진, 어디까지 갈까요",
+      "difficulty": 3,
+      "prereq": [
+        "C2-08"
+      ],
+      "myRole": "리시버",
+      "phase": "리턴+1",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.76,
+            0.93
+          ]
+        },
+        "partner": {
+          "zone": "A-LM",
+          "xy": [
+            0.28,
+            0.78
+          ]
+        },
+        "opp1": {
+          "zone": "E-LX",
+          "xy": [
+            0.18,
+            -0.03
+          ]
+        },
+        "opp2": {
+          "zone": "E-RM",
+          "xy": [
+            0.72,
+            0.29
+          ]
+        },
+        "ball": {
+          "kind": "내 크로스 리턴",
+          "arc": "normal",
+          "from": [
+            0.76,
+            0.93
+          ],
+          "bounce": [
+            0.22,
+            0.08
+          ],
+          "to": [
+            0.18,
+            -0.03
+          ]
+        }
+      },
+      "scene": "내 리턴이 서버 쪽 구석 깊숙이 갔어요.",
+      "cue": "서버가 베이스라인 뒤로 밀렸어요.",
+      "question": {
+        "type": "move",
+        "text": "나는 어디까지 갈까요?"
+      },
+      "answer": {
+        "zone": "A-RM",
+        "short": "서비스라인까지",
+        "principle": "P-03",
+        "why": "밀린 서버는 공을 띄워요. 서비스라인이면 뜬 공도 로브도 받을 수 있어요.",
+        "stand": [
+          0.72,
+          0.74
+        ],
+        "caption": "뜬 공을 발리했어요",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "high",
+            "to": "me",
+            "toZ": 1.3
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": [
+              0.44,
+              0.2
+            ],
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RB",
+          "severity": "차선",
+          "short": "제자리에서 기다리기",
+          "why": "안전하지만, 상대가 밀린 틈을 그냥 보내요.",
+          "caption": "기회를 흘려보냈어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.7,
+                0.9
+              ],
+              "to": "me"
+            }
+          ]
+        },
+        {
+          "zone": "A-RN",
+          "severity": "실수",
+          "short": "네트 앞까지 한 번에",
+          "why": "달려가는 중에 공이 와요. 밀린 서버의 로브가 머리 위로 넘어가요.",
+          "stand": [
+            0.72,
+            0.58
+          ],
+          "caption": "머리 위로 넘어갔어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "lob",
+              "bounce": [
+                0.74,
+                0.92
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "깊게 보냈으면 서비스라인까지 나가요.",
+      "next": {
+        "id": "C2-18",
+        "text": "나간 뒤 첫 발리는요?"
+      },
+      "tags": [
+        "리턴",
+        "전진",
+        "높낮이"
+      ]
+    },
+    {
+      "id": "C2-16",
+      "chapter": "C2",
+      "title": "상대 넷맨이 포치 나왔어요",
+      "difficulty": 3,
+      "prereq": [
+        "C1-17"
+      ],
+      "myRole": "리시버 파트너",
+      "phase": "리턴+1",
+      "setup": {
+        "me": {
+          "zone": "A-LM",
+          "xy": [
+            0.28,
+            0.78
+          ]
+        },
+        "partner": {
+          "zone": "A-RB",
+          "xy": [
+            0.76,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-LB",
+          "xy": [
+            0.3,
+            0.02
+          ]
+        },
+        "opp2": {
+          "zone": "E-CN",
+          "xy": [
+            0.52,
+            0.42
+          ]
+        },
+        "ball": {
+          "kind": "크로스 리턴",
+          "arc": "normal",
+          "from": [
+            0.76,
+            0.95
+          ],
+          "to": [
+            0.52,
+            0.42
+          ]
+        }
+      },
+      "scene": "파트너가 크로스로 리턴했어요.",
+      "cue": "상대 넷맨이 가운데로 뛰어나와 잘라요.",
+      "question": {
+        "type": "move",
+        "text": "나는 어떻게 할까요?"
+      },
+      "answer": {
+        "zone": "A-CM",
+        "short": "가운데로 붙기",
+        "principle": "P-04",
+        "why": "포치한 공은 둘 사이 가운데로 와요. 먼저 가운데를 막아요.",
+        "stand": [
+          0.42,
+          0.74
+        ],
+        "caption": "막고 역습했어요",
+        "play": [
+          {
+            "by": "opp2",
+            "arc": "volley",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": [
+              0.82,
+              0.3
+            ],
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-LB",
+          "severity": "차선",
+          "short": "뒤로 물러서기",
+          "why": "시간은 벌지만, 짧게 떨어지는 공에 닿지 않아요.",
+          "stand": [
+            0.28,
+            0.93
+          ],
+          "caption": "겨우 걷어 올렸어요",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.46,
+                0.7
+              ],
+              "to": [
+                0.52,
+                0.86
+              ],
+              "reach": "partner"
+            },
+            {
+              "by": "partner",
+              "arc": "lob",
+              "bounce": [
+                0.36,
+                0.1
+              ]
+            }
+          ]
+        },
+        {
+          "zone": "A-LM",
+          "severity": "실수",
+          "short": "제자리에서 공 보기",
+          "why": "서비스라인에 멈춰 선 발밑이 가장 좋은 과녁이에요.",
+          "caption": "발밑에 꽂혔어요",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.32,
+                0.72
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "넷맨이 뛰면, 나는 가운데로 붙어요.",
+      "next": {
+        "id": "C2-17",
+        "text": "포치 온 공을 막았다면요?"
+      },
+      "tags": [
+        "포치",
+        "리시버 파트너",
+        "가운데"
       ]
     }
   ]
