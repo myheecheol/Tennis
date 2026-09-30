@@ -67,7 +67,7 @@
     {
       "id": "C1-01",
       "chapter": "C1",
-      "title": "서브 넣기 전, 나는 어디에 서나",
+      "title": "서브 전, 어디에 설까",
       "myRole": "서버",
       "question": "move",
       "difficulty": 1,
@@ -77,7 +77,7 @@
     {
       "id": "C1-02",
       "chapter": "C1",
-      "title": "넷맨의 시작 위치 — 네트에서 몇 걸음",
+      "title": "넷맨의 시작 자리",
       "myRole": "넷맨",
       "question": "move",
       "difficulty": 1,
@@ -89,7 +89,7 @@
     {
       "id": "C1-03",
       "chapter": "C1",
-      "title": "넷맨일 때, 언제 가로채러 나갈까",
+      "title": "포치, 언제 나갈까",
       "myRole": "넷맨",
       "question": "move",
       "difficulty": 2,
@@ -101,7 +101,7 @@
     {
       "id": "C1-04",
       "chapter": "C1",
-      "title": "리시브 준비 위치 — 어디에 서야 다 닿나",
+      "title": "리시브 자리 잡기",
       "myRole": "리시버",
       "question": "move",
       "difficulty": 1,
@@ -123,7 +123,7 @@
     {
       "id": "C1-06",
       "chapter": "C1",
-      "title": "리시버 파트너는 어디를 보고 있나",
+      "title": "내 눈은 어디를 보나",
       "myRole": "리시버 파트너",
       "question": "readNext",
       "difficulty": 2,
@@ -135,7 +135,7 @@
     {
       "id": "C1-07",
       "chapter": "C1",
-      "title": "서브 넣고 나서 앞으로 갈까 남을까",
+      "title": "서브 후, 남을까 나갈까",
       "myRole": "서버",
       "question": "move",
       "difficulty": 2,
@@ -147,7 +147,7 @@
     {
       "id": "C1-08",
       "chapter": "C1",
-      "title": "첫 서브 리턴, 기본 코스는 어디",
+      "title": "퍼스트 서브 리턴 코스",
       "myRole": "리시버",
       "question": "target",
       "difficulty": 2,
@@ -159,7 +159,7 @@
     {
       "id": "C1-09",
       "chapter": "C1",
-      "title": "파트너가 사이드로 끌려나갔다 — 내가 잡은 공을 어디로",
+      "title": "파트너가 끌려나갔다",
       "myRole": "넷맨",
       "question": "target",
       "difficulty": 2,
@@ -171,7 +171,7 @@
     {
       "id": "C1-10",
       "chapter": "C1",
-      "title": "파트너가 포치 나갔다, 나는?",
+      "title": "파트너가 포치 나갔다",
       "myRole": "서버",
       "question": "move",
       "difficulty": 2,
@@ -184,7 +184,7 @@
     {
       "id": "C1-11",
       "chapter": "C1",
-      "title": "상대가 직선을 노리는 것 같다 — 벌릴까",
+      "title": "직선이 두 번 왔다",
       "myRole": "넷맨",
       "question": "move",
       "difficulty": 2,
@@ -196,7 +196,7 @@
     {
       "id": "C1-12",
       "chapter": "C1",
-      "title": "상대 넷맨이 움직였다 — 어디로 치나",
+      "title": "넷맨이 움직였다",
       "myRole": "리시버",
       "question": "target",
       "difficulty": 2,
@@ -208,7 +208,7 @@
     {
       "id": "C1-13",
       "chapter": "C1",
-      "title": "우리 둘 사이 간격은 몇 미터가 맞나",
+      "title": "우리 둘의 간격",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 2,
@@ -220,7 +220,7 @@
     {
       "id": "C1-14",
       "chapter": "C1",
-      "title": "파트너가 뒤로 밀렸다 — 나는 어떻게",
+      "title": "파트너가 밀렸다",
       "myRole": "랠리",
       "question": "both",
       "difficulty": 3,
@@ -232,7 +232,7 @@
     {
       "id": "C1-15",
       "chapter": "C1",
-      "title": "포치 나간 뒤 원래 자리로 돌아갈까",
+      "title": "포치 후, 돌아갈까",
       "myRole": "넷맨",
       "question": "move",
       "difficulty": 2,
@@ -244,7 +244,7 @@
     {
       "id": "C1-16",
       "chapter": "C1",
-      "title": "파트너 리턴이 좋았다 — 전진할까",
+      "title": "리턴이 좋았다",
       "myRole": "리시버 파트너",
       "question": "move",
       "difficulty": 2,
@@ -256,7 +256,7 @@
     {
       "id": "C1-17",
       "chapter": "C1",
-      "title": "파트너 리턴이 떴다 — 나는?",
+      "title": "리턴이 떴다",
       "myRole": "리시버 파트너",
       "question": "move",
       "difficulty": 2,
@@ -268,7 +268,7 @@
     {
       "id": "C1-18",
       "chapter": "C1",
-      "title": "크로스 딥 리턴이 왔다 — 어디로 보내나",
+      "title": "깊은 크로스 리턴",
       "myRole": "서버",
       "question": "target",
       "difficulty": 2,
@@ -280,7 +280,7 @@
     {
       "id": "C1-19",
       "chapter": "C1",
-      "title": "로브가 내 머리 위로 넘어갔다",
+      "title": "로브가 머리 위로",
       "myRole": "넷맨",
       "question": "move",
       "difficulty": 3,
@@ -292,7 +292,7 @@
     {
       "id": "C1-20",
       "chapter": "C1",
-      "title": "스위치하면 좌우가 바뀐다 — 다음 공은 누가",
+      "title": "스위치 뒤 다음 공",
       "myRole": "랠리",
       "question": "readNext",
       "difficulty": 2,
@@ -304,7 +304,7 @@
     {
       "id": "C1-21",
       "chapter": "C1",
-      "title": "공이 우리 왼쪽 구석에 있다 — 오른쪽은 비워도 되나",
+      "title": "상대가 구석에서 친다",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 3,
@@ -316,7 +316,7 @@
     {
       "id": "C1-22",
       "chapter": "C1",
-      "title": "포치로 잡았다 — 어디로 때리나",
+      "title": "포치로 잡았다, 어디로",
       "myRole": "넷맨",
       "question": "target",
       "difficulty": 3,
@@ -328,7 +328,7 @@
     {
       "id": "C1-23",
       "chapter": "C1",
-      "title": "한 명 앞 한 명 뒤 대각선 — 왜 위험한가",
+      "title": "대각선으로 섰다",
       "myRole": "랠리",
       "question": "both",
       "difficulty": 3,
@@ -340,7 +340,7 @@
     {
       "id": "C1-24",
       "chapter": "C1",
-      "title": "1챕터 종합 — 이 포인트의 다음 수",
+      "title": "뜬 가운데 공은 누가",
       "myRole": "랠리",
       "question": "readNext",
       "difficulty": 3,
@@ -364,7 +364,7 @@
     {
       "id": "C2-02",
       "chapter": "C2",
-      "title": "파트너가 와이드 서브를 넣었다 — 리턴은 어디로 올까",
+      "title": "파트너 와이드 서브, 리턴은 어디로",
       "myRole": "넷맨",
       "question": "readNext",
       "difficulty": 3,
@@ -388,7 +388,7 @@
     {
       "id": "C2-04",
       "chapter": "C2",
-      "title": "페이크 포치 — 나가는 척하고 돌아온다",
+      "title": "페이크 포치",
       "myRole": "넷맨",
       "question": "move",
       "difficulty": 3,
@@ -400,7 +400,7 @@
     {
       "id": "C2-05",
       "chapter": "C2",
-      "title": "상대 넷맨이 매번 포치한다 — 어떻게 벌 주나",
+      "title": "매번 포치하는 넷맨 벌주기",
       "myRole": "리시버",
       "question": "target",
       "difficulty": 3,
@@ -412,7 +412,7 @@
     {
       "id": "C2-06",
       "chapter": "C2",
-      "title": "강한 퍼스트 서브 — 무리하지 않는 리턴",
+      "title": "강한 퍼스트 서브 받기",
       "myRole": "리시버",
       "question": "target",
       "difficulty": 2,
@@ -436,7 +436,7 @@
     {
       "id": "C2-08",
       "chapter": "C2",
-      "title": "세컨 서브를 받았다 — 어디로 보낼까",
+      "title": "세컨 서브 리턴 코스",
       "myRole": "리시버",
       "question": "target",
       "difficulty": 3,
@@ -472,7 +472,7 @@
     {
       "id": "C2-11",
       "chapter": "C2",
-      "title": "크로스 딥이 들어갔다 — 전진할까 남을까",
+      "title": "깊게 들어갔다, 나갈까",
       "myRole": "리시버",
       "question": "move",
       "difficulty": 3,
@@ -484,7 +484,7 @@
     {
       "id": "C2-12",
       "chapter": "C2",
-      "title": "리턴이 낮게 왔다 — 발밑 공을 어디로",
+      "title": "낮은 리턴, 발밑 공을 어디로",
       "myRole": "서버",
       "question": "target",
       "difficulty": 3,
@@ -508,7 +508,7 @@
     {
       "id": "C2-14",
       "chapter": "C2",
-      "title": "우리가 낮게 보냈다 — 한 걸음 더 앞으로",
+      "title": "낮게 보냈다, 한 걸음 더",
       "myRole": "넷맨",
       "question": "move",
       "difficulty": 3,
@@ -532,7 +532,7 @@
     {
       "id": "C2-16",
       "chapter": "C2",
-      "title": "상대 넷맨이 포치 나왔다 — 나는 뭘 하나",
+      "title": "상대 넷맨이 포치 나왔다",
       "myRole": "리시버 파트너",
       "question": "move",
       "difficulty": 3,
@@ -544,7 +544,7 @@
     {
       "id": "C2-17",
       "chapter": "C2",
-      "title": "포치 온 공을 막았다 — 어디로 보내나",
+      "title": "포치 온 공을 막았다",
       "myRole": "리시버 파트너",
       "question": "target",
       "difficulty": 3,
@@ -616,7 +616,7 @@
     {
       "id": "C2-23",
       "chapter": "C2",
-      "title": "3구까지 설계하기 — 서브 코스와 포치 신호",
+      "title": "3구까지 설계하기",
       "myRole": "서버",
       "question": "both",
       "difficulty": 4,
@@ -628,7 +628,7 @@
     {
       "id": "C2-24",
       "chapter": "C2",
-      "title": "2챕터 종합 — 이 랠리의 다음 두 수",
+      "title": "2챕터 종합",
       "myRole": "랠리",
       "question": "readNext",
       "difficulty": 4,
@@ -640,7 +640,7 @@
     {
       "id": "C3-01",
       "chapter": "C3",
-      "title": "언제 네트로 나가야 하나 — 신호 하나",
+      "title": "네트로 나갈 신호",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 2,
@@ -664,7 +664,7 @@
     {
       "id": "C3-03",
       "chapter": "C3",
-      "title": "투업일 때 네트에서 거리 — 붙을까 떨어질까",
+      "title": "투업, 네트에서 몇 걸음",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 2,
@@ -676,7 +676,7 @@
     {
       "id": "C3-04",
       "chapter": "C3",
-      "title": "공이 상대 왼쪽 구석에 있다 — 우리 둘은 어디로",
+      "title": "공이 상대 왼쪽 구석에",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 3,
@@ -688,7 +688,7 @@
     {
       "id": "C3-05",
       "chapter": "C3",
-      "title": "하이 발리 찬스 — 발밑인가 빈 공간인가",
+      "title": "하이 발리 찬스",
       "myRole": "랠리",
       "question": "target",
       "difficulty": 3,
@@ -724,7 +724,7 @@
     {
       "id": "C3-08",
       "chapter": "C3",
-      "title": "내 발밑으로 낮은 공이 왔다 — 물러설까",
+      "title": "발밑으로 낮은 공",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 3,
@@ -736,7 +736,7 @@
     {
       "id": "C3-09",
       "chapter": "C3",
-      "title": "발밑 공을 어디로 — 무리할 수 없는 상황",
+      "title": "발밑 공, 무리 없이",
       "myRole": "랠리",
       "question": "target",
       "difficulty": 3,
@@ -760,7 +760,7 @@
     {
       "id": "C3-11",
       "chapter": "C3",
-      "title": "로브가 파트너 머리 위 — 누가 쫓아가나",
+      "title": "로브가 파트너 머리 위",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 3,
@@ -772,7 +772,7 @@
     {
       "id": "C3-12",
       "chapter": "C3",
-      "title": "스매시 커버 — 파트너가 때릴 때 나는",
+      "title": "파트너 스매시 커버",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 4,
@@ -796,7 +796,7 @@
     {
       "id": "C3-14",
       "chapter": "C3",
-      "title": "발리 대 발리 접전 — 라켓과 몸의 위치",
+      "title": "발리 대 발리",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 3,
@@ -856,7 +856,7 @@
     {
       "id": "C3-19",
       "chapter": "C3",
-      "title": "포치로 잡은 공 — 상대가 둘 다 앞이면",
+      "title": "포치 공, 상대 둘 다 앞",
       "myRole": "넷맨",
       "question": "target",
       "difficulty": 3,
@@ -880,7 +880,7 @@
     {
       "id": "C3-21",
       "chapter": "C3",
-      "title": "상대 넷맨이 가운데로 붙었다 — 직선이 열렸다",
+      "title": "넷맨이 가운데로, 직선이 열렸다",
       "myRole": "랠리",
       "question": "target",
       "difficulty": 4,
@@ -892,7 +892,7 @@
     {
       "id": "C3-22",
       "chapter": "C3",
-      "title": "짧은 앵글에 끌려나갔다 — 돌아오는 길",
+      "title": "짧은 앵글에서 돌아오기",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 4,
@@ -928,7 +928,7 @@
     {
       "id": "C4-01",
       "chapter": "C4",
-      "title": "상대가 네트를 잡았다 — 우리 둘은 어디로",
+      "title": "상대가 네트를 잡았다",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 2,
@@ -988,7 +988,7 @@
     {
       "id": "C4-06",
       "chapter": "C4",
-      "title": "내 로브가 짧았다 — 다음에 무슨 일이",
+      "title": "내 로브가 짧았다",
       "myRole": "랠리",
       "question": "readNext",
       "difficulty": 3,
@@ -1000,7 +1000,7 @@
     {
       "id": "C4-07",
       "chapter": "C4",
-      "title": "스매시 맞기 직전 — 어디에 서고 라켓은",
+      "title": "스매시 맞기 직전",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 3,
@@ -1012,7 +1012,7 @@
     {
       "id": "C4-08",
       "chapter": "C4",
-      "title": "스매시를 막았다 — 어디로 보내야 살아나나",
+      "title": "스매시를 막았다, 어디로",
       "myRole": "랠리",
       "question": "target",
       "difficulty": 3,
@@ -1048,7 +1048,7 @@
     {
       "id": "C4-11",
       "chapter": "C4",
-      "title": "낮고 빠르게 치고 싶다 — 왜 안 되나",
+      "title": "낮고 빠르게, 왜 안 되나",
       "myRole": "랠리",
       "question": "target",
       "difficulty": 3,
@@ -1060,7 +1060,7 @@
     {
       "id": "C4-12",
       "chapter": "C4",
-      "title": "상대 발밑으로 보내려면 어디를 겨냥하나",
+      "title": "발밑을 노리는 겨냥점",
       "myRole": "랠리",
       "question": "target",
       "difficulty": 3,
@@ -1084,7 +1084,7 @@
     {
       "id": "C4-14",
       "chapter": "C4",
-      "title": "우리 둘 다 밖으로 밀렸다 — 붙는 방법",
+      "title": "둘 다 밖으로 밀렸다",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 4,
@@ -1120,7 +1120,7 @@
     {
       "id": "C4-17",
       "chapter": "C4",
-      "title": "상대 넷맨이 스매시를 못 친다 — 그쪽으로",
+      "title": "스매시 약한 넷맨 쪽으로",
       "myRole": "랠리",
       "question": "target",
       "difficulty": 4,
@@ -1132,7 +1132,7 @@
     {
       "id": "C4-18",
       "chapter": "C4",
-      "title": "상대가 짧은 공으로 끌어낸다 — 다음은",
+      "title": "짧은 공으로 끌어낸다",
       "myRole": "랠리",
       "question": "readNext",
       "difficulty": 4,
@@ -1144,7 +1144,7 @@
     {
       "id": "C4-19",
       "chapter": "C4",
-      "title": "짧은 공에 내가 나갔다 — 파트너는 뭘 하나",
+      "title": "짧은 공에 내가 나갔다",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 4,
@@ -1180,7 +1180,7 @@
     {
       "id": "C4-22",
       "chapter": "C4",
-      "title": "두 번 연속 밀렸다 — 자리를 리셋하는 법",
+      "title": "두 번 연속 밀렸다",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 5,
@@ -1204,7 +1204,7 @@
     {
       "id": "C4-24",
       "chapter": "C4",
-      "title": "4챕터 종합 — 이 수비에서 살아나는 길",
+      "title": "4챕터 종합",
       "myRole": "랠리",
       "question": "readNext",
       "difficulty": 4,
@@ -1216,7 +1216,7 @@
     {
       "id": "C5-01",
       "chapter": "C5",
-      "title": "상대 대형 알아보기 — 셋 중 무엇인가",
+      "title": "상대 대형 알아보기",
       "myRole": "랠리",
       "question": "readNext",
       "difficulty": 3,
@@ -1324,7 +1324,7 @@
     {
       "id": "C5-10",
       "chapter": "C5",
-      "title": "상대 둘 중 약한 쪽 — 계속 그쪽인가",
+      "title": "약한 쪽만 계속?",
       "myRole": "랠리",
       "question": "target",
       "difficulty": 4,
@@ -1336,7 +1336,7 @@
     {
       "id": "C5-11",
       "chapter": "C5",
-      "title": "같은 코스를 세 번 썼다 — 이제 어디로",
+      "title": "같은 코스 세 번 뒤",
       "myRole": "랠리",
       "question": "target",
       "difficulty": 4,
@@ -1348,7 +1348,7 @@
     {
       "id": "C5-12",
       "chapter": "C5",
-      "title": "상대가 우리 패턴을 읽었다 — 자리를 바꾼다",
+      "title": "패턴을 읽혔다",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 4,
@@ -1408,7 +1408,7 @@
     {
       "id": "C5-17",
       "chapter": "C5",
-      "title": "파트너가 계속 뚫린다 — 대형을 바꿀까",
+      "title": "파트너가 계속 뚫린다",
       "myRole": "랠리",
       "question": "move",
       "difficulty": 4,
@@ -1468,7 +1468,7 @@
     {
       "id": "C5-22",
       "chapter": "C5",
-      "title": "랠리 시뮬레이션 B — 밀리는 흐름 뒤집기",
+      "title": "랠리 시뮬레이션 B",
       "myRole": "랠리",
       "question": "both",
       "difficulty": 5,
@@ -1480,7 +1480,7 @@
     {
       "id": "C5-23",
       "chapter": "C5",
-      "title": "랠리 시뮬레이션 C — 파트너와 한 덩어리로",
+      "title": "랠리 시뮬레이션 C",
       "myRole": "랠리",
       "question": "both",
       "difficulty": 5,

@@ -7,9 +7,9 @@
 prompts/     기획서를 뽑는 프롬프트 체인 (STEP 0~7 + 원샷)
 reference/   프롬프트에 붙여 넣는 재료 (도메인·좌표계·예시·플랫폼)
 design/      ← 위 체인을 실행해서 나온 결과물
-data/        커리큘럼 인덱스와 상황 카드 (기계 검증 대상)
-tools/       생성기와 검증기
-web/         코트 다이어그램 + 카드 데모 페이지
+data/        커리큘럼 인덱스 · 상황 카드 · 카메라 규격 (기계 검증 대상)
+tools/       생성기 · 검증기 · 3D 코트 기하(court3d.py)
+web/         플레이 가능한 프로토타입 — 3D 코트, 중계/내 시점, 카드 25장
 ```
 
 ---
@@ -20,7 +20,7 @@ web/         코트 다이어그램 + 카드 데모 페이지
 |---|---|---|
 | STEP 1 커리큘럼 | `design/01-curriculum.md` · `data/cards-index.json` | ✅ 5챕터 **120장** 확정 |
 | STEP 2 상황 카드 | `data/cards/c1.json` `c2.json` | ✅ **25장** 완성 · 95장 미착수 |
-| STEP 3 시각화 | `design/03-renderer-spec.md` | ✅ 완료 |
+| STEP 3 시각화 | `design/03-renderer-spec.md` | ✅ **v2: 3D 코트 · 공 궤적 · 두 시점** |
 | STEP 4 게임 설계 | `design/04-game-design.md` | ✅ 완료 |
 | STEP 5 플랫폼 | `reference/platform-recommendation.md` | ✅ 완료 · 가격 검증 필요 |
 | STEP 6 기획서 | `design/PRD.md` | ✅ 완료 |
@@ -53,24 +53,29 @@ bash tools/check.sh   # 전체 검증 + 생성물 갱신. 커밋 전에 돌린�
 카드 한 장의 구조:
 
 ```
-id · chapter · title · difficulty · prereq · myRole · phase
-setup { me · partner · opp1 · opp2 · ball }   ← 존 코드 + 정규 좌표
-scene(상황) · cue(관찰 단서) · question{type, text}
+id · chapter · title · difficulty · prereq · myRole · phase · view(선택)
+setup { me · partner · opp1 · opp2 }          ← 존 코드 + 정규 좌표
+setup.ball { kind · arc · from · bounce · to } ← 3D 궤적, 깊게/짧게 태그
+scene · cue · question{type, text}
 answer { zone · short · why · principle }
 distractors[2] { zone · severity(차선|실수) · short · why }
-coachLine · nextBeat · tags
+coachLine · next{id, text} · tags
 ```
+
+해설은 **한 문장(56자)**, 보기는 14자, 한 줄 요약은 24자 — 검증기가 넘치는 카드를 거부합니다.
 
 ### 검증기가 잡는 것 — `tools/validate_cards.py`
 
-사람 눈으로는 매번 놓치는 종류입니다. **실제로 예시 카드의 서브 방향 뒤집힘이 여기서 잡혔습니다.**
+사람 눈으로는 매번 놓치는 종류입니다. 실제로 잡힌 것: 서브 방향 뒤집힘, **코트 안에서 넣는 서브 11장**, 아웃 지역을 노리는 보기.
 
-- 서브가 센터 기준 대각선인가 / 서브 출발점이 서버 위치와 같은가
-- 서버와 넷맨이 반대 반쪽에 서 있는가 / 마커가 상대 코트에 있지 않은가
+- **서브는 베이스라인 뒤에서**, 대각선 서비스 박스 안으로 들어가는가
+- 공을 보내는 보기에 아웃 지역(베이스라인 뒤)이 없는가
+- 모든 존이 화면에서 손가락으로 누를 만큼 보이는가 (중계 · 내 시점 둘 다 계산)
+- 서버와 넷맨이 반대 반쪽에 서 있는가 / 공이 상대 코트에 바운드하는가
 - 좌표가 선언한 존 안에 있는가 / 마커끼리 0.12 이상 떨어져 있는가
 - 정답과 오답 존이 겹치지 않는가 / 오답이 차선 1 + 실수 1 인가
 - `target` 정답이 상대 코트(`E-`)인가, `move` 정답이 우리 코트(`A-`)인가
-- **초보자가 모르는 말을 괄호 설명 없이 쓰지 않았는가** (12개 용어)
+- **초보자가 모르는 말을 괄호 설명 없이 쓰지 않았는가** (12개 용어) / 글자 수 한도
 - 한 배치에서 정답 존이 과하게 반복되지 않는가
 
 ### 검증기가 못 잡는 것
