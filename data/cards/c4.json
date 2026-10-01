@@ -1,0 +1,3711 @@
+{
+  "chapter": "C4",
+  "title": "밀릴 때",
+  "cards": [
+    {
+      "id": "C4-01",
+      "chapter": "C4",
+      "title": "상대가 네트를 잡았어요",
+      "difficulty": 2,
+      "prereq": [
+        "C3-20"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-LN",
+          "xy": [
+            0.3,
+            0.6
+          ]
+        },
+        "partner": {
+          "zone": "A-RB",
+          "xy": [
+            0.74,
+            0.96
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.7,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "파트너 공",
+          "arc": "normal",
+          "from": [
+            0.74,
+            0.96
+          ],
+          "to": [
+            0.68,
+            0.42
+          ],
+          "toZ": 1.1
+        }
+      },
+      "scene": "상대 둘이 함께 네트로 붙었어요. 파트너는 뒤에 있어요.",
+      "cue": "상대 둘이 라켓을 세우고 네트에 서 있어요.",
+      "question": {
+        "type": "move",
+        "text": "나는 어떻게 할까요?"
+      },
+      "answer": {
+        "zone": "A-LB",
+        "short": "베이스라인까지 물러서기",
+        "principle": "P-03",
+        "why": "네트의 나는 두 사람 발리의 과녁이에요. 물러서야 받을 시간이 생겨요.",
+        "stand": [
+          0.28,
+          0.93
+        ],
+        "caption": "물러서서 로브로 받아요",
+        "play": [
+          {
+            "by": "opp2",
+            "arc": "volley",
+            "bounce": [
+              0.36,
+              0.84
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": "E-CB"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-LM",
+          "severity": "차선",
+          "short": "서비스라인까지",
+          "why": "물러선 건 맞지만, 발리가 발밑으로 떨어지는 자리예요.",
+          "stand": [
+            0.3,
+            0.74
+          ],
+          "caption": "발밑에서 겨우 받아요",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.32,
+                0.72
+              ],
+              "to": "me",
+              "toZ": 0.3
+            }
+          ]
+        },
+        {
+          "zone": "A-LN",
+          "severity": "실수",
+          "short": "네트에서 버티기",
+          "why": "한 명이 두 명의 발리를 막을 수는 없어요. 바로 앞이 과녁이에요.",
+          "caption": "발밑에 꽂혔어요",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.34,
+                0.64
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "상대가 둘 다 오면, 우리는 둘 다 뒤로.",
+      "next": {
+        "id": "C4-02",
+        "text": "투백은 언제 쓸까요?"
+      },
+      "tags": [
+        "투백",
+        "후퇴",
+        "투업 대응"
+      ]
+    },
+    {
+      "id": "C4-02",
+      "chapter": "C4",
+      "title": "투백은 언제 쓸까요",
+      "difficulty": 2,
+      "prereq": [
+        "C4-01"
+      ],
+      "myRole": "랠리",
+      "phase": "리턴",
+      "setup": {
+        "me": {
+          "zone": "A-LM",
+          "xy": [
+            0.3,
+            0.76
+          ]
+        },
+        "partner": {
+          "zone": "A-RB",
+          "xy": [
+            0.78,
+            0.98
+          ]
+        },
+        "opp1": {
+          "zone": "E-LX",
+          "xy": [
+            0.28,
+            -0.02
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.7,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "서브 준비",
+          "arc": "hold",
+          "from": [
+            0.28,
+            -0.02
+          ]
+        }
+      },
+      "scene": "상대 서브가 강하고, 넷맨이 리턴을 계속 잘라 먹었어요.",
+      "cue": "서비스라인에 선 내 발밑으로만 세 번 왔어요.",
+      "question": {
+        "type": "move",
+        "text": "이번엔 어디에 설까요?"
+      },
+      "answer": {
+        "zone": "A-LB",
+        "short": "베이스라인으로 내려가기",
+        "principle": "P-01",
+        "why": "강한 서브에 리턴이 뜨면 넷맨이 나를 노려요. 둘 다 뒤에 서면 받을 시간이 생겨요.",
+        "stand": [
+          0.28,
+          0.95
+        ],
+        "caption": "뒤에서 버텨 냈어요",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "serve",
+            "bounce": [
+              0.66,
+              0.72
+            ],
+            "to": "partner"
+          },
+          {
+            "by": "partner",
+            "arc": "normal",
+            "to": [
+              0.66,
+              0.42
+            ]
+          },
+          {
+            "by": "opp2",
+            "arc": "volley",
+            "bounce": [
+              0.34,
+              0.84
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": "E-RB"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-LM",
+          "severity": "차선",
+          "short": "서비스라인 그대로",
+          "why": "기본 자리지만, 지금은 넷맨이 계속 그 발밑을 노려요.",
+          "caption": "발밑 공이 또 왔어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "serve",
+              "bounce": [
+                0.66,
+                0.72
+              ],
+              "to": "partner"
+            },
+            {
+              "by": "partner",
+              "arc": "normal",
+              "to": [
+                0.66,
+                0.42
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.32,
+                0.74
+              ],
+              "to": "me",
+              "toZ": 0.3
+            }
+          ]
+        },
+        {
+          "zone": "A-LN",
+          "severity": "실수",
+          "short": "네트에 붙어 맞서기",
+          "why": "리턴이 떠서 오면 네트 앞의 나는 피할 곳이 없어요.",
+          "stand": [
+            0.3,
+            0.6
+          ],
+          "caption": "정면으로 맞았어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "serve",
+              "bounce": [
+                0.66,
+                0.72
+              ],
+              "to": "partner"
+            },
+            {
+              "by": "partner",
+              "arc": "normal",
+              "to": [
+                0.66,
+                0.42
+              ]
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.34,
+                0.66
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "앞에서 계속 지면, 둘 다 뒤로.",
+      "next": {
+        "id": "C4-03",
+        "text": "상대 투업엔 어디로?"
+      },
+      "tags": [
+        "투백",
+        "리시버 파트너",
+        "대형"
+      ]
+    },
+    {
+      "id": "C4-03",
+      "chapter": "C4",
+      "title": "상대 투업, 1순위 코스는 어디일까요",
+      "difficulty": 2,
+      "prereq": [
+        "C4-01"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.74,
+            0.96
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.3,
+            0.96
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.7,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "상대 발리",
+          "arc": "volley",
+          "from": [
+            0.7,
+            0.4
+          ],
+          "bounce": [
+            0.72,
+            0.86
+          ],
+          "to": [
+            0.74,
+            0.94
+          ],
+          "toZ": 0.9
+        }
+      },
+      "scene": "상대 둘이 네트에 붙었고, 우리는 둘 다 뒤에 있어요.",
+      "cue": "상대 둘이 네트에 바짝 붙어 있어요.",
+      "question": {
+        "type": "target",
+        "text": "어디로 칠까요?"
+      },
+      "answer": {
+        "zone": "E-CB",
+        "short": "두 사람 머리 위 로브",
+        "principle": "P-04",
+        "why": "네트에 붙은 두 사람의 머리 위가 가장 넓은 빈 곳이에요. 가운데로 올리면 서로 미뤄요.",
+        "caption": "머리 위로 넘겼어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": [
+              0.5,
+              0.1
+            ],
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "E-CN",
+          "severity": "차선",
+          "short": "두 사람 사이 발밑",
+          "why": "좋은 2순위지만, 뒤에서 치면 떨어지기 전에 발리로 잘려요.",
+          "caption": "발리로 넘겨 와요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.52,
+                0.42
+              ],
+              "toZ": 0.5
+            },
+            {
+              "by": "opp1",
+              "arc": "volley",
+              "to": "partner"
+            }
+          ]
+        },
+        {
+          "zone": "E-RN",
+          "severity": "실수",
+          "short": "세게 앞사람 정면으로",
+          "why": "네트의 두 사람에게 세게 치면 그대로 돌아와요.",
+          "caption": "그대로 돌아왔어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "flat",
+              "to": [
+                0.7,
+                0.42
+              ],
+              "toZ": 1.2
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.5,
+                0.7
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "둘 다 네트면, 머리 위가 비어요.",
+      "next": {
+        "id": "C4-04",
+        "text": "로브는 어느 쪽으로?"
+      },
+      "tags": [
+        "로브",
+        "투업 공략",
+        "가운데"
+      ]
+    },
+    {
+      "id": "C4-04",
+      "chapter": "C4",
+      "title": "로브를 어느 쪽으로 올릴까요",
+      "difficulty": 3,
+      "prereq": [
+        "C4-03"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.74,
+            0.96
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-LB",
+          "xy": [
+            0.28,
+            0.06
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.68,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "상대 공",
+          "arc": "normal",
+          "from": [
+            0.28,
+            0.06
+          ],
+          "bounce": [
+            0.72,
+            0.88
+          ],
+          "to": [
+            0.74,
+            0.95
+          ]
+        }
+      },
+      "scene": "상대 넷맨이 네트에 붙어 우리 공을 노려요.",
+      "cue": "뒤 사람은 크로스 쪽 베이스라인에 있어요.",
+      "question": {
+        "type": "target",
+        "text": "로브를 어디로 올릴까요?"
+      },
+      "answer": {
+        "zone": "E-RB",
+        "short": "넷맨 머리 위로",
+        "principle": "P-04",
+        "why": "넷맨 뒤로 넘기면 뒤 사람이 대각선으로 뛰어야 해요. 그사이 우리가 자리를 잡아요.",
+        "caption": "넷맨 뒤로 넘겼어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": [
+              0.72,
+              0.1
+            ]
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "E-LB",
+          "severity": "차선",
+          "short": "뒤 사람 쪽 크로스 로브",
+          "why": "안전하지만, 뒤 사람이 제자리에서 편하게 쳐요.",
+          "caption": "편하게 받아 쳐요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "lob",
+              "bounce": [
+                0.28,
+                0.1
+              ]
+            },
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.66,
+                0.86
+              ],
+              "to": "me"
+            }
+          ]
+        },
+        {
+          "zone": "E-RN",
+          "severity": "실수",
+          "short": "넷맨 앞에 짧게",
+          "why": "짧은 로브는 넷맨 스매시의 먹이예요.",
+          "caption": "스매시를 맞았어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "lob",
+              "to": [
+                0.68,
+                0.36
+              ],
+              "toZ": 2.0
+            },
+            {
+              "by": "opp2",
+              "arc": "smash",
+              "bounce": [
+                0.5,
+                0.8
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "로브는 넷맨 머리 위, 깊게.",
+      "next": {
+        "id": "C4-05",
+        "text": "올린 뒤엔 나갈까요?"
+      },
+      "tags": [
+        "로브",
+        "배급",
+        "넷맨 공략"
+      ]
+    },
+    {
+      "id": "C4-05",
+      "chapter": "C4",
+      "title": "로브를 올린 직후 전진할까요",
+      "difficulty": 3,
+      "prereq": [
+        "C4-04"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.74,
+            0.96
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-CB",
+          "xy": [
+            0.4,
+            0.08
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.68,
+            0.38
+          ]
+        },
+        "ball": {
+          "kind": "내 로브",
+          "arc": "lob",
+          "from": [
+            0.74,
+            0.96
+          ],
+          "bounce": [
+            0.72,
+            0.1
+          ]
+        }
+      },
+      "scene": "내 로브가 넷맨 머리를 넘어 깊게 떨어졌어요.",
+      "cue": "상대 둘이 뒤로 돌아 달려가요.",
+      "question": {
+        "type": "move",
+        "text": "나는 어떻게 할까요?"
+      },
+      "answer": {
+        "zone": "A-RM",
+        "short": "서비스라인까지 나가기",
+        "principle": "P-03",
+        "why": "깊은 로브에 상대가 등을 보였어요. 이때 나가야 네트를 되찾아요.",
+        "stand": [
+          0.72,
+          0.75
+        ],
+        "caption": "네트를 되찾았어요",
+        "play": [
+          {
+            "by": "opp1",
+            "from": [
+              0.7,
+              0.04
+            ],
+            "arc": "high",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-CN",
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RB",
+          "severity": "차선",
+          "short": "뒤에 남기",
+          "why": "안전하지만, 상대가 다시 네트로 올 시간을 줘요.",
+          "caption": "상대가 자리를 잡아요",
+          "play": [
+            {
+              "by": "opp1",
+              "from": [
+                0.7,
+                0.04
+              ],
+              "arc": "high",
+              "bounce": [
+                0.6,
+                0.86
+              ],
+              "to": "me"
+            },
+            {
+              "by": "me",
+              "arc": "normal",
+              "bounce": [
+                0.3,
+                0.12
+              ]
+            }
+          ]
+        },
+        {
+          "zone": "A-RN",
+          "severity": "실수",
+          "short": "네트까지 뛰어가기",
+          "why": "멈추지 않고 달리면 되돌아온 로브가 머리를 넘어요.",
+          "stand": [
+            0.72,
+            0.6
+          ],
+          "caption": "로브로 되받았어요",
+          "play": [
+            {
+              "by": "opp1",
+              "from": [
+                0.7,
+                0.04
+              ],
+              "arc": "lob",
+              "bounce": [
+                0.7,
+                0.9
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "로브가 깊으면, 그때 앞으로.",
+      "next": {
+        "id": "C4-06",
+        "text": "로브가 짧았다면요?"
+      },
+      "tags": [
+        "로브",
+        "전진",
+        "높낮이"
+      ]
+    },
+    {
+      "id": "C4-06",
+      "chapter": "C4",
+      "title": "내 로브가 짧았어요",
+      "difficulty": 3,
+      "prereq": [
+        "C4-05"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.74,
+            0.94
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-LB",
+          "xy": [
+            0.3,
+            0.08
+          ]
+        },
+        "opp2": {
+          "zone": "E-CM",
+          "xy": [
+            0.56,
+            0.3
+          ]
+        },
+        "ball": {
+          "kind": "내 로브",
+          "arc": "lob",
+          "from": [
+            0.74,
+            0.94
+          ],
+          "to": [
+            0.56,
+            0.32
+          ],
+          "toZ": 2.6
+        }
+      },
+      "scene": "내 로브가 짧아요. 상대가 그 밑에서 기다려요.",
+      "cue": "상대가 라켓을 머리 뒤로 끌어올렸어요.",
+      "question": {
+        "type": "readNext",
+        "text": "다음 공은 어떻게 올까요?"
+      },
+      "answer": {
+        "zone": "A-RB",
+        "short": "세게 스매시",
+        "principle": "P-03",
+        "reveal": {
+          "type": "oppShot",
+          "by": "opp2",
+          "arc": "smash"
+        },
+        "why": "짧은 로브는 스매시 찬스예요. 뒤에서 라켓을 세우고 받을 준비를 해요.",
+        "stand": [
+          0.72,
+          0.96
+        ],
+        "caption": "받아서 다시 띄웠어요",
+        "play": [
+          {
+            "by": "opp2",
+            "arc": "smash",
+            "bounce": [
+              0.64,
+              0.8
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": "E-CB"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RM",
+          "severity": "차선",
+          "short": "짧게 툭 떨어뜨리기",
+          "why": "올 수는 있지만, 짧은 로브엔 대개 세게 와요. 앞으로 가면 반응이 늦어요.",
+          "stand": [
+            0.72,
+            0.78
+          ],
+          "caption": "몸에 맞듯 받았어요",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "smash",
+              "bounce": [
+                0.68,
+                0.76
+              ],
+              "to": [
+                0.7,
+                0.82
+              ],
+              "reach": "me"
+            }
+          ]
+        },
+        {
+          "zone": "A-CM",
+          "severity": "실수",
+          "short": "높게 되넘기기",
+          "why": "짧은 로브를 높게 돌려줄 이유가 없어요. 앞으로 가면 스매시 정면이에요.",
+          "stand": [
+            0.62,
+            0.66
+          ],
+          "caption": "스매시 정면이었어요",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "smash",
+              "bounce": [
+                0.6,
+                0.7
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "로브가 짧으면, 스매시를 기다려요.",
+      "next": {
+        "id": "C4-07",
+        "text": "스매시 직전 자세는요?"
+      },
+      "tags": [
+        "로브",
+        "스매시 대응",
+        "읽기"
+      ]
+    },
+    {
+      "id": "C4-07",
+      "chapter": "C4",
+      "title": "스매시 맞기 직전",
+      "difficulty": 3,
+      "prereq": [
+        "C4-02"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.76,
+            0.94
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.94
+          ]
+        },
+        "opp1": {
+          "zone": "E-LM",
+          "xy": [
+            0.3,
+            0.3
+          ]
+        },
+        "opp2": {
+          "zone": "E-RB",
+          "xy": [
+            0.7,
+            0.08
+          ]
+        },
+        "ball": {
+          "kind": "파트너 로브",
+          "arc": "lob",
+          "from": [
+            0.28,
+            0.94
+          ],
+          "to": [
+            0.3,
+            0.32
+          ],
+          "toZ": 2.6
+        }
+      },
+      "scene": "파트너 로브가 짧아 상대 왼쪽에서 스매시가 나와요.",
+      "cue": "스매시하는 사람은 왼쪽, 나는 오른쪽 뒤예요.",
+      "question": {
+        "type": "move",
+        "text": "어디에 설까요?"
+      },
+      "answer": {
+        "zone": "A-CB",
+        "short": "가운데 쪽으로 반 걸음",
+        "principle": "P-02",
+        "why": "왼쪽에서 치는 스매시는 대개 가운데나 크로스로 와요. 그 길 안에 서요.",
+        "stand": [
+          0.6,
+          0.95
+        ],
+        "caption": "막아서 다시 올렸어요",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "smash",
+            "bounce": [
+              0.56,
+              0.8
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": "E-CB"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RB",
+          "severity": "차선",
+          "short": "내 자리 그대로",
+          "why": "나쁘진 않지만, 둘 사이 가운데가 넓게 비어요.",
+          "caption": "몸을 날려 받았어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "smash",
+              "bounce": [
+                0.54,
+                0.8
+              ],
+              "to": [
+                0.56,
+                0.88
+              ],
+              "reach": "me"
+            }
+          ]
+        },
+        {
+          "zone": "A-RM",
+          "severity": "실수",
+          "short": "앞으로 나가 막기",
+          "why": "스매시를 앞에서 막으면 반응할 시간이 없어요.",
+          "stand": [
+            0.74,
+            0.76
+          ],
+          "caption": "정면으로 꽂혔어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "smash",
+              "bounce": [
+                0.66,
+                0.72
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "스매시 직전엔 깊게, 그 길 안으로.",
+      "next": {
+        "id": "C4-08",
+        "text": "막았다면 어디로?"
+      },
+      "tags": [
+        "스매시 대응",
+        "각도 원칙",
+        "투백"
+      ]
+    },
+    {
+      "id": "C4-08",
+      "chapter": "C4",
+      "title": "스매시를 막았어요, 어디로 칠까요",
+      "difficulty": 3,
+      "prereq": [
+        "C4-07"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.72,
+            0.96
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-CM",
+          "xy": [
+            0.5,
+            0.3
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.7,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "스매시",
+          "arc": "smash",
+          "from": [
+            0.5,
+            0.3
+          ],
+          "bounce": [
+            0.66,
+            0.8
+          ],
+          "to": [
+            0.72,
+            0.94
+          ],
+          "toZ": 1.2
+        }
+      },
+      "scene": "상대 스매시를 뒤에서 겨우 라켓에 맞혔어요.",
+      "cue": "상대 둘이 네트 앞에서 기다려요.",
+      "question": {
+        "type": "target",
+        "text": "어디로 보낼까요?"
+      },
+      "answer": {
+        "zone": "E-CB",
+        "short": "높고 깊게 다시 로브",
+        "principle": "P-03",
+        "why": "막은 공은 힘이 없어요. 높고 깊게 올려야 다시 자리를 잡아요.",
+        "caption": "시간을 벌었어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": [
+              0.5,
+              0.1
+            ]
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "E-LB",
+          "severity": "차선",
+          "short": "크로스로 낮게 깔기",
+          "why": "좋으면 통하지만, 막는 공으로 낮게 깔기는 어려워요.",
+          "caption": "발리로 넘어왔어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.34,
+                0.4
+              ],
+              "toZ": 0.6
+            },
+            {
+              "by": "opp1",
+              "arc": "volley",
+              "to": "partner"
+            }
+          ]
+        },
+        {
+          "zone": "E-CN",
+          "severity": "실수",
+          "short": "짧게 떨어뜨리기",
+          "why": "네트 앞 두 사람에게 짧은 공은 선물이에요.",
+          "caption": "앞에서 끝났어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.5,
+                0.42
+              ],
+              "toZ": 0.9
+            },
+            {
+              "by": "opp1",
+              "arc": "volley",
+              "bounce": [
+                0.5,
+                0.72
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "막았으면, 높게 올려 다시 시작.",
+      "next": {
+        "id": "C4-09",
+        "text": "파트너가 끌려나가면요?"
+      },
+      "tags": [
+        "로브 리셋",
+        "스매시 대응",
+        "높낮이"
+      ]
+    },
+    {
+      "id": "C4-09",
+      "chapter": "C4",
+      "title": "파트너가 코트 밖으로 끌려나갔어요",
+      "difficulty": 3,
+      "prereq": [
+        "C4-02"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.74,
+            0.95
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            -0.08,
+            0.9
+          ]
+        },
+        "opp1": {
+          "zone": "E-RN",
+          "xy": [
+            0.68,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-LB",
+          "xy": [
+            0.3,
+            0.08
+          ]
+        },
+        "ball": {
+          "kind": "앵글 발리",
+          "arc": "volley",
+          "from": [
+            0.68,
+            0.4
+          ],
+          "bounce": [
+            0.08,
+            0.82
+          ],
+          "to": [
+            -0.08,
+            0.9
+          ],
+          "toZ": 0.6
+        }
+      },
+      "scene": "상대 앵글(옆으로 짧게)에 파트너가 왼쪽 밖으로 끌려나갔어요.",
+      "cue": "우리 코트 가운데가 텅 비었어요.",
+      "question": {
+        "type": "move",
+        "text": "나는 어디로 갈까요?"
+      },
+      "answer": {
+        "zone": "A-CB",
+        "short": "가운데로 옮기기",
+        "principle": "P-01",
+        "why": "파트너가 밖에 있으면 내가 가운데를 맡아요. 줄로 묶인 듯 같이 움직여요.",
+        "stand": [
+          0.56,
+          0.94
+        ],
+        "caption": "가운데를 막았어요",
+        "play": [
+          {
+            "by": "partner",
+            "arc": "lob",
+            "bounce": [
+              0.62,
+              0.12
+            ]
+          },
+          {
+            "by": "opp2",
+            "from": [
+              0.6,
+              0.06
+            ],
+            "arc": "normal",
+            "bounce": [
+              0.52,
+              0.84
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": "E-LB"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RB",
+          "severity": "차선",
+          "short": "제자리",
+          "why": "오른쪽을 지키는 건 맞지만, 가운데까지 너무 멀어요.",
+          "caption": "멀리서 겨우 닿았어요",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "lob",
+              "bounce": [
+                0.62,
+                0.12
+              ]
+            },
+            {
+              "by": "opp2",
+              "from": [
+                0.6,
+                0.06
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.48,
+                0.84
+              ],
+              "to": [
+                0.5,
+                0.92
+              ],
+              "reach": "me"
+            }
+          ]
+        },
+        {
+          "zone": "A-RM",
+          "severity": "실수",
+          "short": "앞으로 나가기",
+          "why": "파트너가 밀렸을 때 나가면 뒤쪽 가운데가 통째로 비어요.",
+          "stand": [
+            0.72,
+            0.74
+          ],
+          "caption": "뒤가 비었어요",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "lob",
+              "bounce": [
+                0.62,
+                0.12
+              ]
+            },
+            {
+              "by": "opp2",
+              "from": [
+                0.6,
+                0.06
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.46,
+                0.9
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "파트너가 밀려나면, 나는 가운데로.",
+      "next": {
+        "id": "C4-10",
+        "text": "얼마나 따라갈까요?"
+      },
+      "tags": [
+        "커버",
+        "로프 원칙",
+        "투백",
+        "앵글"
+      ]
+    },
+    {
+      "id": "C4-10",
+      "chapter": "C4",
+      "title": "커버 이동 — 얼마나 따라갈까요",
+      "difficulty": 4,
+      "prereq": [
+        "C4-09"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-LB",
+          "xy": [
+            0.26,
+            0.95
+          ]
+        },
+        "partner": {
+          "zone": "A-RB",
+          "xy": [
+            1.08,
+            0.9
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RB",
+          "xy": [
+            0.7,
+            0.08
+          ]
+        },
+        "ball": {
+          "kind": "앵글 발리",
+          "arc": "volley",
+          "from": [
+            0.32,
+            0.4
+          ],
+          "bounce": [
+            0.92,
+            0.82
+          ],
+          "to": [
+            1.08,
+            0.9
+          ],
+          "toZ": 0.6
+        }
+      },
+      "scene": "이번엔 파트너가 오른쪽 밖으로 크게 끌려나갔어요.",
+      "cue": "상대 넷맨은 왼쪽 네트 앞에 있어요.",
+      "question": {
+        "type": "move",
+        "text": "얼마나 따라갈까요?"
+      },
+      "answer": {
+        "zone": "A-CB",
+        "short": "가운데까지만",
+        "principle": "P-02",
+        "why": "끝까지 따라가면 내 쪽이 비어요. 가운데까지만 가면 양쪽 다 닿아요.",
+        "stand": [
+          0.5,
+          0.94
+        ],
+        "caption": "양쪽 다 닿았어요",
+        "play": [
+          {
+            "by": "partner",
+            "arc": "lob",
+            "bounce": [
+              0.36,
+              0.12
+            ]
+          },
+          {
+            "by": "opp2",
+            "from": [
+              0.4,
+              0.06
+            ],
+            "arc": "normal",
+            "bounce": [
+              0.46,
+              0.84
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": "E-RB"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-LB",
+          "severity": "차선",
+          "short": "조금만 옮기기",
+          "why": "내 쪽은 지키지만, 가운데 공에 늦어요.",
+          "stand": [
+            0.3,
+            0.95
+          ],
+          "caption": "가운데 공에 늦었어요",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "lob",
+              "bounce": [
+                0.36,
+                0.12
+              ]
+            },
+            {
+              "by": "opp2",
+              "from": [
+                0.4,
+                0.06
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.56,
+                0.84
+              ],
+              "to": [
+                0.58,
+                0.92
+              ],
+              "reach": "me"
+            }
+          ]
+        },
+        {
+          "zone": "A-RB",
+          "severity": "실수",
+          "short": "파트너 쪽 끝까지",
+          "why": "둘이 오른쪽에 몰리면 왼쪽이 통째로 비어요.",
+          "stand": [
+            0.76,
+            0.95
+          ],
+          "caption": "왼쪽으로 빠졌어요",
+          "play": [
+            {
+              "by": "partner",
+              "arc": "lob",
+              "bounce": [
+                0.36,
+                0.12
+              ]
+            },
+            {
+              "by": "opp2",
+              "from": [
+                0.4,
+                0.06
+              ],
+              "arc": "normal",
+              "bounce": [
+                0.2,
+                0.86
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "커버는 가운데까지만.",
+      "next": {
+        "id": "C4-14",
+        "text": "둘 다 밀리면요?"
+      },
+      "tags": [
+        "커버",
+        "각도 원칙"
+      ]
+    },
+    {
+      "id": "C4-11",
+      "chapter": "C4",
+      "title": "낮고 빠르게, 왜 안 될까요",
+      "difficulty": 3,
+      "prereq": [
+        "C3-09"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RX",
+          "xy": [
+            0.74,
+            1.05
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.94
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.7,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "깊은 발리",
+          "arc": "volley",
+          "from": [
+            0.7,
+            0.4
+          ],
+          "bounce": [
+            0.74,
+            0.94
+          ],
+          "to": [
+            0.74,
+            1.04
+          ],
+          "toZ": 0.8
+        }
+      },
+      "scene": "상대 발리가 깊게 와서 라인 뒤로 밀려났어요.",
+      "cue": "몸이 뒤로 기울었어요. 상대는 둘 다 네트예요.",
+      "question": {
+        "type": "target",
+        "text": "어디로 칠까요?"
+      },
+      "answer": {
+        "zone": "E-CB",
+        "short": "높고 깊게 올리기",
+        "principle": "P-03",
+        "why": "밀린 자세에선 낮고 빠른 공이 네트에 걸려요. 높게 올려 시간을 사요.",
+        "caption": "높게 올려 버텼어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": [
+              0.48,
+              0.1
+            ]
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "E-CN",
+          "severity": "차선",
+          "short": "가운데로 느리게 떨어뜨리기",
+          "why": "통할 때도 있지만, 밀린 자세에선 길이를 맞추기 어려워요.",
+          "caption": "발리에 걸려 넘어와요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "bounce": [
+                0.5,
+                0.46
+              ],
+              "to": [
+                0.5,
+                0.42
+              ]
+            },
+            {
+              "by": "opp1",
+              "arc": "volley",
+              "to": "partner"
+            }
+          ]
+        },
+        {
+          "zone": "E-RN",
+          "severity": "실수",
+          "short": "낮고 빠르게 정면으로",
+          "why": "뒤로 기운 채 세게 치면 공이 낮게 깔려 네트에 걸려요.",
+          "caption": "네트에 걸렸어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "flat",
+              "to": [
+                0.62,
+                0.5
+              ],
+              "toZ": 0.6,
+              "call": "네트"
+            }
+          ]
+        }
+      ],
+      "coachLine": "밀릴수록 높게, 깊게.",
+      "next": {
+        "id": "C4-15",
+        "text": "각도가 없을 땐요?"
+      },
+      "tags": [
+        "로브 리셋",
+        "높낮이",
+        "수비"
+      ]
+    },
+    {
+      "id": "C4-12",
+      "chapter": "C4",
+      "title": "발밑을 노리는 겨냥점",
+      "difficulty": 3,
+      "prereq": [
+        "C4-01"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.95
+          ]
+        },
+        "partner": {
+          "zone": "A-RB",
+          "xy": [
+            0.72,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.7,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "상대 발리",
+          "arc": "volley",
+          "from": [
+            0.32,
+            0.4
+          ],
+          "bounce": [
+            0.3,
+            0.84
+          ],
+          "to": [
+            0.28,
+            0.93
+          ]
+        }
+      },
+      "scene": "상대 둘이 네트에 있고, 나는 뒤에서 편하게 칠 수 있어요.",
+      "cue": "상대 둘이 네트 두세 걸음 뒤에 서 있어요.",
+      "question": {
+        "type": "target",
+        "text": "어디를 겨냥할까요?"
+      },
+      "answer": {
+        "zone": "E-CN",
+        "short": "네트 바로 넘어 발밑",
+        "principle": "P-03",
+        "why": "네트를 살짝 넘겨 발 앞에 떨어뜨려요. 그래야 위로 퍼올려요.",
+        "caption": "퍼올린 공을 끝냈어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": [
+              0.5,
+              0.45
+            ],
+            "to": [
+              0.52,
+              0.41
+            ],
+            "toZ": 0.2
+          },
+          {
+            "by": "opp2",
+            "arc": "high",
+            "to": "partner"
+          },
+          {
+            "by": "partner",
+            "arc": "smash",
+            "bounce": "E-CB",
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "E-CM",
+          "severity": "차선",
+          "short": "두 사람 사이 깊게",
+          "why": "좋은 생각이지만, 그 높이면 지나가기 전에 발리로 잡혀요.",
+          "caption": "허리 높이에서 잡혔어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.5,
+                0.38
+              ],
+              "toZ": 1.0
+            },
+            {
+              "by": "opp1",
+              "arc": "volley",
+              "to": "me"
+            }
+          ]
+        },
+        {
+          "zone": "E-RN",
+          "severity": "실수",
+          "short": "앞사람 가슴 높이",
+          "why": "가슴 높이는 넷맨이 가장 좋아하는 높이예요. 그대로 꽂혀요.",
+          "caption": "그대로 꽂혀 왔어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "flat",
+              "to": [
+                0.7,
+                0.42
+              ],
+              "toZ": 1.3
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.56,
+                0.72
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "발밑은 네트 바로 너머를 겨냥해요.",
+      "next": {
+        "id": "C4-13",
+        "text": "퍼올리면 그다음은요?"
+      },
+      "tags": [
+        "발밑",
+        "투업 공략",
+        "높낮이"
+      ]
+    },
+    {
+      "id": "C4-13",
+      "chapter": "C4",
+      "title": "수비에서 공격으로 넘어가는 한 걸음",
+      "difficulty": 4,
+      "prereq": [
+        "C4-12"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.95
+          ]
+        },
+        "partner": {
+          "zone": "A-RB",
+          "xy": [
+            0.72,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.42
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.7,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "내 공",
+          "arc": "normal",
+          "from": [
+            0.28,
+            0.95
+          ],
+          "bounce": [
+            0.36,
+            0.45
+          ],
+          "to": [
+            0.34,
+            0.42
+          ],
+          "toZ": 0.15
+        }
+      },
+      "scene": "내 공이 네트를 살짝 넘어 상대 발밑에 떨어졌어요.",
+      "cue": "상대가 라켓을 아래로 넣어 퍼올려요.",
+      "question": {
+        "type": "both",
+        "text": "어디서, 어떻게 칠까요?"
+      },
+      "answer": {
+        "zone": "A-LM",
+        "short": "한 걸음 나가 발리로",
+        "principle": "P-03",
+        "why": "상대가 퍼올리는 순간이 공격으로 바뀌는 때예요. 나가서 뜬 공을 발리로 잡아요.",
+        "stand": [
+          0.32,
+          0.78
+        ],
+        "caption": "한 걸음에 공격했어요",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "high",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-RM",
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-LB",
+          "severity": "차선",
+          "short": "뒤에서 바운드 후 치기",
+          "why": "나쁘진 않지만, 뜬 공이 튀는 사이 상대가 자리를 잡아요.",
+          "caption": "상대가 자리를 잡았어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "high",
+              "bounce": [
+                0.34,
+                0.84
+              ],
+              "to": "me"
+            },
+            {
+              "by": "me",
+              "arc": "normal",
+              "bounce": [
+                0.6,
+                0.12
+              ]
+            }
+          ]
+        },
+        {
+          "zone": "A-LX",
+          "severity": "실수",
+          "short": "더 물러서기",
+          "why": "퍼올린 공은 짧게 떨어져요. 물러서면 공격 기회가 사라져요.",
+          "stand": [
+            0.28,
+            1.04
+          ],
+          "caption": "짧은 공을 놓쳤어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "normal",
+              "bounce": [
+                0.4,
+                0.68
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "상대가 퍼올리면, 그 순간 공격.",
+      "next": {
+        "id": "C4-23",
+        "text": "정확히 언제 바꿀까요?"
+      },
+      "tags": [
+        "전환",
+        "높낮이",
+        "전진"
+      ]
+    },
+    {
+      "id": "C4-14",
+      "chapter": "C4",
+      "title": "둘 다 밖으로 밀렸어요",
+      "difficulty": 4,
+      "prereq": [
+        "C4-10"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            1.08,
+            0.94
+          ]
+        },
+        "partner": {
+          "zone": "A-LX",
+          "xy": [
+            -0.06,
+            1.02
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RM",
+          "xy": [
+            0.68,
+            0.24
+          ]
+        },
+        "ball": {
+          "kind": "앵글",
+          "arc": "normal",
+          "from": [
+            0.32,
+            0.4
+          ],
+          "bounce": [
+            0.94,
+            0.86
+          ],
+          "to": [
+            1.08,
+            0.94
+          ],
+          "toZ": 0.6
+        }
+      },
+      "scene": "파트너는 왼쪽 밖, 나는 오른쪽 밖으로 밀렸어요.",
+      "cue": "우리 코트 한가운데가 텅 비었어요.",
+      "question": {
+        "type": "move",
+        "text": "어떻게 버틸까요?"
+      },
+      "answer": {
+        "zone": "A-CB",
+        "short": "높게 올리고 가운데로",
+        "principle": "P-01",
+        "why": "둘 다 밀렸으면 높게 올려 시간을 벌고, 둘이 가운데로 모여요.",
+        "moves": {
+          "partner": [
+            0.36,
+            0.96
+          ]
+        },
+        "caption": "둘이 가운데로 모였어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": [
+              0.48,
+              0.08
+            ]
+          },
+          {
+            "by": "opp2",
+            "from": [
+              0.5,
+              0.04
+            ],
+            "arc": "high",
+            "bounce": [
+              0.58,
+              0.84
+            ],
+            "to": [
+              0.6,
+              0.92
+            ],
+            "reach": "me"
+          },
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": "E-LB"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RB",
+          "severity": "차선",
+          "short": "세게 치고 버티기",
+          "why": "세게 치면 공이 빨리 돌아와요. 둘 다 돌아올 틈이 없어요.",
+          "moves": {
+            "partner": [
+              0.0,
+              0.98
+            ]
+          },
+          "caption": "파트너가 겨우 막아요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "flat",
+              "to": [
+                0.36,
+                0.42
+              ]
+            },
+            {
+              "by": "opp1",
+              "arc": "volley",
+              "bounce": [
+                0.5,
+                0.8
+              ],
+              "to": [
+                0.48,
+                0.88
+              ],
+              "reach": "partner"
+            }
+          ]
+        },
+        {
+          "zone": "A-RM",
+          "severity": "실수",
+          "short": "앞으로 나가 승부",
+          "why": "밀린 채로 승부를 걸면 가운데가 텅 비어 있어요.",
+          "moves": {
+            "partner": [
+              -0.06,
+              1.02
+            ]
+          },
+          "caption": "가운데로 빠졌어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.36,
+                0.42
+              ]
+            },
+            {
+              "by": "opp1",
+              "arc": "volley",
+              "bounce": [
+                0.5,
+                0.84
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "둘 다 밀리면, 높게 올리고 모여요.",
+      "next": {
+        "id": "C4-22",
+        "text": "두 번 연속 밀리면요?"
+      },
+      "tags": [
+        "로브 리셋",
+        "로프 원칙",
+        "커버"
+      ]
+    },
+    {
+      "id": "C4-15",
+      "chapter": "C4",
+      "title": "각도가 없어요 — 그래도 살리는 코스",
+      "difficulty": 4,
+      "prereq": [
+        "C4-11"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RX",
+          "xy": [
+            1.04,
+            1.04
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.3,
+            0.94
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RM",
+          "xy": [
+            0.7,
+            0.24
+          ]
+        },
+        "ball": {
+          "kind": "상대 공",
+          "arc": "normal",
+          "from": [
+            0.7,
+            0.24
+          ],
+          "bounce": [
+            0.96,
+            0.92
+          ],
+          "to": [
+            1.04,
+            1.04
+          ],
+          "toZ": 0.7
+        }
+      },
+      "scene": "오른쪽 깊은 구석 밖까지 쫓겨 왔어요.",
+      "cue": "상대 하나가 네트 왼쪽에서 기다려요.",
+      "question": {
+        "type": "target",
+        "text": "어디로 살릴까요?"
+      },
+      "answer": {
+        "zone": "E-LB",
+        "short": "크로스로 넷맨 넘겨 깊게",
+        "principle": "P-02",
+        "why": "구석에선 크로스가 가장 길어요. 넷맨 머리 위로 높게 넘겨 깊게 보내요.",
+        "caption": "길게 넘겨 살렸어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": [
+              0.26,
+              0.1
+            ]
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "E-RB",
+          "severity": "차선",
+          "short": "직선으로 높게",
+          "why": "살릴 수는 있지만, 직선은 짧아서 길이 맞추기가 어려워요.",
+          "caption": "짧아서 다시 몰려요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "lob",
+              "to": [
+                0.84,
+                0.2
+              ],
+              "toZ": 2.2
+            },
+            {
+              "by": "opp2",
+              "arc": "smash",
+              "bounce": [
+                0.6,
+                0.8
+              ],
+              "to": "partner"
+            }
+          ]
+        },
+        {
+          "zone": "E-CN",
+          "severity": "실수",
+          "short": "가운데로 세게 깔기",
+          "why": "구석에서 세게 치면 넷맨 라켓으로 가요. 그대로 끝나요.",
+          "caption": "넷맨에게 잡혔어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "flat",
+              "to": [
+                0.4,
+                0.42
+              ],
+              "toZ": 0.9
+            },
+            {
+              "by": "opp1",
+              "arc": "volley",
+              "bounce": [
+                0.56,
+                0.74
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "구석에선 가장 긴 길, 크로스로.",
+      "next": {
+        "id": "C4-21",
+        "text": "완전히 무너지면요?"
+      },
+      "tags": [
+        "수비",
+        "각도 원칙",
+        "로브"
+      ]
+    },
+    {
+      "id": "C4-16",
+      "chapter": "C4",
+      "title": "상대 스매시 각도를 미리 지워요",
+      "difficulty": 3,
+      "prereq": [
+        "C4-07"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-LN",
+          "xy": [
+            0.3,
+            0.6
+          ]
+        },
+        "partner": {
+          "zone": "A-RB",
+          "xy": [
+            0.74,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-RM",
+          "xy": [
+            0.7,
+            0.3
+          ]
+        },
+        "opp2": {
+          "zone": "E-LB",
+          "xy": [
+            0.3,
+            0.08
+          ]
+        },
+        "ball": {
+          "kind": "파트너 로브",
+          "arc": "lob",
+          "from": [
+            0.74,
+            0.95
+          ],
+          "to": [
+            0.7,
+            0.32
+          ],
+          "toZ": 2.6
+        }
+      },
+      "scene": "파트너 로브가 짧아요. 오른쪽 상대가 스매시해요.",
+      "cue": "나는 왼쪽 네트 앞, 파트너는 오른쪽 뒤예요.",
+      "question": {
+        "type": "move",
+        "text": "나는 어디로 갈까요?"
+      },
+      "answer": {
+        "zone": "A-CB",
+        "short": "뒤로, 가운데 쪽으로",
+        "principle": "P-02",
+        "why": "오른쪽에서 치는 스매시는 대개 가운데와 왼쪽으로 와요. 물러서며 그 길로 가요.",
+        "stand": [
+          0.42,
+          0.93
+        ],
+        "caption": "길을 막고 올렸어요",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "smash",
+            "bounce": [
+              0.44,
+              0.78
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": "E-RB"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-LB",
+          "severity": "차선",
+          "short": "왼쪽 뒤로만",
+          "why": "물러선 건 맞지만, 가운데 길이 열려 있어요.",
+          "stand": [
+            0.24,
+            0.93
+          ],
+          "caption": "겨우 걷어 올렸어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "smash",
+              "bounce": [
+                0.46,
+                0.78
+              ],
+              "to": [
+                0.44,
+                0.86
+              ],
+              "reach": "me"
+            }
+          ]
+        },
+        {
+          "zone": "A-LN",
+          "severity": "실수",
+          "short": "네트에서 그대로",
+          "why": "짧은 로브 앞 네트는 스매시 과녁이에요.",
+          "caption": "스매시가 꽂혔어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "smash",
+              "bounce": [
+                0.4,
+                0.66
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "스매시 길은 치는 사람 쪽에서 읽어요.",
+      "next": {
+        "id": "C4-17",
+        "text": "스매시가 약하다면요?"
+      },
+      "tags": [
+        "스매시 대응",
+        "각도 원칙",
+        "후퇴"
+      ]
+    },
+    {
+      "id": "C4-17",
+      "chapter": "C4",
+      "title": "스매시 약한 넷맨 쪽으로",
+      "difficulty": 4,
+      "prereq": [
+        "C4-04"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.74,
+            0.95
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.7,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "상대 발리",
+          "arc": "volley",
+          "from": [
+            0.32,
+            0.4
+          ],
+          "bounce": [
+            0.72,
+            0.86
+          ],
+          "to": [
+            0.74,
+            0.94
+          ]
+        }
+      },
+      "scene": "앞쪽 넷맨은 스매시를 두 번이나 놓쳤어요.",
+      "cue": "크로스 쪽 넷맨은 스매시가 강해요.",
+      "question": {
+        "type": "target",
+        "text": "로브를 어디로 올릴까요?"
+      },
+      "answer": {
+        "zone": "E-RB",
+        "short": "앞 넷맨 머리 위 직선",
+        "principle": "P-05",
+        "why": "스매시를 놓친 사람 쪽으로 올려요. 직선이라도 그 사람 머리 위가 안전해요.",
+        "caption": "스매시가 길게 나갔어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "lob",
+            "to": [
+              0.72,
+              0.34
+            ],
+            "toZ": 2.6
+          },
+          {
+            "by": "opp2",
+            "arc": "smash",
+            "bounce": [
+              0.5,
+              1.04
+            ],
+            "call": "아웃"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "E-CB",
+          "severity": "차선",
+          "short": "가운데 깊게 로브",
+          "why": "나쁘지 않지만, 강한 쪽 넷맨이 받을 수도 있어요.",
+          "caption": "뒤로 돌아 받아요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "lob",
+              "bounce": [
+                0.5,
+                0.12
+              ]
+            },
+            {
+              "by": "opp1",
+              "from": [
+                0.44,
+                0.06
+              ],
+              "arc": "normal",
+              "to": "partner"
+            }
+          ]
+        },
+        {
+          "zone": "E-LB",
+          "severity": "실수",
+          "short": "강한 넷맨 쪽 크로스 로브",
+          "why": "스매시가 강한 사람에게 로브를 주면 그대로 맞아요.",
+          "caption": "강한 스매시를 맞았어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "lob",
+              "to": [
+                0.32,
+                0.34
+              ],
+              "toZ": 2.4
+            },
+            {
+              "by": "opp1",
+              "arc": "smash",
+              "bounce": [
+                0.5,
+                0.82
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "로브는 스매시가 약한 쪽으로.",
+      "next": {
+        "id": "C4-18",
+        "text": "짧은 공으로 끌어내면요?"
+      },
+      "tags": [
+        "로브",
+        "다운더라인",
+        "상대 약점"
+      ]
+    },
+    {
+      "id": "C4-18",
+      "chapter": "C4",
+      "title": "짧은 공으로 끌어내요",
+      "difficulty": 4,
+      "prereq": [
+        "C4-06"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.72,
+            0.95
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-LB",
+          "xy": [
+            0.3,
+            0.06
+          ]
+        },
+        "opp2": {
+          "zone": "E-RB",
+          "xy": [
+            0.7,
+            0.06
+          ]
+        },
+        "ball": {
+          "kind": "내 짧은 공",
+          "arc": "normal",
+          "from": [
+            0.72,
+            0.95
+          ],
+          "bounce": [
+            0.42,
+            0.4
+          ],
+          "to": [
+            0.4,
+            0.36
+          ],
+          "toZ": 0.3
+        }
+      },
+      "scene": "상대 둘이 뒤에 있어 짧은 공으로 끌어냈어요.",
+      "cue": "상대가 앞으로 달려와 낮은 공을 퍼올려요.",
+      "question": {
+        "type": "readNext",
+        "text": "다음 공은 어떻게 올까요?"
+      },
+      "answer": {
+        "zone": "A-CM",
+        "short": "떠서 가운데로",
+        "principle": "P-03",
+        "reveal": {
+          "type": "oppShot",
+          "by": "opp1",
+          "arc": "high"
+        },
+        "why": "짧은 공을 뛰어와 받으면 위로 퍼올려요. 그 공을 앞에서 잡아요.",
+        "stand": [
+          0.56,
+          0.76
+        ],
+        "caption": "끌어내고 끝냈어요",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "high",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-RB",
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RB",
+          "severity": "차선",
+          "short": "깊게 되돌아오기",
+          "why": "올 수는 있지만, 달려오며 깊게 치기는 어려워요.",
+          "caption": "기회를 그냥 받았어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "high",
+              "bounce": [
+                0.6,
+                0.82
+              ],
+              "to": "me"
+            }
+          ]
+        },
+        {
+          "zone": "A-RN",
+          "severity": "실수",
+          "short": "짧게 되받기",
+          "why": "퍼올린 공은 대개 떠요. 앞에 붙으면 머리 위로 넘어가요.",
+          "stand": [
+            0.7,
+            0.6
+          ],
+          "caption": "머리 위로 넘어갔어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "lob",
+              "bounce": [
+                0.72,
+                0.88
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "짧게 끌어내면, 뜬 공이 와요.",
+      "next": {
+        "id": "C4-19",
+        "text": "끌어내다 내가 나갔다면요?"
+      },
+      "tags": [
+        "투백 공략",
+        "높낮이",
+        "읽기"
+      ]
+    },
+    {
+      "id": "C4-19",
+      "chapter": "C4",
+      "title": "짧은 공에 내가 나갔어요",
+      "difficulty": 4,
+      "prereq": [
+        "C4-18"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-LN",
+          "xy": [
+            0.3,
+            0.62
+          ]
+        },
+        "partner": {
+          "zone": "A-RB",
+          "xy": [
+            0.72,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-LM",
+          "xy": [
+            0.3,
+            0.24
+          ]
+        },
+        "opp2": {
+          "zone": "E-RB",
+          "xy": [
+            0.7,
+            0.08
+          ]
+        },
+        "ball": {
+          "kind": "내 공",
+          "arc": "normal",
+          "from": [
+            0.3,
+            0.62
+          ],
+          "bounce": [
+            0.66,
+            0.16
+          ],
+          "to": [
+            0.68,
+            0.1
+          ]
+        }
+      },
+      "scene": "짧은 공을 쫓아 나가 네트 앞에서 넘겼어요.",
+      "cue": "파트너는 오른쪽 뒤에 그대로 있어요.",
+      "question": {
+        "type": "move",
+        "text": "나는 어디에 있을까요?"
+      },
+      "answer": {
+        "zone": "A-LN",
+        "short": "네트에 그대로 남기",
+        "principle": "P-01",
+        "why": "나왔으면 원업원백이에요. 뛰어 돌아가는 중에 공이 오면 못 받아요.",
+        "caption": "앞에서 잡았어요",
+        "play": [
+          {
+            "by": "opp2",
+            "arc": "normal",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-LB",
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-LM",
+          "severity": "차선",
+          "short": "서비스라인까지만 물러서기",
+          "why": "어중간한 자리예요. 공이 발밑으로 와요.",
+          "stand": [
+            0.3,
+            0.75
+          ],
+          "caption": "발밑에서 받았어요",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "normal",
+              "bounce": [
+                0.3,
+                0.72
+              ],
+              "to": "me",
+              "toZ": 0.3
+            }
+          ]
+        },
+        {
+          "zone": "A-LB",
+          "severity": "실수",
+          "short": "뒤로 뛰어 돌아가기",
+          "why": "돌아가는 등 뒤로 짧은 공이 떨어져요. 나왔으면 남아요.",
+          "stand": [
+            0.28,
+            0.93
+          ],
+          "caption": "앞이 비었어요",
+          "play": [
+            {
+              "by": "opp2",
+              "arc": "normal",
+              "bounce": [
+                0.34,
+                0.7
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "끌려 나왔으면, 네트에 남아요.",
+      "next": {
+        "id": "C4-20",
+        "text": "돌아갈 땐 어떻게?"
+      },
+      "tags": [
+        "원업원백",
+        "로프 원칙",
+        "전진"
+      ]
+    },
+    {
+      "id": "C4-20",
+      "chapter": "C4",
+      "title": "나갔다 돌아올 때 대형 복구",
+      "difficulty": 4,
+      "prereq": [
+        "C4-19"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-LN",
+          "xy": [
+            0.3,
+            0.6
+          ]
+        },
+        "partner": {
+          "zone": "A-RB",
+          "xy": [
+            0.72,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RB",
+          "xy": [
+            0.7,
+            0.08
+          ]
+        },
+        "ball": {
+          "kind": "상대 공",
+          "arc": "high",
+          "from": [
+            0.7,
+            0.08
+          ],
+          "to": [
+            0.32,
+            0.58
+          ],
+          "toZ": 1.6
+        }
+      },
+      "scene": "짧은 공에 나왔는데 상대 넷맨이 바로 앞에 붙었어요.",
+      "cue": "공이 높게 와서 시간이 있어요.",
+      "question": {
+        "type": "both",
+        "text": "치고 어디로 갈까요?"
+      },
+      "answer": {
+        "zone": "A-LB",
+        "short": "깊게 로브 올리고 뒤로",
+        "principle": "P-01",
+        "why": "앞에서 버티기 어려우면 높게 올려 시간을 벌고 둘 다 뒤로 가요.",
+        "caption": "시간을 벌고 돌아갔어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": [
+              0.68,
+              0.1
+            ]
+          },
+          {
+            "by": "opp2",
+            "from": [
+              0.7,
+              0.04
+            ],
+            "arc": "high",
+            "bounce": [
+              0.3,
+              0.86
+            ],
+            "to": [
+              0.28,
+              0.93
+            ],
+            "reach": "me"
+          },
+          {
+            "by": "me",
+            "arc": "normal",
+            "bounce": "E-RB"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-LN",
+          "severity": "차선",
+          "short": "네트에서 그냥 발리",
+          "why": "버틸 수는 있지만, 넷맨 바로 앞이라 계속 과녁이 돼요.",
+          "caption": "계속 과녁이 돼요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "volley",
+              "bounce": [
+                0.66,
+                0.14
+              ]
+            },
+            {
+              "by": "opp2",
+              "from": [
+                0.68,
+                0.08
+              ],
+              "arc": "normal",
+              "to": [
+                0.34,
+                0.6
+              ],
+              "reach": "me"
+            }
+          ]
+        },
+        {
+          "zone": "A-LM",
+          "severity": "실수",
+          "short": "치면서 뒷걸음질",
+          "why": "뒷걸음질 치며 친 공은 짧아요. 넷맨이 발밑으로 꽂아요.",
+          "stand": [
+            0.3,
+            0.7
+          ],
+          "caption": "발밑에 꽂혔어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "normal",
+              "to": [
+                0.34,
+                0.42
+              ]
+            },
+            {
+              "by": "opp1",
+              "arc": "volley",
+              "bounce": [
+                0.3,
+                0.7
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "나갔다 돌아올 땐, 높게 올리고.",
+      "next": {
+        "id": "C4-21",
+        "text": "완전히 무너지면요?"
+      },
+      "tags": [
+        "로브 리셋",
+        "대형",
+        "복구"
+      ]
+    },
+    {
+      "id": "C4-21",
+      "chapter": "C4",
+      "title": "완전히 무너졌어요 — 최선의 한 수",
+      "difficulty": 4,
+      "prereq": [
+        "C4-15"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RX",
+          "xy": [
+            0.86,
+            1.06
+          ]
+        },
+        "partner": {
+          "zone": "A-LM",
+          "xy": [
+            0.1,
+            0.72
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.7,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "상대 발리",
+          "arc": "volley",
+          "from": [
+            0.7,
+            0.4
+          ],
+          "bounce": [
+            0.8,
+            0.92
+          ],
+          "to": [
+            0.86,
+            1.04
+          ],
+          "toZ": 0.6
+        }
+      },
+      "scene": "둘 다 자리를 잃었어요. 상대는 둘 다 네트에 있어요.",
+      "cue": "나는 라인 한참 뒤, 파트너는 왼쪽 옆이에요.",
+      "question": {
+        "type": "target",
+        "text": "어디로 칠까요?"
+      },
+      "answer": {
+        "zone": "E-CB",
+        "short": "가운데로 아주 높게",
+        "principle": "P-04",
+        "why": "무너졌을 땐 가장 높게, 가운데로요. 각도가 안 나와 둘 다 돌아올 시간이 생겨요.",
+        "moves": {
+          "partner": [
+            0.32,
+            0.94
+          ]
+        },
+        "caption": "둘 다 돌아왔어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": [
+              0.5,
+              0.08
+            ]
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "E-LB",
+          "severity": "차선",
+          "short": "크로스로 높게",
+          "why": "괜찮지만, 크로스는 각도가 남아 한 번 더 몰려요.",
+          "caption": "한 번 더 몰렸어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "lob",
+              "bounce": [
+                0.24,
+                0.1
+              ]
+            },
+            {
+              "by": "opp1",
+              "from": [
+                0.26,
+                0.16
+              ],
+              "arc": "smash",
+              "bounce": [
+                0.64,
+                0.84
+              ],
+              "to": "me"
+            }
+          ]
+        },
+        {
+          "zone": "E-RN",
+          "severity": "실수",
+          "short": "빈 곳을 노려 세게",
+          "why": "무너진 자세로 세게 치면 낮게 걸리거나 넷맨에게 가요.",
+          "caption": "넷맨에게 걸렸어요",
+          "play": [
+            {
+              "by": "me",
+              "arc": "flat",
+              "to": [
+                0.68,
+                0.42
+              ],
+              "toZ": 1.0
+            },
+            {
+              "by": "opp2",
+              "arc": "volley",
+              "bounce": [
+                0.4,
+                0.74
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "무너지면, 가장 높게 가운데로.",
+      "next": {
+        "id": "C4-22",
+        "text": "두 번 연속 밀리면요?"
+      },
+      "tags": [
+        "로브 리셋",
+        "가운데",
+        "수비"
+      ]
+    },
+    {
+      "id": "C4-22",
+      "chapter": "C4",
+      "title": "두 번 연속 밀렸어요",
+      "difficulty": 5,
+      "prereq": [
+        "C4-14"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.84,
+            0.98
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.3,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "opp2": {
+          "zone": "E-RN",
+          "xy": [
+            0.68,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "내 로브",
+          "arc": "lob",
+          "from": [
+            0.84,
+            0.98
+          ],
+          "to": [
+            0.34,
+            0.36
+          ],
+          "toZ": 2.4
+        }
+      },
+      "scene": "두 번 연속 오른쪽 구석으로 밀렸어요. 겨우 로브를 올렸어요.",
+      "cue": "상대가 왼쪽 네트에서 라켓을 들어요.",
+      "question": {
+        "type": "move",
+        "text": "나는 어디로 갈까요?"
+      },
+      "answer": {
+        "zone": "A-CB",
+        "short": "가운데 쪽으로 돌아오기",
+        "principle": "P-02",
+        "why": "또 밀릴 땐 먼저 가운데로 돌아와요. 각도를 줄여야 세 번째를 버텨요.",
+        "stand": [
+          0.62,
+          0.96
+        ],
+        "caption": "세 번째를 버텼어요",
+        "play": [
+          {
+            "by": "opp1",
+            "arc": "smash",
+            "bounce": [
+              0.56,
+              0.82
+            ],
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "lob",
+            "bounce": "E-CB"
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RB",
+          "severity": "차선",
+          "short": "오른쪽 끝 그대로",
+          "why": "그 자리에선 가운데까지 너무 멀어요. 겨우 닿아요.",
+          "caption": "멀리서 겨우 닿아요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "smash",
+              "bounce": [
+                0.56,
+                0.82
+              ],
+              "to": [
+                0.58,
+                0.9
+              ],
+              "reach": "me"
+            }
+          ]
+        },
+        {
+          "zone": "A-RM",
+          "severity": "실수",
+          "short": "앞으로 나가 승부",
+          "why": "밀린 뒤에 앞으로 나가면 스매시 정면이에요.",
+          "stand": [
+            0.78,
+            0.76
+          ],
+          "caption": "정면으로 맞았어요",
+          "play": [
+            {
+              "by": "opp1",
+              "arc": "smash",
+              "bounce": [
+                0.66,
+                0.72
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "밀리면 먼저 돌아오고, 그다음 버텨요.",
+      "next": {
+        "id": "C4-23",
+        "text": "공격으로 바꿀 때는요?"
+      },
+      "tags": [
+        "수비",
+        "각도 원칙",
+        "복구"
+      ]
+    },
+    {
+      "id": "C4-23",
+      "chapter": "C4",
+      "title": "수비 → 공격 전환의 정확한 순간",
+      "difficulty": 5,
+      "prereq": [
+        "C4-13"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.72,
+            0.95
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-RX",
+          "xy": [
+            0.86,
+            -0.04
+          ]
+        },
+        "opp2": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "상대 공",
+          "arc": "high",
+          "from": [
+            0.86,
+            -0.04
+          ],
+          "to": [
+            0.6,
+            0.74
+          ],
+          "toZ": 1.7
+        }
+      },
+      "scene": "우리 깊은 로브에 상대가 구석에서 겨우 넘겼어요.",
+      "cue": "공이 느리고 높게 우리 코트 가운데로 와요.",
+      "question": {
+        "type": "both",
+        "text": "어디서, 어떻게 칠까요?"
+      },
+      "answer": {
+        "zone": "A-CM",
+        "short": "나가서 공중에서 치기",
+        "principle": "P-03",
+        "why": "느리고 높은 공은 바운드를 기다리지 말고 나가서 잡아요. 그 순간이 공격이에요.",
+        "stand": [
+          0.6,
+          0.76
+        ],
+        "caption": "공중에서 끝냈어요",
+        "play": [
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": [
+              0.72,
+              0.2
+            ],
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RB",
+          "severity": "차선",
+          "short": "바운드 후 크로스로",
+          "why": "나쁘진 않지만, 튀는 사이 상대가 자리를 되찾아요.",
+          "caption": "상대가 돌아왔어요",
+          "play": [
+            {
+              "by": "none",
+              "arc": "high",
+              "bounce": [
+                0.62,
+                0.8
+              ],
+              "to": "me"
+            },
+            {
+              "by": "me",
+              "arc": "normal",
+              "bounce": [
+                0.3,
+                0.12
+              ]
+            }
+          ]
+        },
+        {
+          "zone": "A-RX",
+          "severity": "실수",
+          "short": "물러나 로브 기다리기",
+          "why": "공격할 공을 기다리면 기회가 사라져요. 오히려 빈 앞에 떨어져요.",
+          "stand": [
+            0.72,
+            1.04
+          ],
+          "caption": "빈 앞에 떨어졌어요",
+          "play": [
+            {
+              "by": "none",
+              "arc": "high",
+              "bounce": [
+                0.6,
+                0.78
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "느리고 높으면, 그때가 공격이에요.",
+      "next": {
+        "id": "C4-24",
+        "text": "4챕터 종합"
+      },
+      "tags": [
+        "전환",
+        "높낮이",
+        "발리"
+      ]
+    },
+    {
+      "id": "C4-24",
+      "chapter": "C4",
+      "title": "4챕터 종합",
+      "difficulty": 4,
+      "prereq": [
+        "C4-23"
+      ],
+      "myRole": "랠리",
+      "phase": "랠리",
+      "setup": {
+        "me": {
+          "zone": "A-RB",
+          "xy": [
+            0.72,
+            0.95
+          ]
+        },
+        "partner": {
+          "zone": "A-LB",
+          "xy": [
+            0.28,
+            0.95
+          ]
+        },
+        "opp1": {
+          "zone": "E-CB",
+          "xy": [
+            0.56,
+            0.06
+          ]
+        },
+        "opp2": {
+          "zone": "E-LN",
+          "xy": [
+            0.32,
+            0.4
+          ]
+        },
+        "ball": {
+          "kind": "파트너 로브",
+          "arc": "lob",
+          "from": [
+            0.28,
+            0.95
+          ],
+          "bounce": [
+            0.24,
+            0.08
+          ]
+        }
+      },
+      "scene": "파트너 로브가 넷맨 머리를 넘어 깊게 떨어졌어요.",
+      "cue": "상대가 등을 보이며 공을 쫓아가요.",
+      "question": {
+        "type": "readNext",
+        "text": "다음 공은 어떻게 올까요?"
+      },
+      "answer": {
+        "zone": "A-CM",
+        "short": "높고 약하게",
+        "principle": "P-03",
+        "reveal": {
+          "type": "oppShot",
+          "by": "opp1",
+          "arc": "high"
+        },
+        "why": "등을 보이며 친 공은 높고 약해요. 앞으로 나가 기다려요.",
+        "stand": [
+          0.58,
+          0.76
+        ],
+        "caption": "나가서 잡았어요",
+        "play": [
+          {
+            "by": "opp1",
+            "from": [
+              0.24,
+              0.02
+            ],
+            "arc": "high",
+            "to": "me"
+          },
+          {
+            "by": "me",
+            "arc": "volley",
+            "bounce": "E-RN",
+            "winner": true
+          }
+        ]
+      },
+      "distractors": [
+        {
+          "zone": "A-RB",
+          "severity": "차선",
+          "short": "깊게 크로스로",
+          "why": "올 수는 있지만, 쫓아가며 깊게 치기는 어려워요.",
+          "caption": "평범한 공을 받았어요",
+          "play": [
+            {
+              "by": "opp1",
+              "from": [
+                0.24,
+                0.02
+              ],
+              "arc": "high",
+              "bounce": [
+                0.64,
+                0.86
+              ],
+              "to": "me"
+            }
+          ]
+        },
+        {
+          "zone": "A-RX",
+          "severity": "실수",
+          "short": "세게 스매시",
+          "why": "쫓아가는 사람은 세게 못 쳐요. 물러나면 약한 공이 앞에 떨어져요.",
+          "stand": [
+            0.72,
+            1.04
+          ],
+          "caption": "약한 공을 놓쳤어요",
+          "play": [
+            {
+              "by": "opp1",
+              "from": [
+                0.24,
+                0.02
+              ],
+              "arc": "high",
+              "bounce": [
+                0.56,
+                0.7
+              ],
+              "winner": true
+            }
+          ]
+        }
+      ],
+      "coachLine": "상대가 등을 보이면, 우리가 앞으로.",
+      "next": {
+        "id": "C5-01",
+        "text": "5챕터, 상대 읽기"
+      },
+      "tags": [
+        "종합",
+        "로브",
+        "전환"
+      ]
+    }
+  ]
+}
