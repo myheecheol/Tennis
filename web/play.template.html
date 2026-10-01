@@ -56,12 +56,13 @@ html,body{min-height:100%}
 .prog-n{font-family:var(--f-display);font-weight:900;font-size:26px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .prog-n small{font-family:var(--f-body);font-weight:500;font-size:14px;color:var(--muted);margin-left:4px}
 .prog-meta{display:flex;gap:12px;font-size:13px;color:var(--ink-2)}
-.cells{display:flex;gap:8px}
-.cgrp{display:grid;gap:3px}
-.cells i{height:12px;border-radius:3px;background:#DDE7CF}
+.cells{display:flex;flex-direction:column;gap:5px}
+.crow-p{display:grid;grid-template-columns:42px minmax(0,1fr);gap:8px;align-items:center}
+.cgrp{display:grid;gap:2px}
+.cells i{height:11px;border-radius:3px;background:#DDE7CF}
 .cells i.정답{background:var(--good)} .cells i.차선{background:#D9A12E} .cells i.실수{background:#D0573B}
 .cells i.next{box-shadow:inset 0 0 0 2px var(--ink)}
-.cgrp-l{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);margin-top:2px}
+.cgrp-l{font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
 
 /* 전술 부수 */
 .rank-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
@@ -248,7 +249,7 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
 
     <div class="card" id="c-prog">
       <div class="prog-head">
-        <span class="prog-n" id="p-n">0<small>/ 30장</small></span>
+        <span class="prog-n" id="p-n">0<small>/ 120장</small></span>
         <span class="prog-meta"><span id="p-acc"></span><span id="p-streak"></span></span>
       </div>
       <div class="cells" id="p-cells"></div>
@@ -341,6 +342,7 @@ var TOTAL=ORDER.length,TASTE=BY[CFG.tasteCard]?CFG.tasteCard:ORDER[ORDER.length-
 var XP={정답:10,차선:4,실수:0},IV={실수:[1,3,7,21],차선:[3,14]};
 var VERD={정답:'✓ 정답',차선:'△ 차선',실수:'✕ 실수'},MARK={정답:'✓',차선:'△',실수:'✕'};
 var RANKS=['신인부','5부','4부','3부','2부','1부'],WEEK=['일','월','화','수','목','금','토'];
+var RANK_SAY=['','네 역할의 자리를 알아요','세 번째 공까지 봐요','네트를 잡아요','밀려도 안 무너져요','상대를 읽어요'];   // 게임 설계 §4
 var REASONS=['전술이 틀린 것 같아요','다른 답도 맞는 것 같아요','그림이 헷갈려요','글이 어려워요'];
 
 /* ═════════ 날짜 ═════════ */
@@ -417,7 +419,7 @@ function mergeRemote(d){
   if(d.wait&&!S.wait){S.wait=d.wait;changed=true;}else if(S.wait&&!d.wait)ahead=true;
   var seen={};S.reports.forEach(function(x){seen[x.c+x.at]=1;});(d.reports||[]).forEach(function(x){if(!seen[x.c+x.at]){S.reports.push(x);changed=true;}});
   if(S.reports.length>(d.reports||[]).length)ahead=true;
-  S.rank=rankNow();
+  S.rank=rankKeep();
   if(changed){saveLocal();if(screen==='home')renderHome();}
   return ahead;
 }
@@ -430,7 +432,13 @@ function newIds(n){return ORDER.filter(function(id){return !S.cards[id];}).slice
 function dueIds(n){var t=ymd();return ORDER.filter(function(id){var r=S.cards[id];return r&&r.due&&r.due<=t;})
   .sort(function(a,b){var x=S.cards[a].due,y=S.cards[b].due;return x<y?-1:x>y?1:ORDER.indexOf(a)-ORDER.indexOf(b);}).slice(0,n);}
 function nextDue(){var m=null;ORDER.forEach(function(id){var r=S.cards[id];if(r&&r.due&&(!m||r.due<m))m=r.due;});return m;}
-function rankNow(){var c1=chIds('C1');return c1.length&&c1.every(function(id){return S.cards[id];})&&acc(c1)>=.7?'5부':'신인부';}
+/* 전술 부수 — 1챕터부터 차례로, 챕터를 다 풀고 그 챕터의 최근 결과 정답률이 70% 이상이면 한 단계.
+   게임 설계 §4 의 승급 조건(오답 노트 졸업 · 10초 룰 · 한 포인트)은 그 모드가 생기는 Phase 2 에서 */
+function chDone(ch){var ids=chIds(ch.id);return ids.length===ch.total&&ids.every(function(id){return S.cards[id];});}
+function rankIdx(){var r=0;for(var k=0;k<CHS.length;k++){if(chDone(CHS[k])&&acc(chIds(CHS[k].id))>=.7)r=k+1;else break;}return r;}
+function rankNow(){return RANKS[rankIdx()];}
+/* 한 번 오른 부수는 내려가지 않는다 — 복습에서 틀려 정답률이 잠깐 떨어져도 */
+function rankKeep(){return RANKS[Math.max(rankIdx(),Math.max(0,RANKS.indexOf(S.rank)))];}
 /* 연속 학습일 — 주말은 쉬어도 끊기지 않는다 */
 function streak(){var set={};S.days.forEach(function(x){set[x]=1;});var d=ymd(),n=0;if(!set[d])d=addDays(d,-1);
   for(var k=0;k<400;k++){var wd=parseYmd(d).getDay();if(set[d])n++;else if(wd!==0&&wd!==6)break;d=addDays(d,-1);}return n;}
@@ -443,7 +451,8 @@ function record(id,v,o,ms,isReview){
   else{r.track=v;r.box=0;r.due=addDays(t,IV[v][0]);}   // 간격 반복: 실수 1·3·7·21일, 차선 3·14일
   S.xp+=XP[v];markDay();
   Log.track('answer',{c:id,v:v,o:o,ms:ms,rev:isReview?1:0,sid:S.session?S.session.sid:null});
-  var rk=rankNow();if(rk!==S.rank){S.rank=rk;S.rankUp=rk;Log.track('rank',{rank:rk});}
+  var rk=rankKeep();if(rk!==S.rank){S.rank=rk;S.rankUp=rk;Log.track('rank',{rank:rk});}
+  if(first&&answeredIds().length===Math.min(30,TOTAL))Log.track('m30');   // Phase 1 통과 기준 ① — 30장
   if(first&&answeredIds().length===TOTAL)Log.track('complete');
   save();
 }
@@ -484,20 +493,20 @@ function renderHome(){
   var sk=streak();$('p-streak').textContent=sk>=2?'연속 '+sk+'일째':'';
   var nx=newIds(1)[0],cells='';
   CHS.forEach(function(ch){var ids=chIds(ch.id);if(!ids.length)return;
-    cells+='<div style="flex:'+ids.length+'"><div class="cgrp" style="grid-template-columns:repeat('+ids.length+',1fr)">';
+    cells+='<div class="crow-p"><span class="cgrp-l">'+ch.id.replace('C','')+'챕터</span><div class="cgrp" style="grid-template-columns:repeat('+ids.length+',1fr)">';
     ids.forEach(function(id){var r=S.cards[id];cells+='<i class="'+(r?r.l:(id===nx?'next':''))+'" title="'+id+'"></i>';});
-    cells+='</div><div class="cgrp-l">'+ch.id.replace('C','')+'챕터</div></div>';});
+    cells+='</div></div>';});
   $('p-cells').innerHTML=cells;
   // 전술 부수
-  $('r-now').textContent=S.rank;var ri=RANKS.indexOf(S.rank);
+  $('r-now').textContent=S.rank;var ri=Math.max(0,RANKS.indexOf(S.rank));
   $('r-ladder').innerHTML=RANKS.map(function(r,i){return '<li class="'+(i===ri?'on':i<ri?'past':'')+'">'+r+'</li>';}).join('');
-  if(S.rank==='신인부'){var c1=chIds('C1'),d1=c1.filter(function(id){return S.cards[id];}).length;
-    $('r-next').textContent='5부까지 — 1챕터 '+d1+'/'+c1.length+'장'+(d1?', 정답률 '+Math.round(acc(c1)*100)+'% (70% 이상)':', 정답률 70% 이상');}
-  else $('r-next').textContent='4부는 2챕터 카드가 모두 나온 뒤에 열려요.';
+  if(ri<RANKS.length-1){var ch=CHS[ri],ci=chIds(ch.id),dn=ci.filter(function(id){return S.cards[id];}).length;
+    $('r-next').textContent=RANKS[ri+1]+'까지 — '+(ri+1)+'챕터 '+dn+'/'+ch.total+'장'+(dn?', 정답률 '+Math.round(acc(ci)*100)+'% (70% 이상)':', 정답률 70% 이상');}
+  else $('r-next').textContent='가장 높은 부수예요. 복습으로 감각을 지켜요.';
   // 다 풀었을 때
   var all=done.length>=TOTAL,w=$('c-wait');w.hidden=!all;
   if(all){$('w-head').textContent=TOTAL+'장을 모두 풀었어요';
-    $('w-body').textContent='2챕터 나머지 카드와 3~5챕터를 만들고 있어요. 기다린다고 알려 주시면 우선순위를 정하는 데 써요.';
+    $('w-body').textContent='다음은 두 수 앞을 읽는 연쇄 모드와 새 상황 카드예요. 기다린다고 알려 주시면 우선순위를 정하는 데 써요.';
     $('w-act').innerHTML=S.wait?'<p class="done-mark">기다린다고 전했어요 ✓ 새 카드는 이 링크에 올라와요.</p>':'<button class="cta" data-act="wait">다음 카드 기다릴게요</button>';}
   // 챕터
   var rows='';CHS.forEach(function(ch,i){var ids=chIds(ch.id),d=ids.filter(function(id){return S.cards[id];}).length;
@@ -625,7 +634,8 @@ function renderDone(){
   var pr=null;sm.res.forEach(function(r){if(!pr&&r.v!=='정답')pr=r;});if(!pr)pr=sm.res[sm.res.length-1];
   var c=BY[pr.id];$('d-coach').textContent='“'+c.coachLine+'”';$('d-from').textContent=c.id+' · '+c.title;
   var rk=$('d-rank');
-  if(S.rankUp){rk.innerHTML='<b>전술 부수 '+esc(S.rankUp)+'가 됐어요</b><span>네 역할의 자리를 알아요. 전술 부수는 이 앱 안의 등급이에요 — 동호회 부수와는 달라요.</span>';rk.hidden=false;S.rankUp=null;saveLocal();}
+  if(S.rankUp){var rs=RANK_SAY[RANKS.indexOf(S.rankUp)]||'';
+    rk.innerHTML='<b>전술 부수 '+esc(S.rankUp)+'가 됐어요</b><span>'+esc(rs)+(rs?'. ':'')+'전술 부수는 이 앱 안의 등급이에요 — 동호회 부수와는 달라요.</span>';rk.hidden=false;S.rankUp=null;saveLocal();}
   else rk.hidden=true;
   $('d-acts').innerHTML=(newIds(1).length||dueIds(1).length?'<button class="cta" data-act="more">한 판 더</button>':'')+'<button class="btn" data-act="home">홈으로</button>';
 }
@@ -651,13 +661,13 @@ function showStats(){showScreen('stats');var b=$('st-body');
   Remote.col.get().then(function(q){renderStats(q.docs.map(function(d){return d.data();}).filter(Boolean));},
     function(){b.innerHTML='<p class="note">기록을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>';});}
 function renderStats(ps){
-  var st=ps.filter(function(p){return (p.answered||0)>0;}),fin=st.filter(function(p){return p.answered>=TOTAL;}),
+  var st=ps.filter(function(p){return (p.answered||0)>0;}),m30=st.filter(function(p){return p.answered>=Math.min(30,TOTAL);}),fin=st.filter(function(p){return p.answered>=TOTAL;}),
       wait=ps.filter(function(p){return p.wait;}).length,reps=0,tasted=ps.filter(function(p){return p.taste;}).length;
   ps.forEach(function(p){reps+=(p.reports||[]).length;});
   var d7=st.filter(function(p){var ds=p.days||[],f=ds[0];return f&&ds.some(function(x){return x>=addDays(f,7);});}).length;
-  var rate=st.length?Math.round(fin.length/st.length*100):0;
-  var h='<div class="kpis">'+kpi(tasted,'맛보기를 푼 사람')+kpi(st.length,'오늘의 코트를 시작한 사람')+kpi(rate+'%','30장 완주 · 목표 60%',st.length&&rate>=60)
-      +kpi(wait,'다음 카드 기다림 · 목표 3명',wait>=3)+kpi(d7,'7일 뒤에도 온 사람')+kpi(reps,'이 카드 이상해요')+'</div>';
+  var rate=st.length?Math.round(m30.length/st.length*100):0,more=st.filter(function(p){return p.answered>Math.min(30,TOTAL);}).length;
+  var h='<div class="kpis">'+kpi(tasted,'맛보기를 푼 사람')+kpi(st.length,'오늘의 코트를 시작한 사람')+kpi(rate+'%','30장까지 푼 사람 · 목표 60%',st.length&&rate>=60)
+      +kpi(more,'30장 넘게 계속 푼 사람 · 목표 3명',more>=3)+kpi(fin.length,TOTAL+'장 완주')+kpi(wait,'다음 카드 기다림')+kpi(d7,'7일 뒤에도 온 사람')+kpi(reps,'이 카드 이상해요')+'</div>';
   h+='<div class="card"><h2>카드별 첫 선택</h2><p class="klegend"><span><i style="background:var(--good)"></i>정답</span><span><i style="background:#D9A12E"></i>차선</span><span><i style="background:#D0573B"></i>실수</span><span>오른쪽: 정답률 · 신고</span></p><div class="klist">';
   ORDER.forEach(function(id){var n=0,g=0,s=0,m=0,rp=0;
     ps.forEach(function(p){var r=p.cards&&p.cards[id];if(r){n++;if(r.f==='정답')g++;else if(r.f==='차선')s++;else m++;}(p.reports||[]).forEach(function(x){if(x.c===id)rp++;});});
@@ -715,7 +725,7 @@ document.addEventListener('keydown',function(e){
 });
 
 /* ═════════ 시작 ═════════ */
-S.opens=(S.opens||0)+1;S.rank=rankNow();Log.track('open',{n:S.opens});saveLocal();
+S.opens=(S.opens||0)+1;S.rank=rankKeep();Log.track('open',{n:S.opens});saveLocal();
 if(!S.onboarded&&!S.taste&&!answeredIds().length)openCard(BY[TASTE],'taste',-1,false);
 else goHome();
 Remote.start();

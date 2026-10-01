@@ -5,8 +5,8 @@
     · 카드 한 장은 누를 때만 넘어간다: 제목 → 상황 → 질문 → 결과 → 해설 (움직임 줄이기 켬 · 끔)
     · 처음 온 사람: 맛보기 → 시작하기 → 5장 → 결과 → 홈
     · 복습이 밀린 사람: 복습 2 + 새 카드 5 → 중간에 나가기 → 이어서 하기
-    · 1챕터 마지막 카드를 맞히면 전술 부수 5부
-    · 30장을 다 푼 사람: 다음 카드 기다릴게요
+    · 1챕터 마지막 카드를 맞히면 전술 부수 5부 · 2챕터까지면 4부
+    · 카드를 다 푼 사람: 다음 카드 기다릴게요
     · claude.ai 저장소(가짜): 불러오기 · 쓰기 · 만든 사람의 검증 지표
     · 기록 주소(가짜 fetch): 이벤트 묶음 전송
   블루프린트(web/index.html)
@@ -154,7 +154,7 @@ def main():
     check("코트를 누르면 해설 시트", t and t["phase"] == "verdict" and t["sheet"], t)
     check("시작하기 → 오늘의 코트 5장", s1 and s1["count"] == "1 / 5" and s1["dots"] == 5, s1)
     check("한 판 결과 — 성공 4 · 실패 1", d and d["screen"] == "done" and "성공 4" in d["tally"] and "실패 1" in d["tally"], d)
-    check("홈 진도 5/30", h and h["prog"].startswith("5/"), h)
+    check("홈 진도 5장", h and h["prog"].startswith("5/"), h)
     check("오류 없음 (처음 온 사람)", h and not h["err"], h and h["err"])
 
     # 1b) 누를 때만 넘어간다 — 움직임을 켠 기기에서 공이 실제로 날 때. 오래 기다려도 혼자 넘어가지 않는다
@@ -189,11 +189,16 @@ def main():
     check("전술 부수 5부 승급 안내", d and d["rankup"] and "5부" in d["rankup"], d)
     check("윗줄 부수 표시 5부", h and h["rank"] == "5부" and not h["err"], h)
 
+    # 3b) 2챕터까지 다 맞힌 사람은 4부 — 부수 사다리는 챕터마다 한 단계
+    log = game("rank4", [[150, "g.snap('home')"]], state([(cid, "정답", None) for cid in IDS if cid < "C3"]))
+    h = last(log, "home")
+    check("2챕터까지 70% 이상이면 전술 부수 4부", h and h["rank"] == "4부" and not h["err"], h)
+
     # 4) 다 푼 사람
     log = game("all", [[150, "g.snap('home')"], [150, "g.click('[data-act=wait]')"], [150, "g.snap('waited')"]],
                state([(cid, "정답", None) for cid in IDS]))
     h, w = last(log, "home"), last(log, "waited")
-    check("30장 완주 — 기다림 카드", h and h["wait"] and h["prog"].startswith(f"{len(IDS)}/"), h)
+    check("다 푼 사람 — 기다림 카드", h and h["wait"] and h["prog"].startswith(f"{len(IDS)}/"), h)
     check("다음 카드 기다릴게요 → 안내", w and w["toast"] and "전했어요" in w["toast"], w)
 
     # 5) claude.ai 저장소 (가짜)

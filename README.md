@@ -9,7 +9,7 @@ reference/   프롬프트에 붙여 넣는 재료 (도메인·좌표계·예시�
 design/      ← 위 체인을 실행해서 나온 결과물
 data/        커리큘럼 인덱스 · 상황 카드 · 카메라 규격 (기계 검증 대상)
 tools/       생성기 · 검증기 · 3D 코트 기하(court3d.py) · 웹 스모크 테스트 · 검증판 기록 받기(phase1/)
-web/         play.html — Phase 1 검증판 게임 (카드 30장 · 오늘의 코트 · 복습 · 기록)
+web/         play.html — 검증판 게임 (카드 120장 · 오늘의 코트 · 복습 · 전술 부수 · 기록)
              index.html — 설계 페이지 (카드 플레이어 · 프롬프트 체인) · src/ — 두 페이지가 같이 쓰는 코트 엔진
 ```
 
@@ -22,7 +22,7 @@ web/         play.html — Phase 1 검증판 게임 (카드 30장 · 오늘의 �
 | 단계 | 산출물 | 상태 |
 |---|---|---|
 | STEP 1 커리큘럼 | `design/01-curriculum.md` · `data/cards-index.json` | ✅ 5챕터 **120장** 확정 |
-| STEP 2 상황 카드 | `data/cards/c1.json` `c2.json` | ✅ **30장** 완성 (1챕터 24 + 2챕터 6) · 90장은 Phase 2 |
+| STEP 2 상황 카드 | `data/cards/c1.json` … `c5.json` | ✅ **120장** 완성 (5챕터 × 24) · 기존 30장 재검수 `design/09-content-review.md` |
 | STEP 3 시각화 | `design/03-renderer-spec.md` | ✅ **v2: 3D 코트 · 공 궤적** · v4: 멈춤 → 결과 재생 · v8: 중계 시점 하나 · 누르면 넘어가기 |
 | STEP 4 게임 설계 | `design/04-game-design.md` | ✅ 완료 |
 | STEP 5 플랫폼 | `reference/platform-recommendation.md` | ✅ 완료 · 가격 검증 필요 |
