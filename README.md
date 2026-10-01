@@ -23,7 +23,7 @@ web/         play.html — Phase 1 검증판 게임 (카드 30장 · 오늘의 �
 |---|---|---|
 | STEP 1 커리큘럼 | `design/01-curriculum.md` · `data/cards-index.json` | ✅ 5챕터 **120장** 확정 |
 | STEP 2 상황 카드 | `data/cards/c1.json` `c2.json` | ✅ **30장** 완성 (1챕터 24 + 2챕터 6) · 90장은 Phase 2 |
-| STEP 3 시각화 | `design/03-renderer-spec.md` | ✅ **v2: 3D 코트 · 공 궤적 · 두 시점** · v4: 멈춤 → 결과 재생 |
+| STEP 3 시각화 | `design/03-renderer-spec.md` | ✅ **v2: 3D 코트 · 공 궤적** · v4: 멈춤 → 결과 재생 · v8: 중계 시점 하나 · 누르면 넘어가기 |
 | STEP 4 게임 설계 | `design/04-game-design.md` | ✅ 완료 |
 | STEP 5 플랫폼 | `reference/platform-recommendation.md` | ✅ 완료 · 가격 검증 필요 |
 | STEP 6 기획서 | `design/PRD.md` | ✅ 완료 |
@@ -76,7 +76,7 @@ coachLine · next{id, text} · tags
 
 - **서브는 베이스라인 뒤에서**, 대각선 서비스 박스 안으로 들어가는가
 - 공을 보내는 보기에 아웃 지역(베이스라인 뒤)이 없는가
-- 모든 존이 화면에서 손가락으로 누를 만큼 보이는가 (중계 · 내 시점 둘 다 계산)
+- 모든 존이 중계 화면에서 손가락으로 누를 만큼 보이는가
 - 서버와 넷맨이 반대 반쪽에 서 있는가 / 공이 상대 코트에 바운드하는가
 - 좌표가 선언한 존 안에 있는가 / 마커끼리 0.12 이상 떨어져 있는가
 - 정답과 오답 존이 겹치지 않는가 / 오답이 차선 1 + 실수 1 인가

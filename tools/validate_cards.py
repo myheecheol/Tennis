@@ -216,7 +216,7 @@ def check_play(c, o, severity, e):
 
 
 def check(cards):
-    errs, warns, info = [], [], []
+    errs, warns = [], []
     ans_zones = collections.Counter()
     bc = court3d.broadcast_camera()
 
@@ -369,20 +369,13 @@ def check(cards):
             if (players["me"][0] - .5) * (players["partner"][0] - .5) > 0:
                 w("서버와 넷맨이 같은 반쪽에 있다")
 
-        # ── 존이 화면에서 누를 만큼 보이는가 ──
-        view = c.get("view", "top")
-        if view not in ("top", "me"):
-            e(f"알 수 없는 view {view}")
+        # ── 시점은 중계 하나 (PRD 결정 #20) · 존이 화면에서 누를 만큼 보이는가 ──
+        if "view" in c:
+            e("시점은 중계 하나다 — view 를 지운다")
         for z in zones:
             ar = court3d.visible_area(bc, z)
             if ar < MIN_TAP:
                 e(f"중계 시점에서 존 {z} 가 너무 작다 ({ar:.0f}px²)")
-        mc = court3d.me_camera(players["me"])
-        me_ok = all(court3d.visible_area(mc, z) >= MIN_TAP for z in zones)
-        if view == "me" and not me_ok:
-            small = {z: round(court3d.visible_area(mc, z)) for z in zones}
-            e(f"내 시점에서 누르기 어려운 존이 있다 {small}")
-        info.append((cid, view, me_ok))
 
         # ── 초보자가 모르는 말 ──
         body = " ".join([c["scene"], c["cue"], a["short"], a["why"], c["coachLine"]]
@@ -399,7 +392,7 @@ def check(cards):
     for z, n in ans_zones.items():
         if n >= limit:
             warns.append(f"정답 존 {z} 이 {n}장에서 반복된다 (한도 {limit})")
-    return errs, warns, info
+    return errs, warns
 
 
 def main(paths):
@@ -407,16 +400,12 @@ def main(paths):
     for p in paths:
         d = json.loads(pathlib.Path(p).read_text(encoding="utf-8"))
         cards += d["cards"] if isinstance(d, dict) else d
-    errs, warns, info = check(cards)
+    errs, warns = check(cards)
     print(f"검사 대상 {len(cards)}장")
     for m in warns:
         print(f"  ⚠️  {m}")
     for m in errs:
         print(f"  ❌ {m}")
-    me_cards = [cid for cid, v, _ in info if v == "me"]
-    me_ok = [cid for cid, v, ok in info if ok and v != "me"]
-    print(f"  내 시점 기본 {len(me_cards)}장: {', '.join(me_cards) or '-'}")
-    print(f"  내 시점으로도 풀 수 있는 카드: {', '.join(me_ok) or '-'}")
     if errs:
         print(f"\n실패: 오류 {len(errs)}건, 경고 {len(warns)}건")
         return 1

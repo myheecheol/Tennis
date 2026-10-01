@@ -326,7 +326,6 @@
       ],
       "myRole": "넷맨",
       "phase": "서브+1",
-      "view": "me",
       "setup": {
         "me": {
           "zone": "A-LN",
@@ -1216,7 +1215,6 @@
       ],
       "myRole": "넷맨",
       "phase": "랠리",
-      "view": "me",
       "setup": {
         "me": {
           "zone": "A-LN",
@@ -3075,7 +3073,6 @@
       ],
       "myRole": "랠리",
       "phase": "랠리",
-      "view": "me",
       "setup": {
         "me": {
           "zone": "A-CN",
@@ -3218,7 +3215,6 @@
       ],
       "myRole": "넷맨",
       "phase": "마무리",
-      "view": "me",
       "setup": {
         "me": {
           "zone": "A-CN",
@@ -3490,7 +3486,6 @@
       ],
       "myRole": "랠리",
       "phase": "마무리",
-      "view": "me",
       "setup": {
         "me": {
           "zone": "A-RN",

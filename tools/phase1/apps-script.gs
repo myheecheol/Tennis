@@ -13,8 +13,8 @@
  * 게임이 보내는 몸통: {"u": "p_…(브라우저마다 무작위 익명 id)", "events": [{"t": ISO 시각, "e": 이벤트, …}]}
  * 이벤트 종류와 칸의 뜻도 design/08-phase1.md 에 있다. 이름이나 연락처는 오지 않는다.
  */
-var HEAD = ['받은 시각', '참여자', '시각', '이벤트', '카드', '결과', '보기', '걸린 ms', '시점', '복습', '세션', '나머지'];
-var KNOWN = ['t', 'e', 'c', 'v', 'o', 'ms', 'view', 'rev', 'sid'];
+var HEAD = ['받은 시각', '참여자', '시각', '이벤트', '카드', '결과', '보기', '걸린 ms', '복습', '세션', '나머지'];
+var KNOWN = ['t', 'e', 'c', 'v', 'o', 'ms', 'rev', 'sid'];
 
 function doPost(e) {
   var body;
@@ -26,7 +26,7 @@ function doPost(e) {
     var rest = {};
     Object.keys(ev || {}).forEach(function (k) { if (KNOWN.indexOf(k) < 0) rest[k] = ev[k]; });
     return [new Date(), who, cut(ev.t), cut(ev.e), cut(ev.c), cut(ev.v), ev.o == null ? '' : ev.o,
-            ev.ms == null ? '' : ev.ms, cut(ev.view), ev.rev ? 1 : '', cut(ev.sid), cut(JSON.stringify(rest), 500)];
+            ev.ms == null ? '' : ev.ms, ev.rev ? 1 : '', cut(ev.sid), cut(JSON.stringify(rest), 500)];
   });
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);   // 여러 사람이 동시에 보내도 줄이 겹치지 않게

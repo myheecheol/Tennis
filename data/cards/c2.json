@@ -185,7 +185,6 @@
       ],
       "myRole": "넷맨",
       "phase": "서브+1",
-      "view": "me",
       "setup": {
         "me": {
           "zone": "A-RN",

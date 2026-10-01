@@ -39,7 +39,7 @@ CASES = [
     ("공이 자기 코트에 바운드", "C1-13", set_(["setup", "ball", "bounce"], [0.48, 0.80]), "자기 코트"),
     ("장황한 해설", "C1-03", set_(["answer", "why"], "가" * 57), "해설이 길다"),
     ("설명 없는 전문 용어", "C1-13", set_(["scene"], "파트너가 투백으로 내려갔어요."), "전문 용어"),
-    ("베이스라인에서 보는 내 시점 — 먼 존이 너무 작다", "C1-12", set_(["view"], "me"), "내 시점에서 누르기 어려운"),
+    ("카드에 시점을 적는다 — 시점은 중계 하나 (결정 #20)", "C1-12", set_(["view"], "me"), "중계 하나"),
     ("정답과 오답이 같은 존", "C1-03", set_(["distractors", 0, "zone"], "A-CN"), "겹친다"),
     # 결과 장면 — 채점과 장면이 어긋나는 것을 막는다 (C1-07 의 요약·채점 모순과 같은 종류)
     ("실수를 골랐는데 포인트를 딴다", "C1-03",
@@ -65,7 +65,7 @@ fail = 0
 for desc, cid, mutate, expect in CASES:
     c = copy.deepcopy(base[cid])
     mutate(c)
-    errs, warns, _ = V.check([c])
+    errs, warns = V.check([c])
     hit = any(expect in m for m in errs + warns)
     fail += not hit
     print(f"  {'✅' if hit else '❌'} {desc}")

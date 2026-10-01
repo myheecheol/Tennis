@@ -2,6 +2,7 @@
 """웹 페이지 스모크 테스트 — 헤드리스 Chromium 으로 실제 흐름을 눌러 본다.
 
   검증판 게임(web/play.html)
+    · 카드 한 장은 누를 때만 넘어간다: 제목 → 상황 → 질문 → 결과 → 해설 (움직임 줄이기 켬 · 끔)
     · 처음 온 사람: 맛보기 → 시작하기 → 5장 → 결과 → 홈
     · 복습이 밀린 사람: 복습 2 + 새 카드 5 → 중간에 나가기 → 이어서 하기
     · 1챕터 마지막 카드를 맞히면 전술 부수 5부
@@ -9,7 +10,7 @@
     · claude.ai 저장소(가짜): 불러오기 · 쓰기 · 만든 사람의 검증 지표
     · 기록 주소(가짜 fetch): 이벤트 묶음 전송
   블루프린트(web/index.html)
-    · 30장 × 보기 3 × 시점 2 = 180번 재생 — 결과 배지가 채점과 같은가
+    · 카드 수 × 보기 3 번 재생 — 결과 배지가 채점과 같은가
 
 애니메이션은 requestAnimationFrame 을 타이머로 바꿔 가상 시간으로 돌린다.
 브라우저가 없으면 건너뛴다 (CHROME_BIN 으로 경로를 줄 수 있다)."""
@@ -36,7 +37,7 @@ PRE = ('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" c
        'window.requestAnimationFrame=function(cb){return setTimeout(function(){cb(performance.now());},16);};'
        'window.cancelAnimationFrame=function(i){clearTimeout(i);};'
        'var _mm=window.matchMedia;window.matchMedia=function(q){return q.indexOf("reduced-motion")>=0?'
-       '{matches:true,addListener:function(){},addEventListener:function(){}}:_mm.call(window,q);};'
+       '{matches:{REDUCED},addListener:function(){},addEventListener:function(){}}:_mm.call(window,q);};'
        'window.__ERR=[];window.addEventListener("error",function(e){window.__ERR.push(String(e.message));});'
        '</script>{MOCK}</head><body>')
 
@@ -48,15 +49,21 @@ function snap(tag){var say=q('#p-say'),t=q('#toast');
   var cap=q('#gs-cap');
   LOG.push({tag:tag,screen:vis(),count:q('#bar-play').hidden?'':q('#scount').textContent,dots:document.querySelectorAll('#sdots i').length,
     phase:q('#gs').getAttribute('data-phase'),cap:cap.hidden?null:cap.textContent,rev:!q('#gs-rev').hidden,sheet:!q('#p-verdict').hidden,
+    title:q('#gs-name').textContent,scene:q('#gs-scene-t').textContent,dock:q('#gs-dock').textContent.slice(0,90),
     head:q('#t-head').textContent,say:say.hidden?null:say.textContent,prog:q('#p-n').textContent,rank:q('#bar-rank-t').textContent,
     rankup:q('#d-rank').hidden?null:q('#d-rank').textContent,tally:q('#s-done').hidden?null:q('#d-tally').textContent,
     wait:!q('#c-wait').hidden,owner:!q('#h-stats').hidden,stats:q('#s-stats').hidden?null:q('#st-body').textContent.slice(0,200),
     toast:t.hidden?null:t.textContent,writes:window.__writes||0,sent:window.__SENT||null,err:window.__ERR.slice()});
   document.body.setAttribute('data-m',JSON.stringify(LOG));}
 function click(sel){var el=q(sel);if(!el){window.__ERR.push('없음 '+sel);return;}el.dispatchEvent(new MouseEvent('click',{bubbles:true}));}
-function pick(want){var id=q('#p-id').textContent.split(' ')[0],c=JSON.parse(q('#card-data').textContent).filter(function(x){return x.id===id;})[0];
-  var i=0;Court.optsOf(c).forEach(function(x,j){if(x.v===(want||'정답'))i=j;});click('#p-opts [data-opt="'+i+'"]');}
-var g={q:q,click:click,snap:snap,pick:pick},STEPS=__STEPS__;
+function phase(){return q('#gs').getAttribute('data-phase');}
+function tap(){click('#gs-court');}
+// 질문이 나올 때까지 코트를 누른다 (제목 → 상황 → 질문). 움직임 줄이기면 도입 공은 바로 끝난다
+function ask(){for(var k=0;k<4&&phase()!=='ask';k++)tap();if(phase()!=='ask')window.__ERR.push('질문까지 못 감: '+phase());}
+function opt(i){ask();click('#p-opts [data-opt="'+i+'"]');}
+function pick(want){var id=q('#p-id').textContent,c=JSON.parse(q('#card-data').textContent).filter(function(x){return x.id===id;})[0];
+  var i=0;Court.optsOf(c).forEach(function(x,j){if(x.v===(want||'정답'))i=j;});opt(i);}
+var g={q:q,click:click,snap:snap,pick:pick,opt:opt,tap:tap,ask:ask},STEPS=__STEPS__;
 setTimeout(function(){snap('start');var i=0;(function next(){if(i>=STEPS.length)return;var s=STEPS[i++];
   setTimeout(function(){try{(new Function('g',s[1]))(g);}catch(err){window.__ERR.push('단계 '+i+': '+err.message);}next();},s[0]);})();},600);
 })();
@@ -79,6 +86,7 @@ FETCH_MOCK = ('<script>window.__SENT=[];window.fetch=function(u,o){var b=JSON.pa
 
 
 def run(name, page, budget=20000):
+    page = page.replace("{REDUCED}", "true")
     f = TMP / (name + ".html")
     f.write_text(page, encoding="utf-8")
     out = subprocess.run([CHROME, "--headless=new", "--no-sandbox", "--disable-gpu", f"--virtual-time-budget={budget}",
@@ -87,13 +95,14 @@ def run(name, page, budget=20000):
     return json.loads(html.unescape(m.group(1))) if m else None
 
 
-def game(name, steps, state=None, mock="", config=None, budget=20000):
+def game(name, steps, state=None, mock="", config=None, budget=20000, motion=False):
     page = (WEB / "play.html").read_text(encoding="utf-8")
     if config:
         page = page.replace('"endpoint": ""', '"endpoint": "%s"' % config)
     st = ('try{localStorage.setItem("dmb-game-v1",' + json.dumps(json.dumps(state, ensure_ascii=False)) + ')}catch(e){}'
           if state else 'try{localStorage.removeItem("dmb-game-v1")}catch(e){}')
-    return run(name, PRE.replace("{STATE}", st).replace("{MOCK}", mock) + page
+    pre = PRE.replace("{REDUCED}", "false" if motion else "true")
+    return run(name, pre.replace("{STATE}", st).replace("{MOCK}", mock) + page
                + GAME_PROBE.replace("__STEPS__", json.dumps(steps, ensure_ascii=False)), budget)
 
 
@@ -105,12 +114,12 @@ def state(answers):
          "days": [day(-3), day(-2)], "sessions": 1, "rank": "신인부", "rankUp": None, "session": None,
          "reports": [], "wait": None, "ev": []}
     for cid, v, due in answers:
-        s["cards"][cid] = {"f": v, "l": v, "n": 1, "ms": 5000, "at": day(-2) + "T10:00:00Z", "view": "top",
+        s["cards"][cid] = {"f": v, "l": v, "n": 1, "ms": 5000, "at": day(-2) + "T10:00:00Z",
                            "due": None if due is None else day(due), "track": None if v == "정답" else v, "box": 0}
     return s
 
 
-NEXT = [[120, "g.pick()"], [120, "g.click('[data-act=next]')"]]
+NEXT = [[120, "g.pick()"], [120, "g.click('[data-act=explain]')"], [120, "g.click('[data-act=next]')"]]
 fails = []
 
 
@@ -130,19 +139,35 @@ def main():
         return 0
 
     # 1) 처음 온 사람
-    log = game("new", [[150, "g.click('#p-opts [data-opt=\"0\"]')"], [150, "g.snap('taste')"],
-                       [150, "g.click('[data-act=taste-start]')"], [150, "g.snap('s1')"]] + NEXT * 4 +
-               [[120, "g.pick('실수')"], [120, "g.click('[data-act=finish]')"], [150, "g.snap('done')"],
+    log = game("new", [[150, "g.ask()"], [150, "g.snap('ask')"], [150, "g.opt(0)"], [150, "g.snap('result')"], [150, "g.tap()"],
+                       [150, "g.snap('taste')"], [150, "g.click('[data-act=taste-start]')"], [150, "g.snap('s1')"]] + NEXT * 4 +
+               [[120, "g.pick('실수')"], [120, "g.tap()"], [120, "g.click('[data-act=finish]')"], [150, "g.snap('done')"],
                 [150, "g.click('[data-act=home]')"], [150, "g.snap('home')"]])
-    s0, t, s1, d, h = (last(log, k) for k in ("start", "taste", "s1", "done", "home"))
-    q24 = next(c for c in CARDS if c["id"] == "C1-24")["question"]["text"]
-    check("처음 온 사람은 맛보기 카드부터 — 코트 위 질문 띠", s0 and s0["screen"] == "play" and s0["count"] == "맛보기 · 1분"
-          and s0["phase"] == "ask" and q24 in (s0["cap"] or ""), s0)
-    check("맛보기 결과 배지 + 해설 시트", t and t["say"] and t["say"][0] in "✓△✕" and t["phase"] == "verdict" and t["sheet"], t)
+    s0, a, r, t, s1, d, h = (last(log, k) for k in ("start", "ask", "result", "taste", "s1", "done", "home"))
+    c24 = next(c for c in CARDS if c["id"] == "C1-24")
+    check("처음 온 사람은 맛보기 카드부터 — 어두운 코트에 〈제목〉", s0 and s0["screen"] == "play" and s0["count"] == "맛보기 · 1분"
+          and s0["phase"] == "title" and c24["title"] in s0["title"], s0)
+    check("코트를 누르면 상황 글을 거쳐 질문 띠", a and a["phase"] == "ask" and c24["question"]["text"] in (a["cap"] or "")
+          and a["scene"] == c24["scene"], a)
+    check("고르면 결과 배지 — 해설은 누를 때까지 안 나온다", r and r["phase"] == "result" and r["say"] and r["say"][0] in "✓△✕"
+          and not r["sheet"] and "해설 보기" in r["dock"], r)
+    check("코트를 누르면 해설 시트", t and t["phase"] == "verdict" and t["sheet"], t)
     check("시작하기 → 오늘의 코트 5장", s1 and s1["count"] == "1 / 5" and s1["dots"] == 5, s1)
     check("한 판 결과 — 성공 4 · 실패 1", d and d["screen"] == "done" and "성공 4" in d["tally"] and "실패 1" in d["tally"], d)
     check("홈 진도 5/30", h and h["prog"].startswith("5/"), h)
     check("오류 없음 (처음 온 사람)", h and not h["err"], h and h["err"])
+
+    # 1b) 누를 때만 넘어간다 — 움직임을 켠 기기에서 공이 실제로 날 때. 오래 기다려도 혼자 넘어가지 않는다
+    log = game("tap", [[9000, "g.snap('t1')"], [100, "g.tap()"], [8000, "g.snap('t2')"], [9000, "g.snap('t3')"],
+                       [100, "g.tap()"], [300, "g.snap('t4')"], [100, "g.opt(0)"], [100, "g.snap('t5')"], [8000, "g.snap('t6')"],
+                       [9000, "g.snap('t7')"], [100, "g.tap()"], [300, "g.snap('t8')"]], motion=True, budget=70000)
+    t = {k: last(log, k) for k in ("t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8")}
+    ph = {k: (v or {}).get("phase") for k, v in t.items()}
+    check("기다려도 제목에 머문다 → 누르면 공이 나고 상황 글에서 멈춘다", ph["t1"] == "title" and ph["t2"] == "scene"
+          and ph["t3"] == "scene" and (t["t2"] or {}).get("scene") == c24["scene"], ph)
+    check("누르면 질문 → 고르면 결과 재생 → 결과에서 멈춘다 → 누르면 해설", ph["t4"] == "ask" and ph["t5"] == "out"
+          and ph["t6"] == "result" and ph["t7"] == "result" and ph["t8"] == "verdict" and (t["t8"] or {}).get("sheet")
+          and not (t["t8"] or {}).get("err"), ph)
 
     # 2) 복습 2장이 밀린 사람 — 중간에 나갔다 이어서
     st = state([(cid, "정답", None) for cid in IDS[:10]])
@@ -157,7 +182,7 @@ def main():
     check("이어서 하기 → 3번째 카드", rs and rs["count"] == "3 / 7" and not rs["err"], rs)
 
     # 3) 1챕터 마지막 카드를 맞히면 5부
-    log = game("rank", [[150, "g.click('#t-cta')"]] + NEXT * 4 + [[120, "g.pick()"], [120, "g.click('[data-act=finish]')"],
+    log = game("rank", [[150, "g.click('#t-cta')"]] + NEXT * 4 + [[120, "g.pick()"], [120, "g.tap()"], [120, "g.click('[data-act=finish]')"],
                         [150, "g.snap('done')"], [150, "g.click('[data-act=home]')"], [150, "g.snap('home')"]],
                state([(cid, "정답", None) for cid in IDS[:23]]))
     d, h = last(log, "done"), last(log, "home")
@@ -181,7 +206,7 @@ def main():
     check("검증 지표 — 참여자 두 명 집계", s and s["stats"] and s["stats"].startswith("2맛보기") and not s["err"], s)
 
     # 6) 기록 주소 (가짜 fetch)
-    log = game("http", [[150, "g.click('#p-opts [data-opt=\"1\"]')"], [150, "g.click('[data-act=taste-start]')"],
+    log = game("http", [[150, "g.opt(1)"], [150, "g.tap()"], [150, "g.click('[data-act=taste-start]')"],
                         [150, "g.pick()"], [2200, "g.snap('sent')"]], mock=FETCH_MOCK, config="https://example.invalid/log")
     s = last(log, "sent")
     sent = [e for b in (s or {}).get("sent") or [] for e in b["e"]]
@@ -193,17 +218,16 @@ def main():
 setTimeout(function(){
   var out=[],n=document.querySelectorAll('#strip button').length;function q(s){return document.querySelector(s);}
   for(var i=0;i<n;i++){q('[data-jump="'+i+'"]').click();var id=q('#p-id').textContent;
-    ['top','me'].forEach(function(vw){q('[data-view="'+vw+'"]').click();
-      for(var j=0;j<3;j++){if(q('[data-reset]'))q('[data-reset]').click();var e0=window.__ERR.length;
-        q('#p-opts [data-opt="'+j+'"]').click();var say=q('#p-say'),b=q('#p-verdict .badge');
-        out.push({id:id,say:say.hidden?'':say.textContent,v:b?b.textContent:'',err:window.__ERR.length-e0});}
-      if(q('[data-reset]'))q('[data-reset]').click();});}
+    for(var j=0;j<3;j++){if(q('[data-reset]'))q('[data-reset]').click();var e0=window.__ERR.length;
+      q('#p-opts [data-opt="'+j+'"]').click();var say=q('#p-say'),b=q('#p-verdict .badge');
+      out.push({id:id,say:say.hidden?'':say.textContent,v:b?b.textContent:'',err:window.__ERR.length-e0});}
+    if(q('[data-reset]'))q('[data-reset]').click();}
   document.body.setAttribute('data-m',JSON.stringify(out));},400);
 </script>"""
     out = run("blueprint", PRE.replace("{STATE}", "try{localStorage.removeItem('dmb-player-v2')}catch(e){}").replace("{MOCK}", "") + page + sweep, 12000)
     SAY = {"✓": "정답", "△": "차선", "✕": "실수"}
     bad = [r for r in out or [] if r["err"] or not r["say"] or not r["v"].endswith(SAY.get(r["say"][0], "?"))]
-    check(f"블루프린트 {len(out or [])}번 재생 — 결과 배지 = 채점", out and len(out) == len(IDS) * 6 and not bad, bad[:3])
+    check(f"블루프린트 {len(out or [])}번 재생 — 결과 배지 = 채점", out and len(out) == len(IDS) * 3 and not bad, bad[:3])
 
     shutil.rmtree(TMP, ignore_errors=True)
     print(f"웹 스모크 테스트 {'통과' if not fails else f'실패 {len(fails)}건'}")

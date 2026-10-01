@@ -131,7 +131,7 @@ footer code{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
     <div class="chips">
       <span class="chip"><b id="n-play">30</b>장 플레이</span>
       <span class="chip"><b>120</b>장 커리큘럼</span>
-      <span class="chip">중계 · 내 시점</span>
+      <span class="chip">중계 시점</span>
     </div>
     <span class="swatch"><i></i>PANTONE 15-0343 · GREENERY</span>
   </div>
@@ -158,13 +158,7 @@ footer code{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
       <div class="p-stage">
         <svg id="stage" class="court" viewBox="0 0 400 500" role="img"></svg>
         <div class="p-say" id="p-say" role="status" aria-live="polite" hidden></div>
-        <div class="p-ctrl">
-          <div class="seg" role="group" aria-label="시점">
-            <button id="v-top" data-view="top" aria-pressed="true">중계</button>
-            <button id="v-me" data-view="me" aria-pressed="false">내 시점</button>
-          </div>
-          <button class="replay" id="replay" aria-label="공 궤적 다시 보기">▶ 다시</button>
-        </div>
+        <div class="p-ctrl"><button class="replay" id="replay" aria-label="공 궤적 다시 보기">▶ 다시</button></div>
       </div>
       <div class="p-panel">
         <h3 id="p-title"></h3>
@@ -199,7 +193,7 @@ footer code{font-family:var(--f-mono);font-size:12px;color:var(--ink-2)}
         <tr><td>커리큘럼</td><td>5챕터 120장</td><td>확정</td></tr>
         <tr><td>상황 카드</td><td>1챕터 24장 + 2챕터 6장</td><td>30장 완성 · 90장 남음</td></tr>
         <tr><td>검증판 게임</td><td>오늘의 코트 · 복습 · 전술 부수 · 기록 · 검증 지표</td><td>완성 — 사람 검증만 남음</td></tr>
-        <tr><td>화면</td><td>3D 코트 · 공 궤적 · 중계/내 시점</td><td>완료</td></tr>
+        <tr><td>화면</td><td>3D 코트 · 공 궤적 · 중계 시점</td><td>완료</td></tr>
         <tr><td>게임 설계</td><td>3단 채점 · 모드 5개 · 부수 체계</td><td>완료</td></tr>
         <tr><td>기획서</td><td>PRD + 4인 검수</td><td>완료</td></tr>
         <tr><td>사람 검증</td><td>코치 감수 · 30명 검증</td><td><b>아직</b></td></tr>
@@ -250,26 +244,24 @@ Court.init(JSON.parse(document.getElementById('cam-data').textContent));
 var KEYS=Court.KEYS,optsOf=Court.optsOf,correctIdx=Court.correctIdx,esc=Court.esc,clamp=Court.clamp;
 
 /* ═════════ 플레이어 상태 ═════════ */
-var idx=0,views={},answers={},shown={},revealed={};
+var idx=0,answers={},shown={},revealed={};
 try{var sv=JSON.parse(localStorage.getItem('dmb-player-v2')||'{}');if(sv.answers)answers=sv.answers;if(typeof sv.idx==='number')idx=clamp(sv.idx,0,CARDS.length-1);}catch(e){}
 Object.keys(answers).forEach(function(k){revealed[k]=true;});
 function save(){try{localStorage.setItem('dmb-player-v2',JSON.stringify({idx:idx,answers:answers}));}catch(e){}}
-function viewOf(c){return views[c.id]||c.view||'top';}
 
 /* ═════════ 카드 한 장 ═════════ */
 var $=function(id){return document.getElementById(id);};
 var stage=new Court.Stage($('stage'),$('p-say'));
 /* mode: 'intro'(도입 재생) · 'out'(방금 고름 — 결과 재생) · 'replay'(도입+결과) · 'still'(멈춘 화면) */
 function render(mode){
-  var c=CARDS[idx],pick=answers[c.id]!=null?answers[c.id]:-1,isMe=viewOf(c)==='me';
+  var c=CARDS[idx],pick=answers[c.id]!=null?answers[c.id]:-1;
   $('p-id').textContent=c.id;$('p-role').textContent=c.myRole;
   var dd='';for(var i=1;i<=5;i++)dd+=i<=c.difficulty?'<b>●</b>':'○';$('p-diff').innerHTML=dd;$('p-diff').setAttribute('aria-label','난이도 '+c.difficulty);
   $('p-pos').textContent=(idx+1)+' / '+CARDS.length;
   $('p-prev').disabled=idx===0;$('p-next').disabled=idx===CARDS.length-1;
-  $('v-top').setAttribute('aria-pressed',!isMe);$('v-me').setAttribute('aria-pressed',isMe);
   $('p-title').textContent=c.title;$('p-scene').textContent=c.scene;$('p-cue').textContent=c.cue;$('p-ask').textContent=c.question.text;
   panel(c);
-  stage.show(c,{view:viewOf(c),pick:pick,shown:shown[c.id],mode:mode},function(){
+  stage.show(c,{pick:pick,shown:shown[c.id],mode:mode},function(){
     if(!revealed[c.id]){revealed[c.id]=true;panel(c);}
   });
 }
@@ -304,14 +296,13 @@ function choose(i){
 function go(i,mode){idx=clamp(i,0,CARDS.length-1);var c=CARDS[idx];delete shown[c.id];render(answers[c.id]!=null?(mode||'still'):'intro');}
 
 document.addEventListener('click',function(e){
-  var t=e.target.closest?e.target.closest('[data-opt],[data-go],[data-reset],[data-jump],[data-view],[data-scene],#p-prev,#p-next,#replay,#stage'):null;
+  var t=e.target.closest?e.target.closest('[data-opt],[data-go],[data-reset],[data-jump],[data-scene],#p-prev,#p-next,#replay,#stage'):null;
   if(!t||!$('player').contains(t))return;
   if(t.hasAttribute('data-opt'))return choose(+t.getAttribute('data-opt'));
   if(t.id==='stage')return stage.skip();   // 재생 중 코트를 누르면 끝으로
   if(t.id==='p-prev')return go(idx-1);
   if(t.id==='p-next')return go(idx+1);
   if(t.id==='replay')return render(answers[CARDS[idx].id]!=null?'replay':'intro');
-  if(t.hasAttribute('data-view')){views[CARDS[idx].id]=t.getAttribute('data-view');return render('still');}
   if(t.hasAttribute('data-jump'))return go(+t.getAttribute('data-jump'));
   if(t.hasAttribute('data-go'))return go(+t.getAttribute('data-go'),'still');
   if(t.hasAttribute('data-scene')){var c=CARDS[idx];shown[c.id]=+t.getAttribute('data-scene');panel(c);return render('out');}
@@ -336,7 +327,6 @@ function legend(){
     ['<svg width="44" height="34" viewBox="0 0 44 34"><polygon points="4,24 26,24 26,19 38,26 26,33 26,28 4,28" fill="#E4FF3D" stroke="#2A3A06" stroke-opacity=".5"/></svg>','결과','고른 대로 공과 사람이 움직여요. 노란 공 = 우리, 남색 공 = 상대'],
   ];
   I.push(['<svg width="44" height="34" viewBox="0 0 44 34"><rect x="5" y="7" width="34" height="20" rx="3" fill="#fff" fill-opacity=".1" stroke="#fff" stroke-width="1.8" stroke-dasharray="4 3"/><circle cx="12" cy="13" r="6" fill="#12210B" fill-opacity=".75" stroke="#fff" stroke-opacity=".8"/><text x="12" y="16" text-anchor="middle" font-size="8" font-weight="900" fill="#fff" font-family="sans-serif">A</text></svg>','누를 수 있는 칸','점선 칸을 눌러 답해요. 아래 보기를 눌러도 돼요']);
-  I.push(['<svg width="44" height="34" viewBox="0 0 44 34"><rect x="2" y="7" width="40" height="20" rx="10" fill="#14230D" fill-opacity=".6"/><rect x="4" y="9" width="19" height="16" rx="8" fill="#E4FF3D"/><text x="13.5" y="20" text-anchor="middle" font-size="7.5" font-weight="700" fill="#14230D" font-family="sans-serif">중계</text><text x="31" y="20" text-anchor="middle" font-size="7" font-weight="700" fill="#cfdbe2" font-family="sans-serif">내 시점</text></svg>','두 시점','중계는 전체 배치, 내 시점은 내 등 뒤에서 본 코트']);
   $('legend').innerHTML=I.map(function(x){return '<div class="lg"><span class="tile">'+x[0]+'</span><div><b>'+x[1]+'</b><span>'+x[2]+'</span></div></div>';}).join('');
 }
 
