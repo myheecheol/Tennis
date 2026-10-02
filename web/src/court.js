@@ -94,7 +94,7 @@ function arcPts(a,b,k,n){
 /* 공 데이터(from/bounce/to/arc) → 3D 점열 + 바운드 인덱스 */
 function flight(ball,opt){
   opt=opt||{};
-  var arc=ball.arc,k=BULGE[arc]||1,z0=opt.z0!=null?opt.z0:(Z0[arc]||1);
+  var arc=ball.arc,k=opt.k!=null?opt.k:(BULGE[arc]||1),z0=opt.z0!=null?opt.z0:(Z0[arc]||1);
   var A=world(ball.from,z0),pts,bi=-1;
   if(ball.bounce){
     var B=world(ball.bounce,0);pts=arcPts(A,B,k,36);bi=pts.length-1;
@@ -278,9 +278,23 @@ function ease(u){return u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;}
 function lerpPts(P,x){var i=Math.min(P.length-2,Math.max(0,Math.floor(x))),r=clamp(x-i,0,1),a=P[i],b=P[i+1];return [a[0]+(b[0]-a[0])*r,a[1]+(b[1]-a[1])*r,a[2]+(b[2]-a[2])*r];}
 function newTL(c){var p={};PL.forEach(function(k){p[k]=c.setup[k].xy.slice();});return {dur:0,start:p,moves:[],flights:[],hold:null,look:null,res:null,moved:null};}
 
+/* 바운드한 공 · 아무도 안 친 공은 오던 방향 그대로 간다 — 바닥에 비친 공의 길은 꺾이지 않는다.
+   F→B 방향으로 B 에서 나아간 직선 위, T 에 가장 가까운 점 (나아가는 거리 r[0]~r[1] m).
+   tools/validate_cards.py 의 along 과 같은 식이다 */
+var ST_TO=[.6,12],ST_HOP=[.8,10],ST_NONE=[.3,15];
+function along(F,B,T,r){
+  var ux=(B[0]-F[0])*CW,uy=(B[1]-F[1])*CL,l=Math.hypot(ux,uy)||1;ux/=l;uy/=l;
+  var s=clamp((T[0]-B[0])*CW*ux+(T[1]-B[1])*CL*uy,r[0],r[1]);
+  return [B[0]+s*ux/CW,B[1]+s*uy/CL];
+}
+function straightIntro(b){
+  if(b.arc==='hold'||!b.bounce||!b.to)return b;
+  var o={};for(var k in b)o[k]=b[k];o.to=along(b.from,b.bounce,b.to,ST_TO);return o;
+}
+
 /* 도입 — 상황 속 공이 날아와, 결정하는 순간에 멈춘다 */
 function buildIntro(c){
-  var T=newTL(c),b=c.setup.ball;
+  var T=newTL(c),b=straightIntro(c.setup.ball);
   if(b.arc==='hold'){T.hold={who:nearestPlayer(c,b.from),t1:1e9};return T;}
   var fl=flight(b),d=flDur(fl,b.arc);
   T.flights.push({t0:.15,t1:.15+d,fl:fl,col:WHITE,tag:depthTag(b),intro:true});
@@ -289,13 +303,13 @@ function buildIntro(c){
 
 /* 결과 — 고른 보기대로 내가 움직이고, 공이 이어진다 */
 function buildOutcome(c,oi){
-  var o=optsOf(c)[oi],src=o.src,T=newTL(c),pos={},t=.2,b0=c.setup.ball,cur,z1=null,i;
+  var o=optsOf(c)[oi],src=o.src,T=newTL(c),pos={},t=.2,b0=straightIntro(c.setup.ball),cur,z1=null,i;
   PL.forEach(function(k){pos[k]=c.setup[k].xy.slice();});
   if(b0.arc==='hold'){cur={st:'hold'};T.hold={who:nearestPlayer(c,b0.from),t1:0};}
   else{
     var f0=flight(b0),e0=f0.pts[f0.pts.length-1];
     T.flights.push({t0:-1,t1:0,fl:f0,col:WHITE,tag:depthTag(b0),intro:true,faint:true});
-    cur=b0.to?{st:'air',pt:b0.to.slice()}:{st:'ground',pt:b0.bounce.slice()};z1=e0[2];
+    cur=b0.to?{st:'air',pt:b0.to.slice(),from:b0.from}:{st:'ground',pt:b0.bounce.slice(),from:b0.from};z1=e0[2];
   }
   var rv=revealOf(c),ty=c.question.type,moving=ty==='move'||ty==='both'||(ty==='readNext'&&(rv.type==='move'||rv.type==='oppShot'));
   var dest={};
@@ -304,6 +318,7 @@ function buildOutcome(c,oi){
   if(rv.type==='look')T.look={t0:t,who:nearestPlayer(c,zoneN(o.zone))};
   var play=src.play||[],b1=play[0];
   var start1=b1.from?b1.from.slice():(b1.by==='none'||cur.st==='air')?cur.pt.slice():(dest[b1.by]||pos[b1.by]).slice();
+  if(cur.st==='ground'&&b1.by!=='none')start1=along(cur.from,cur.pt,start1,ST_HOP);   // 튄 공이 가는 길 위에서 친다
   if(b1.by!=='none')dest[b1.by]=start1;
   if(dest.me)T.moved={a:pos.me.slice(),b:dest.me.slice()};
   // 0단계 — 동시에 뛴다
@@ -314,12 +329,13 @@ function buildOutcome(c,oi){
   if(T.look)d0=Math.max(d0,.6);
   if(cur.st==='ground'&&b1.by!=='none'){   // 바운드한 공이 치는 사람 쪽으로 튀어 오른다
     var hop=flight({arc:'normal',from:cur.pt,to:start1,toZ:.95},{z0:0}),hd=Math.max(.35,flDur(hop,'normal')*.8),h0=t+Math.max(0,d0-hd);
-    T.flights.push({t0:h0,t1:h0+hd,fl:hop,col:WHITE,hop:true});d0=Math.max(d0,hd);z1=.95;cur={st:'air',pt:start1.slice()};
+    T.flights.push({t0:h0,t1:h0+hd,fl:hop,col:WHITE,hop:true});d0=Math.max(d0,hd);z1=.95;cur={st:'air',pt:start1.slice(),from:cur.pt};
   }
   t+=d0+(d0>0?.1:0);
   if(T.hold)T.hold.t1=t;
   for(i=0;i<play.length;i++){
     var b=play[i],by=b.by,start=i===0?start1:b.from?b.from.slice():(by==='none'||cur.st==='air')?cur.pt.slice():pos[by].slice();
+    if(i>0&&cur.st==='ground'&&by!=='none')start=along(cur.from,cur.pt,start,ST_HOP);
     if(i>0&&by!=='none'&&Math.hypot((pos[by][0]-start[0])*CW,(pos[by][1]-start[1])*CL)>.05){
       var rd=runDur(pos[by],start);T.moves.push({who:by,t0:t,t1:t+rd,a:pos[by].slice(),b:start.slice()});pos[by]=start.slice();t+=rd;
     }
@@ -327,19 +343,26 @@ function buildOutcome(c,oi){
       var hop2=flight({arc:'normal',from:cur.pt,to:start,toZ:.95},{z0:0}),hd2=Math.max(.3,flDur(hop2,'normal')*.8);
       T.flights.push({t0:t,t1:t+hd2,fl:hop2,col:WHITE,hop:true});t+=hd2;z1=.95;
     }
-    var ball={arc:b.arc,from:start};
+    var ball={arc:b.arc,from:start},fo={};
     if(b.bounce)ball.bounce=resolveXY(b.bounce,pos);
     if(b.to)ball.to=resolveXY(b.to,pos);
     if(b.toZ!=null)ball.toZ=b.toZ;
-    var z0=(b.arc==='serve'||b.arc==='serve2')?undefined:(z1!=null?z1:undefined);
-    var fl=flight(ball,z0!=null?{z0:z0}:{}),dur=flDur(fl,b.arc),team=by==='none'?'none':(by==='me'||by==='partner')?'us':'them';
+    if(by==='none'&&cur.st!=='hold'){   // 아무도 안 친 공 — 오던 길 그대로, 떨어지던 대로
+      if(ball.bounce)ball.bounce=along(cur.from,cur.pt,ball.bounce,ST_NONE);
+      else if(ball.to)ball.to=along(cur.from,cur.pt,ball.to,ST_NONE);
+      fo.k=.15;if(cur.st==='ground')fo.z0=0;
+    }
+    if(ball.bounce&&ball.to)ball.to=along(start,ball.bounce,ball.to,ST_TO);   // 바운드 뒤에도 같은 방향
+    if(fo.z0==null&&!(b.arc==='serve'||b.arc==='serve2')&&z1!=null)fo.z0=z1;
+    var fl=flight(ball,fo),dur=flDur(fl,b.arc),team=by==='none'?'none':(by==='me'||by==='partner')?'us':'them';
     T.flights.push({t0:t,t1:t+dur,fl:fl,col:team==='us'?YEL:team==='them'?OPPC:WHITE,call:b.call,winner:b.winner,team:team});
-    if(b.to&&Array.isArray(b.to)){   // 받는 사람이 공을 향해 뛴다
-      var catcher=b.reach||(play[i+1]&&play[i+1].by!=='none'?play[i+1].by:null);
-      if(catcher){T.moves.push({who:catcher,t0:t,t1:t+dur,a:pos[catcher].slice(),b:ball.to.slice()});pos[catcher]=ball.to.slice();}
+    if(ball.to){   // 받는 사람이 공의 길로 간다 — 이름을 부른 선수, 아니면 reach, 아니면 다음에 칠 사람
+      var named=PL.indexOf(b.to)>=0,catcher=b.reach||(named?b.to:(play[i+1]&&play[i+1].by!=='none'?play[i+1].by:null));
+      if(catcher&&Math.hypot((pos[catcher][0]-ball.to[0])*CW,(pos[catcher][1]-ball.to[1])*CL)>.05){
+        T.moves.push({who:catcher,t0:t,t1:t+dur,a:pos[catcher].slice(),b:ball.to.slice()});pos[catcher]=ball.to.slice();}
     }
     var ep=fl.pts[fl.pts.length-1];
-    if(b.to){cur={st:'air',pt:ball.to};z1=ep[2];}else{cur={st:'ground',pt:ball.bounce};z1=null;}
+    if(ball.to){cur={st:'air',pt:ball.to,from:start};z1=ep[2];}else{cur={st:'ground',pt:ball.bounce,from:start};z1=null;}
     t+=dur+.14;
   }
   T.dur=t+.1;T.res={v:o.v,caption:src.caption,zone:o.zone};
@@ -473,5 +496,6 @@ Stage.prototype.show=function(c,o,done){
 };
 
 return {init:init,Stage:Stage,KEYS:KEYS,optsOf:optsOf,correctIdx:correctIdx,esc:esc,clamp:clamp,
+        _tl:{intro:buildIntro,outcome:buildOutcome},   // 시험용 — 공의 길 검사(tools/web_smoke.py)
         reduced:function(){return REDUCED;}};
 })();

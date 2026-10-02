@@ -6,6 +6,7 @@
   · 서브를 베이스라인 안쪽에서 넣는 카드 11장
   · 베이스라인 뒤(아웃)를 '로브 착지점'으로 쓴 보기
   · 설명 없이 쓴 전문 용어
+  · 바운드에서 꺾이는 공 — 공이 받는 사람 쪽으로 휘어 들어갔다 (사용자가 아이패드에서 찾음)
 """
 import json, sys, pathlib, collections, itertools, re
 
@@ -72,6 +73,34 @@ def dist(a, b):
     return ((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2) ** .5
 
 
+# 바운드한 공 · 아무도 안 친 공은 오던 방향 그대로 간다 — 바닥에 비친 공의 길은 꺾이지 않는다.
+# 엔진(web/src/court.js along)과 같은 식. 데이터에 적은 점은 그 직선 위에 있어야 하고(STRAIGHT_TOL),
+# 이름으로 부른 선수는 공의 길에서 CATCH_MAX 안에 있어야 한다 — 멀면 바운드를 그 선수 쪽으로 다시 겨눈다.
+CW, CL = court3d.COURT_W, court3d.COURT_L
+ST_TO, ST_HOP, ST_NONE = (.6, 12), (.8, 10), (.3, 15)   # 바운드(지금 점)에서 나아가는 거리 m
+STRAIGHT_TOL = .2     # 좌표 반올림 몫 m
+CATCH_MAX = 2.2       # 받는 사람이 공의 길까지 옮기는 거리 m
+JUMP_TOL = .3         # 공중의 공과 다음 타자 from 이 어긋나도 되는 거리 m
+
+
+def meters(a, b):
+    return (((a[0] - b[0]) * CW) ** 2 + ((a[1] - b[1]) * CL) ** 2) ** .5
+
+
+def along(f, b, t, rng):
+    """f→b 방향으로 b 에서 나아간 직선 위, t 에 가장 가까운 점과 t 까지의 거리(m)"""
+    ux, uy = (b[0] - f[0]) * CW, (b[1] - f[1]) * CL
+    n = (ux * ux + uy * uy) ** .5 or 1
+    ux, uy = ux / n, uy / n
+    s = max(rng[0], min(rng[1], (t[0] - b[0]) * CW * ux + (t[1] - b[1]) * CL * uy))
+    q = [b[0] + s * ux / CW, b[1] + s * uy / CL]
+    return q, meters(q, t)
+
+
+def xy2(p):
+    return f"[{p[0]:.2f}, {p[1]:.2f}]"
+
+
 PLAYERS = ("me", "partner", "opp1", "opp2")
 CALLS = {"풋폴트", "폴트", "아웃", "네트"}
 ZONE_CENTER_ROWS = {"A": {"N": .57, "M": .75, "B": .93, "X": 1.049},
@@ -125,9 +154,10 @@ def check_play(c, o, severity, e):
     if b0["arc"] == "hold":
         cur = {"pt": b0["from"], "state": "hold"}
     elif "to" in b0:
-        cur = {"pt": b0["to"], "state": "air"}
+        end = along(b0["from"], b0["bounce"], b0["to"], ST_TO)[0] if "bounce" in b0 else b0["to"]
+        cur = {"pt": end, "state": "air", "from": b0["from"]}
     else:
-        cur = {"pt": b0["bounce"], "state": "ground"}
+        cur = {"pt": b0["bounce"], "state": "ground", "from": b0["from"]}
 
     if t == "target" and play[0].get("by") != "me":
         e(f"{tag} 공을 보내는 문제는 첫 공을 내가 친다")
@@ -150,18 +180,38 @@ def check_play(c, o, severity, e):
         # 출발점 — 엔진과 같은 규칙
         if "from" in b:
             start = b["from"]
+            jump = meters(start, cur["pt"])
+            if cur["state"] == "air" and by != "none" and jump > JUMP_TOL:
+                e(f"{tag} 공{k + 1}: 공중의 공이 {jump:.1f}m 순간이동한다 — from 을 지우거나 공을 먼저 떨어뜨린다")
         elif by == "none" or cur["state"] == "air":
             start = cur["pt"]
         else:
             start = pos[by]
+        if cur["state"] == "ground" and by != "none":   # 튄 공이 가는 길 위에서 친다
+            q, d = along(cur["from"], cur["pt"], start, ST_HOP)
+            if "from" in b and d > STRAIGHT_TOL:
+                e(f"{tag} 공{k + 1}: from 이 튄 공의 길에서 {d:.1f}m 벗어났다 — {xy2(q)} 로")
+            start = q
         if by != "none":
-            run = ((pos[by][0] - start[0]) * 10.97) ** 2 + ((pos[by][1] - start[1]) * 23.77) ** 2
-            if run ** .5 > 9.0:
-                e(f"{tag} 공{k + 1}: {by} 가 치러 가기엔 너무 멀다 ({run ** .5:.1f}m)")
+            run = meters(pos[by], start)
+            if run > 9.0:
+                e(f"{tag} 공{k + 1}: {by} 가 치러 가기엔 너무 멀다 ({run:.1f}m)")
             pos[by] = list(start)
 
         call = b.get("call")
         bo = resolve(b["bounce"], pos) if "bounce" in b else None
+        end = None
+        if by == "none" and cur["state"] != "hold" and (bo or "to" in b):   # 아무도 안 친 공은 오던 길 그대로
+            key = "bounce" if bo else "to"
+            q, d = along(cur["from"], cur["pt"], bo or resolve(b["to"], pos), ST_NONE)
+            if isinstance(b[key], list) and d > STRAIGHT_TOL:
+                e(f"{tag} 공{k + 1}: 아무도 안 친 공이 꺾인다 ({d:.1f}m) — {key} 를 {xy2(q)} 로")
+            elif not isinstance(b[key], list) and d > CATCH_MAX:
+                e(f"{tag} 공{k + 1}: {b[key]} 가 공의 길에서 {d:.1f}m 떨어져 있다")
+            if bo:
+                bo = q
+            else:
+                end = q
         if bo and by != "none":
             if (start[1] - .5) * (bo[1] - .5) > 0:
                 e(f"{tag} 공{k + 1}: 자기 코트에 바운드한다 (출발 y={start[1]:.2f}, 바운드 y={bo[1]:.2f})")
@@ -183,16 +233,25 @@ def check_play(c, o, severity, e):
         if t == "target" and k == 0 and bo and not call and not in_zone(bo, o["zone"]):
             e(f"{tag} 내 공이 고른 존 {o['zone']} 에 떨어지지 않는다 ({bo})")
 
-        # 공이 끝나는 곳과 받는 사람
+        # 공이 끝나는 곳과 받는 사람 — 이름을 부른 선수, 아니면 reach, 아니면 다음에 칠 사람이 공의 길로 간다
         if "to" in b:
-            end = resolve(b["to"], pos)
-            if isinstance(b["to"], list):
-                catcher = b.get("reach") or (play[k + 1]["by"] if k + 1 < len(play) and play[k + 1]["by"] != "none" else None)
-                if catcher:
-                    pos[catcher] = list(end)
-            cur = {"pt": end, "state": "air"}
+            named = isinstance(b["to"], str) and b["to"] in PLAYERS
+            if end is None:
+                end = resolve(b["to"], pos)
+            if bo:   # 바운드 뒤에도 같은 방향
+                q, d = along(start, bo, end, ST_TO)
+                if isinstance(b["to"], list) and d > STRAIGHT_TOL:
+                    e(f"{tag} 공{k + 1}: 공이 바운드에서 꺾인다 ({d:.1f}m) — to 를 {xy2(q)} 로")
+                elif not isinstance(b["to"], list) and d > CATCH_MAX:
+                    e(f"{tag} 공{k + 1}: {b['to']} 가 바운드한 공의 길에서 {d:.1f}m 떨어져 있다 — 바운드를 그쪽으로 다시 겨눈다")
+                end = q
+            catcher = b.get("reach") or (b["to"] if named else (
+                play[k + 1]["by"] if k + 1 < len(play) and play[k + 1]["by"] != "none" else None))
+            if catcher:
+                pos[catcher] = list(end)
+            cur = {"pt": end, "state": "air", "from": start}
         elif bo:
-            cur = {"pt": bo, "state": "ground"}
+            cur = {"pt": bo, "state": "ground", "from": start}
 
     # 결과 — 마지막 공으로 판정
     last = play[-1]
@@ -338,6 +397,10 @@ def check(cards):
                 e(f"바운드 {bo} 가 코트 밖이다 (아웃)")
             if (fr[1] - .5) * (bo[1] - .5) > 0:
                 e(f"공이 자기 코트에 바운드한다 (from y={fr[1]}, bounce y={bo[1]})")
+            if isinstance(b.get("to"), list):
+                q, d = along(fr, bo, b["to"], ST_TO)
+                if d > STRAIGHT_TOL:
+                    e(f"도입 공이 바운드에서 꺾인다 ({d:.1f}m) — 바운드를 from→to 직선 위로, 또는 to 를 {xy2(q)} 로")
 
         # ── 서브는 베이스라인 뒤에서, 대각선 서비스 박스로 ──
         is_serve = arc in SERVE_ARCS or b.get("kind", "").startswith("서브")

@@ -356,7 +356,8 @@ function rid(){var s='';for(var i=0;i<12;i++)s+='abcdefghijklmnopqrstuvwxyz01234
 var KEY='dmb-game-v1';
 function fresh(){return {v:1,uid:rid(),created:iso(),opens:0,onboarded:false,taste:null,cards:{},xp:0,days:[],sessions:0,
   rank:'신인부',rankUp:null,session:null,reports:[],wait:null,ev:[]};}
-var S=(function(){try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.v===1&&s.cards)return s;}catch(e){}return fresh();})();
+var S=(function(){try{var s=JSON.parse(localStorage.getItem(KEY)||'null');   // 예전 판에서 저장한 기록이면 없는 칸을 채운다
+  if(s&&s.v===1&&s.cards){var f=fresh();for(var k in f)if(!(k in s))s[k]=f[k];return s;}}catch(e){}return fresh();})();
 if(S.session&&S.session.ids.some(function(id){return !BY[id];}))S.session=null;   // 카드가 바뀌었으면 하던 판은 버린다
 function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 function save(){saveLocal();Remote.push();}

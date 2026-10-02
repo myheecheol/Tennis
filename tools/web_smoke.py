@@ -217,7 +217,7 @@ def main():
     sent = [e for b in (s or {}).get("sent") or [] for e in b["e"]]
     check("기록 주소로 이벤트 묶음 전송 (no-cors)", s and "answer" in sent and "taste" in sent and all(b["mode"] == "no-cors" for b in s["sent"]), s)
 
-    # 7) 블루프린트 — 180번 재생
+    # 7) 블루프린트 — 카드 × 보기 재생 + 공의 길
     page = (WEB / "index.html").read_text(encoding="utf-8")
     sweep = r"""<script>
 setTimeout(function(){
@@ -227,12 +227,26 @@ setTimeout(function(){
       q('#p-opts [data-opt="'+j+'"]').click();var say=q('#p-say'),b=q('#p-verdict .badge');
       out.push({id:id,say:say.hidden?'':say.textContent,v:b?b.textContent:'',err:window.__ERR.length-e0});}
     if(q('[data-reset]'))q('[data-reset]').click();}
+  // 공의 길 — 바운드한 공 · 튄 공을 치러 가는 길 · 아무도 안 친 공은 바닥에서 보아 꺾이지 않는다
+  function ang(a,b){return Math.abs(Math.atan2(a[0]*b[1]-a[1]*b[0],a[0]*b[0]+a[1]*b[1]))*180/Math.PI;}
+  function dv(p,r){return [r[0]-p[0],r[1]-p[1]];}function len(v){return Math.hypot(v[0],v[1]);}
+  var C=JSON.parse(q('#card-data').textContent),kinks=[],nf=0;
+  function scan(T,tag){var prev=null;T.flights.forEach(function(f){var P=f.fl.pts,bi=f.fl.bounce,e=P.length-1,a,b;nf++;
+    if(bi>=0&&bi<e){a=dv(P[0],P[bi]);b=dv(P[bi],P[e]);if(len(b)>.05&&ang(a,b)>1.5)kinks.push(tag+' 바운드 '+ang(a,b).toFixed(1)+'°');}
+    if(prev&&(f.hop||f.team==='none')){var Q=prev.fl.pts,pb=prev.fl.bounce,pe=Q.length-1;a=pb>=0&&pb<pe?dv(Q[pb],Q[pe]):dv(Q[0],Q[pe]);
+      b=dv(P[0],bi>=0?P[bi]:P[e]);if(len(a)>.05&&len(b)>.05&&ang(a,b)>1.5)kinks.push(tag+(f.hop?' 튄 공':' 안 친 공')+' '+ang(a,b).toFixed(1)+'°');}
+    prev=f;});}
+  C.forEach(function(c){scan(Court._tl.intro(c),c.id+' 도입');for(var j=0;j<3;j++)scan(Court._tl.outcome(c,j),c.id+' 보기'+j);});
+  out.push({kinks:kinks,flights:nf});
   document.body.setAttribute('data-m',JSON.stringify(out));},400);
 </script>"""
     out = run("blueprint", PRE.replace("{STATE}", "try{localStorage.removeItem('dmb-player-v2')}catch(e){}").replace("{MOCK}", "") + page + sweep, 12000)
+    path = out.pop() if out and "kinks" in out[-1] else {}
     SAY = {"✓": "정답", "△": "차선", "✕": "실수"}
     bad = [r for r in out or [] if r["err"] or not r["say"] or not r["v"].endswith(SAY.get(r["say"][0], "?"))]
     check(f"블루프린트 {len(out or [])}번 재생 — 결과 배지 = 채점", out and len(out) == len(IDS) * 3 and not bad, bad[:3])
+    check(f"공의 길 {path.get('flights', 0)}개 — 바운드에서 꺾이지 않는다",
+          path.get("flights", 0) > len(IDS) * 3 and not path.get("kinks"), (path.get("kinks") or [])[:5])
 
     shutil.rmtree(TMP, ignore_errors=True)
     print(f"웹 스모크 테스트 {'통과' if not fails else f'실패 {len(fails)}건'}")
