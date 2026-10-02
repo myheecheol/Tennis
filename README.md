@@ -9,7 +9,7 @@ reference/   프롬프트에 붙여 넣는 재료 (도메인·좌표계·예시�
 design/      ← 위 체인을 실행해서 나온 결과물
 data/        커리큘럼 인덱스 · 상황 카드 · 카메라 규격 (기계 검증 대상)
 tools/       생성기 · 검증기 · 3D 코트 기하(court3d.py) · 웹 스모크 테스트 · 검증판 기록 받기(phase1/)
-web/         play.html — 검증판 게임 (카드 120장 · 오늘의 코트 · 복습 · 전술 부수 · 기록)
+web/         play.html — 검증판 게임 (카드 120장 · 오늘의 코트 · 복습 · 두 수 앞 · 전술 부수 · 기록)
              index.html — 설계 페이지 (카드 플레이어 · 프롬프트 체인) · src/ — 두 페이지가 같이 쓰는 코트 엔진
 ```
 
@@ -54,11 +54,12 @@ bash tools/check.sh   # 전체 검증 + 생성물 갱신 + 웹 스모크 테스�
 
 `cards-index.json` 이 120장의 뼈대(역할·질문유형·난이도·선행·원칙)이고,
 `cards/*.json` 이 완성된 카드입니다. **둘은 항상 일치해야 하며 `tools/check_consistency.py` 가 검사합니다.**
+`chains.json` 은 `두 수 앞` 모드의 짝 목록 — 첫 카드 정답 장면에서 둘째 카드가 정말 이어지는 것만 (같은 검사기가 본다).
 
 카드 한 장의 구조:
 
 ```
-id · chapter · title · difficulty · prereq · myRole · phase · view(선택)
+id · chapter · title · difficulty · prereq · myRole · phase
 setup { me · partner · opp1 · opp2 }          ← 존 코드 + 정규 좌표
 setup.ball { kind · arc · from · bounce · to } ← 3D 궤적, 깊게/짧게 태그
 scene · cue · question{type, text}

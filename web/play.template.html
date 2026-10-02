@@ -27,6 +27,8 @@ html,body{min-height:100%}
 .sdots i{flex:1;height:7px;border-radius:4px;background:#DDE7CF}
 .sdots i.cur{background:var(--ink)}
 .sdots i.정답{background:var(--good)} .sdots i.차선{background:#D9A12E} .sdots i.실수{background:#D0573B}
+.sdots b{flex:none;width:7px}   /* 두 수 앞 — 짝 사이 */
+.sdots i.cut{background:repeating-linear-gradient(135deg,#C9D3BC 0 3px,#EEF3E6 3px 6px)}   /* 첫 수에서 끊긴 두 번째 수 */
 .scount{flex:none;font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 
 .screen{display:flex;flex-direction:column;gap:14px}
@@ -80,6 +82,15 @@ html,body{min-height:100%}
 .wait .cta{background:var(--optic);color:var(--night)}
 .wait .done-mark{font-family:var(--f-display);font-weight:800;color:var(--optic)}
 
+/* 두 수 앞 */
+.chain-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.chain-n{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.k-head{display:flex;align-items:center;gap:10px}
+.k-link{flex:none;display:inline-flex;align-items:center}
+.k-link i{width:11px;height:11px;border-radius:50%;background:var(--optic);box-shadow:0 0 0 2px var(--night)}
+.k-link b{width:18px;height:2px;background:var(--night)}
+.k-cta{align-self:flex-start;font-family:var(--f-display);font-weight:800;font-size:14.5px;padding:10px 16px;border-radius:12px}   /* 오늘의 코트 다음 자리 — 버튼은 한 단계 낮게 */
+
 /* 챕터 */
 .chs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 .ch{width:100%;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;padding:10px 12px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);cursor:pointer}
@@ -110,6 +121,7 @@ button.ch:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:2p
 .gs-title .kick{display:flex;gap:7px;align-items:center;font-family:var(--f-mono);font-size:12px;color:#C9D8B6}
 .gs-title .role{font-family:var(--f-display);font-weight:800;color:var(--night);background:var(--optic);padding:2px 8px;border-radius:6px}
 .gs-title .rev{font-family:var(--f-display);font-weight:800;color:var(--optic);border:1px solid rgba(228,255,61,.55);padding:1px 7px;border-radius:6px}
+.gs-title .bridge{font-family:var(--f-display);font-weight:800;font-size:14px;color:var(--optic);text-wrap:balance}
 .gs-title b{font-family:var(--f-display);font-weight:900;font-size:clamp(22px,6.2vw,30px);letter-spacing:-.02em;color:#fff;text-wrap:balance}
 .gs-title .tap,.gs-scene .tap{font-size:12px;color:#9FB38C}
 /* 상황 글 — 공이 멈춘 코트 위 가운데 */
@@ -247,6 +259,13 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
       <div id="w-act"></div>
     </div>
 
+    <div class="card" id="c-chain" hidden>
+      <div class="chain-top"><p class="eyebrow">두 수 앞</p><span class="chain-n" id="k-n"></span></div>
+      <h2 class="k-head"><span class="k-link" aria-hidden="true"><i></i><b></b><i></i></span>첫 수가 맞아야 다음 수가 와요</h2>
+      <p class="note" id="k-body"></p>
+      <button class="btn primary k-cta" data-act="chain-start">두 수 앞 시작 →</button>
+    </div>
+
     <div class="card" id="c-prog">
       <div class="prog-head">
         <span class="prog-n" id="p-n">0<small>/ 120장</small></span>
@@ -281,6 +300,7 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
         <div class="gs-dim" id="gs-dim"></div>
         <div class="gs-title" id="gs-title" aria-hidden="true">
           <span class="kick" id="gs-kick"><span class="role" id="gs-role"></span><span id="p-id"></span><span class="rev" id="gs-rev" hidden>복습</span></span>
+          <span class="bridge" id="gs-bridge" hidden></span>
           <b id="gs-name"></b>
           <span class="tap">화면을 누르면 시작해요</span>
         </div>
@@ -329,6 +349,7 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
 <script id="cam-data" type="application/json">/*CAMERAS_JSON*/</script>
 <script id="chapter-data" type="application/json">/*CHAPTERS_JSON*/</script>
 <script id="config-data" type="application/json">/*CONFIG_JSON*/</script>
+<script id="chain-data" type="application/json">/*CHAINS_JSON*/</script>
 <script>/*COURT_JS*/</script>
 <script>
 (function(){
@@ -339,6 +360,8 @@ Court.init(JSON.parse($('cam-data').textContent));
 var KEYS=Court.KEYS,optsOf=Court.optsOf,correctIdx=Court.correctIdx,esc=Court.esc;
 var BY={},ORDER=[];CARDS.forEach(function(c){BY[c.id]=c;ORDER.push(c.id);});
 var TOTAL=ORDER.length,TASTE=BY[CFG.tasteCard]?CFG.tasteCard:ORDER[ORDER.length-1];
+/* 두 수 앞 — 진짜로 이어지는 카드 짝(data/chains.json). 첫 수가 정답이어야 두 번째 수가 온다 (PRD 결정 #25) */
+var CHAINS=JSON.parse($('chain-data').textContent).pairs.filter(function(p){return BY[p[0]]&&BY[p[1]];}),CH_ROUND=3,CH_RUN=null;
 var XP={정답:10,차선:4,실수:0},IV={실수:[1,3,7,21],차선:[3,14]};
 var VERD={정답:'✓ 정답',차선:'△ 차선',실수:'✕ 실수'},MARK={정답:'✓',차선:'△',실수:'✕'};
 var RANKS=['신인부','5부','4부','3부','2부','1부'],WEEK=['일','월','화','수','목','금','토'];
@@ -355,7 +378,7 @@ function rid(){var s='';for(var i=0;i<12;i++)s+='abcdefghijklmnopqrstuvwxyz01234
 /* ═════════ 저장 — 이 브라우저에 ═════════ */
 var KEY='dmb-game-v1';
 function fresh(){return {v:1,uid:rid(),created:iso(),opens:0,onboarded:false,taste:null,cards:{},xp:0,days:[],sessions:0,
-  rank:'신인부',rankUp:null,session:null,reports:[],wait:null,ev:[]};}
+  rank:'신인부',rankUp:null,session:null,reports:[],wait:null,ev:[],pairs:{},chainRuns:0};}
 var S=(function(){try{var s=JSON.parse(localStorage.getItem(KEY)||'null');   // 예전 판에서 저장한 기록이면 없는 칸을 채운다
   if(s&&s.v===1&&s.cards){var f=fresh();for(var k in f)if(!(k in s))s[k]=f[k];return s;}}catch(e){}return fresh();})();
 if(S.session&&S.session.ids.some(function(id){return !BY[id];}))S.session=null;   // 카드가 바뀌었으면 하던 판은 버린다
@@ -403,7 +426,8 @@ var Remote={ref:null,col:null,busy:false,dirty:false,retried:false,owner:false,
 function cardDoc(r){return {f:r.f,l:r.l,n:r.n,ms:r.ms,o:r.o,at:r.at,due:r.due||null,track:r.track||null,box:r.box||0};}
 function docBody(){var cards={};Object.keys(S.cards).forEach(function(id){if(BY[id])cards[id]=cardDoc(S.cards[id]);});
   return {v:1,first:S.created,last:iso(),days:S.days.slice(-120),sessions:S.sessions,xp:S.xp,rank:S.rank,onboarded:S.onboarded,
-    taste:S.taste,cards:cards,answered:answeredIds().length,total:TOTAL,reports:S.reports.slice(-30),wait:S.wait,ev:S.ev.slice(-200)};}
+    taste:S.taste,cards:cards,answered:answeredIds().length,total:TOTAL,reports:S.reports.slice(-30),wait:S.wait,ev:S.ev.slice(-200),
+    chainRuns:S.chainRuns,pairs:S.pairs};}
 /* 다른 기기에서 푼 기록을 합친다. 이 브라우저에만 있는 기록이 있으면 true */
 function mergeRemote(d){
   if(!d||!d.cards)return answeredIds().length>0||!!S.taste;
@@ -420,6 +444,9 @@ function mergeRemote(d){
   if(d.wait&&!S.wait){S.wait=d.wait;changed=true;}else if(S.wait&&!d.wait)ahead=true;
   var seen={};S.reports.forEach(function(x){seen[x.c+x.at]=1;});(d.reports||[]).forEach(function(x){if(!seen[x.c+x.at]){S.reports.push(x);changed=true;}});
   if(S.reports.length>(d.reports||[]).length)ahead=true;
+  if((d.chainRuns||0)>S.chainRuns){S.chainRuns=d.chainRuns;changed=true;}else if(S.chainRuns>(d.chainRuns||0))ahead=true;
+  var dp=d.pairs||{};Object.keys(dp).forEach(function(k){var l=S.pairs[k];if(!l||(dp[k].at||'')>(l.at||'')){S.pairs[k]=dp[k];changed=true;}});
+  Object.keys(S.pairs).forEach(function(k){if(!dp[k]||(S.pairs[k].at||'')>(dp[k].at||''))ahead=true;});
   S.rank=rankKeep();
   if(changed){saveLocal();if(screen==='home')renderHome();}
   return ahead;
@@ -451,7 +478,7 @@ function record(id,v,o,ms,isReview){
   if(v==='정답'){if(r.track){r.box++;if(r.box>=IV[r.track].length){r.track=null;r.due=null;r.box=0;}else r.due=addDays(t,IV[r.track][r.box]);}else r.due=null;}
   else{r.track=v;r.box=0;r.due=addDays(t,IV[v][0]);}   // 간격 반복: 실수 1·3·7·21일, 차선 3·14일
   S.xp+=XP[v];markDay();
-  Log.track('answer',{c:id,v:v,o:o,ms:ms,rev:isReview?1:0,sid:S.session?S.session.sid:null});
+  Log.track('answer',{c:id,v:v,o:o,ms:ms,rev:isReview?1:0,sid:mode==='session'&&S.session?S.session.sid:null,kid:mode==='chain'&&CH_RUN?CH_RUN.kid:null});
   var rk=rankKeep();if(rk!==S.rank){S.rank=rk;S.rankUp=rk;Log.track('rank',{rank:rk});}
   if(first&&answeredIds().length===Math.min(30,TOTAL))Log.track('m30');   // Phase 1 통과 기준 ① — 30장
   if(first&&answeredIds().length===TOTAL)Log.track('complete');
@@ -507,8 +534,13 @@ function renderHome(){
   // 다 풀었을 때
   var all=done.length>=TOTAL,w=$('c-wait');w.hidden=!all;
   if(all){$('w-head').textContent=TOTAL+'장을 모두 풀었어요';
-    $('w-body').textContent='다음은 두 수 앞을 읽는 연쇄 모드와 새 상황 카드예요. 기다린다고 알려 주시면 우선순위를 정하는 데 써요.';
+    $('w-body').textContent='다음은 새 상황 카드와 10초 룰이에요. 그동안 두 수 앞으로 이어 풀어 보세요. 기다린다고 알려 주시면 우선순위를 정하는 데 써요.';
     $('w-act').innerHTML=S.wait?'<p class="done-mark">기다린다고 전했어요 ✓ 새 카드는 이 링크에 올라와요.</p>':'<button class="cta" data-act="wait">다음 카드 기다릴게요</button>';}
+  // 두 수 앞 — 첫 카드를 풀어 본 짝부터 열린다
+  var pool=chainPool();$('c-chain').hidden=!pool.length;
+  if(pool.length){var okN=pool.filter(function(q){var x=S.pairs[pairKey(q)];return x&&x.ok;}).length;
+    $('k-n').textContent='이은 짝 '+okN+' / '+pool.length;
+    $('k-body').textContent='푼 카드의 정답 장면에서 이어지는 다음 상황이에요. 첫 수가 정답이어야 두 번째 수가 와요. 한 판 '+Math.min(CH_ROUND,pool.length)+'짝 · 약 2분.';}
   // 챕터
   var rows='';CHS.forEach(function(ch,i){var ids=chIds(ch.id),d=ids.filter(function(id){return S.cards[id];}).length;
     if(ids.length)rows+='<li><button class="ch" data-act="chapter" data-ch="'+ch.id+'"><span class="n">'+(i+1)+'</span><span class="t"><b>'+esc(ch.title)+'</b><small>'+d+'/'+ids.length+'장 풀었어요'+(ids.length<ch.total?' · 나머지 '+(ch.total-ids.length)+'장은 준비 중':'')+'</small></span><span class="c go" aria-hidden="true">›</span></button></li>';
@@ -524,7 +556,10 @@ var mode=null,cur=null,pick=-1,revealed=false,shown=null,openedAt=0,repOpen=fals
 var phase='',sheetOpen=true,REDUCED=Court.reduced();
 function openCard(c,m,p,rev){
   mode=m;cur=c;pick=p;revealed=!!rev;shown=null;repOpen=false;sheetOpen=true;
-  $('gs-role').textContent=c.myRole;$('p-id').textContent=c.id;$('gs-rev').hidden=!(m==='session'&&S.session.rev[S.session.i]);
+  var tag=m==='session'&&S.session.rev[S.session.i]?'복습':m==='chain'?(CH_RUN.step?'두 번째 수':'첫 수'):'',
+      br=m==='chain'&&CH_RUN.step?'앞 수에서 이어져요':'';
+  $('gs-role').textContent=c.myRole;$('p-id').textContent=c.id;$('gs-rev').textContent=tag;$('gs-rev').hidden=!tag;
+  $('gs-bridge').textContent=br;$('gs-bridge').hidden=!br;
   $('gs-name').textContent='〈'+c.title+'〉';$('gs-scene-t').textContent='';
   showScreen('play');renderBar();
   if(p>=0){stage.show(c,{pick:p,mode:'still'},explain);return;}   // 이미 푼 카드 — 결과 장면과 해설
@@ -549,6 +584,10 @@ function renderBar(){
   if(mode==='session'){var ss=S.session;ss.ids.forEach(function(id,i){var r=ss.res[i];h+='<i class="'+(r?r.v:'')+(i===ss.i?' cur':'')+'"></i>';});
     $('scount').textContent=(ss.i+1)+' / '+ss.ids.length;x.textContent='✕';x.setAttribute('aria-label','오늘의 코트 나가기');}
   else if(mode==='taste'){$('scount').textContent='맛보기 · 1분';x.textContent='✕';x.setAttribute('aria-label','맛보기 건너뛰기');}
+  else if(mode==='chain'){var r=CH_RUN;r.pairs.forEach(function(q,k){var v=r.res[k];
+      h+=(k?'<b></b>':'')+'<i class="'+(v[0]||'')+(k===r.i&&r.step===0?' cur':'')+'"></i>'
+        +'<i class="'+(v[1]||(v[0]&&v[0]!=='정답'?'cut':''))+(k===r.i&&r.step===1?' cur':'')+'"></i>';});
+    $('scount').textContent='두 수 '+(r.i+1)+' / '+r.pairs.length;x.textContent='✕';x.setAttribute('aria-label','두 수 앞 나가기');}
   else{$('scount').textContent=cur.id+' 다시 보기';x.textContent='‹';x.setAttribute('aria-label','목록으로');}
   $('sdots').innerHTML=h;
 }
@@ -568,11 +607,16 @@ function renderDock(){
     var p=optsOf(cur)[pick],ci=correctIdx(cur),a='';
     if(mode==='session'){var last=S.session.i>=S.session.ids.length-1;a+='<button class="btn primary" data-act="'+(last?'finish':'next')+'">'+(last?'결과 보기':'다음 카드 →')+'</button>';}
     else if(mode==='taste')a+='<button class="btn primary" data-act="taste-start">시작하기 →</button>';
+    else if(mode==='chain'){var cr=CH_RUN,go=cr.step===0&&p.v==='정답',endR=cr.i>=cr.pairs.length-1;
+      a+='<button class="btn primary" data-act="chain-next">'+(go?'두 번째 수 →':endR?'결과 보기':'다음 두 수 →')+'</button>';}
     else a+='<button class="btn primary" data-act="retry">다시 풀기</button><button class="btn" data-act="back">목록으로</button>';
     if(p.v!=='정답'){var sc=shown!=null&&shown!==pick;a+='<button class="btn" data-act="scene" data-i="'+(sc?pick:ci)+'">'+(sc?'내 선택 ▶':'정답 장면 ▶')+'</button>';}
     var nx='';   // 다음에 무엇이 오는지 한 줄 — "한 판 더"를 누르게 만드는 자리
     if(mode==='session'){var ss=S.session,n=ss.ids[ss.i+1];nx=n?'다음 · <b>'+esc(BY[n].title)+'</b>':'마지막 카드였어요 — 오늘의 결과를 볼까요?';}
     else if(mode==='taste')nx='이런 상황이 <b>'+TOTAL+'개</b> 있어요 · 하루 몇 장씩';
+    else if(mode==='chain'){var kr=CH_RUN,kA=BY[kr.pairs[kr.i][0]],kn=kr.pairs[kr.i+1];
+      if(kr.step===0)nx=(p.v==='정답'?'이어서 두 번째 수 · ':'정답이어야 이어져요 · ')+'<b>'+esc(kA.next.text)+'</b>';
+      else nx=kn?'다음 두 수 · <b>'+esc(BY[kn[0]].title)+'</b>':'마지막 수였어요 — 결과를 볼까요?';}
     h=(nx?'<p class="gs-next">'+nx+'</p>':'')+'<div class="gs-acts">'+a+'</div>';
   }else{
     var on=phase==='ask'&&pick<0;
@@ -608,6 +652,7 @@ function choose(i){
   pick=i;revealed=false;
   if(mode==='taste'){S.taste={v:o.v,o:i,ms:ms,at:iso()};markDay();Log.track('taste',{c:c.id,v:o.v,o:i,ms:ms});save();}
   else if(mode==='session'){var ss=S.session;ss.res[ss.i]={id:c.id,v:o.v,o:i};ss.xp+=XP[o.v];record(c.id,o.v,i,ms,ss.rev[ss.i]);}
+  else if(mode==='chain'){var kr=CH_RUN;kr.res[kr.i][kr.step]=o.v;kr.xp+=XP[o.v];record(c.id,o.v,i,ms,!!S.cards[c.id]);}
   else record(c.id,o.v,i,ms,true);
   renderBar();setPhase('out');
   stage.show(c,{pick:i,mode:'out'},onReveal);
@@ -627,17 +672,55 @@ function finishSession(){
   S.sessions++;Log.track('session_end',{sid:ss.sid,n:ss.res.length,g:cnt.정답,s:cnt.차선,m:cnt.실수});
   lastSum={cnt:cnt,xp:ss.xp,res:ss.res.slice()};S.session=null;save();renderDone();showScreen('done');
 }
+/* ── 두 수 앞 한 판 — 짝 셋. 첫 수가 정답이면 두 번째 수, 아니면 다음 짝 ── */
+function pairKey(q){return q[0]+'>'+q[1];}
+function chainPool(){return CHAINS.filter(function(q){return S.cards[q[0]];});}   // 첫 카드를 풀어 본 짝
+function chainPick(){   // 아직 못 이은 짝 → 오래전에 한 짝 → 커리큘럼 순. 한 판에 같은 카드는 한 번만
+  var pool=chainPool().sort(function(a,b){var x=S.pairs[pairKey(a)]||{},y=S.pairs[pairKey(b)]||{},xo=x.ok?1:0,yo=y.ok?1:0;
+    if(xo!==yo)return xo-yo;var xa=x.at||'',ya=y.at||'';if(xa!==ya)return xa<ya?-1:1;return ORDER.indexOf(a[0])-ORDER.indexOf(b[0]);});
+  var used={},out=[];pool.forEach(function(q){if(out.length<CH_ROUND&&!used[q[0]]&&!used[q[1]]){out.push(q);used[q[0]]=used[q[1]]=1;}});
+  return out;
+}
+function startChain(){
+  var ps=chainPick();if(!ps.length)return goHome();
+  CH_RUN={kid:'k'+Date.now().toString(36),pairs:ps,i:0,step:0,res:ps.map(function(){return [null,null];}),xp:0};
+  Log.track('chain_start',{kid:CH_RUN.kid,n:ps.length});openChainCard();
+}
+function openChainCard(){var r=CH_RUN;openCard(BY[r.pairs[r.i][r.step]],'chain',-1,false);}
+function chainNext(){
+  var r=CH_RUN;if(!r)return goHome();
+  if(r.step===0&&r.res[r.i][0]==='정답'){r.step=1;return openChainCard();}
+  var q=r.pairs[r.i],v=r.res[r.i],k=pairKey(q),x=S.pairs[k]||(S.pairs[k]={n:0,ok:0,at:null});
+  x.n++;if(v[0]==='정답'&&v[1]==='정답')x.ok++;x.at=iso();
+  if(r.i<r.pairs.length-1){r.i++;r.step=0;saveLocal();return openChainCard();}
+  var ok=r.res.filter(function(v2){return v2[0]==='정답'&&v2[1]==='정답';}).length;
+  S.chainRuns++;Log.track('chain_end',{kid:r.kid,n:r.pairs.length,ok:ok});
+  lastSum={kind:'chain',run:r,ok:ok,xp:r.xp};CH_RUN=null;save();renderDone();showScreen('done');
+}
+function rankUpNote(){var rk=$('d-rank');
+  if(S.rankUp){var rs=RANK_SAY[RANKS.indexOf(S.rankUp)]||'';
+    rk.innerHTML='<b>전술 부수 '+esc(S.rankUp)+'가 됐어요</b><span>'+esc(rs)+(rs?'. ':'')+'전술 부수는 이 앱 안의 등급이에요 — 동호회 부수와는 달라요.</span>';rk.hidden=false;S.rankUp=null;saveLocal();}
+  else rk.hidden=true;}
+function renderChainDone(sm){
+  var r=sm.run,n=r.pairs.length,pick=null;
+  $('d-eye').textContent='두 수 앞';$('d-head').textContent=sm.ok===n?'두 수를 모두 이었어요!':'두 수 앞 끝!';
+  $('d-tally').innerHTML='<span class="정답">✓ 이은 짝 '+sm.ok+'</span><span class="실수">✕ 끊긴 짝 '+(n-sm.ok)+'</span>';
+  $('d-xp').textContent='경험치 +'+sm.xp+' · 모두 '+S.xp;
+  r.res.forEach(function(v,k){if(pick)return;if(v[0]!=='정답')pick=r.pairs[k][0];else if(v[1]!=='정답')pick=r.pairs[k][1];});   // 처음 끊긴 수의 한 줄
+  var c=BY[pick||r.pairs[n-1][1]];$('d-coach').textContent='“'+c.coachLine+'”';$('d-from').textContent=c.id+' · '+c.title;
+  rankUpNote();
+  $('d-acts').innerHTML=(chainPick().length?'<button class="cta" data-act="chain-start">한 판 더</button>':'')+'<button class="btn" data-act="home">홈으로</button>';
+}
 function renderDone(){
   var sm=lastSum,cnt=sm.cnt;
+  if(sm.kind==='chain')return renderChainDone(sm);
+  $('d-eye').textContent='오늘의 코트';
   $('d-head').textContent=newIds(1).length?'오늘의 코트 끝!':TOTAL+'장을 모두 풀었어요!';
   $('d-tally').innerHTML='<span class="정답">✓ 성공 '+cnt.정답+'</span><span class="차선">△ 아쉬움 '+cnt.차선+'</span><span class="실수">✕ 실패 '+cnt.실수+'</span>';
   $('d-xp').textContent='경험치 +'+sm.xp+' · 모두 '+S.xp;
   var pr=null;sm.res.forEach(function(r){if(!pr&&r.v!=='정답')pr=r;});if(!pr)pr=sm.res[sm.res.length-1];
   var c=BY[pr.id];$('d-coach').textContent='“'+c.coachLine+'”';$('d-from').textContent=c.id+' · '+c.title;
-  var rk=$('d-rank');
-  if(S.rankUp){var rs=RANK_SAY[RANKS.indexOf(S.rankUp)]||'';
-    rk.innerHTML='<b>전술 부수 '+esc(S.rankUp)+'가 됐어요</b><span>'+esc(rs)+(rs?'. ':'')+'전술 부수는 이 앱 안의 등급이에요 — 동호회 부수와는 달라요.</span>';rk.hidden=false;S.rankUp=null;saveLocal();}
-  else rk.hidden=true;
+  rankUpNote();
   $('d-acts').innerHTML=(newIds(1).length||dueIds(1).length?'<button class="cta" data-act="more">한 판 더</button>':'')+'<button class="btn" data-act="home">홈으로</button>';
 }
 
@@ -666,9 +749,10 @@ function renderStats(ps){
       wait=ps.filter(function(p){return p.wait;}).length,reps=0,tasted=ps.filter(function(p){return p.taste;}).length;
   ps.forEach(function(p){reps+=(p.reports||[]).length;});
   var d7=st.filter(function(p){var ds=p.days||[],f=ds[0];return f&&ds.some(function(x){return x>=addDays(f,7);});}).length;
-  var rate=st.length?Math.round(m30.length/st.length*100):0,more=st.filter(function(p){return p.answered>Math.min(30,TOTAL);}).length;
+  var rate=st.length?Math.round(m30.length/st.length*100):0,more=st.filter(function(p){return p.answered>Math.min(30,TOTAL);}).length,
+      chainers=ps.filter(function(p){return (p.chainRuns||0)>0;}).length;
   var h='<div class="kpis">'+kpi(tasted,'맛보기를 푼 사람')+kpi(st.length,'오늘의 코트를 시작한 사람')+kpi(rate+'%','30장까지 푼 사람 · 목표 60%',st.length&&rate>=60)
-      +kpi(more,'30장 넘게 계속 푼 사람 · 목표 3명',more>=3)+kpi(fin.length,TOTAL+'장 완주')+kpi(wait,'다음 카드 기다림')+kpi(d7,'7일 뒤에도 온 사람')+kpi(reps,'이 카드 이상해요')+'</div>';
+      +kpi(more,'30장 넘게 계속 푼 사람 · 목표 3명',more>=3)+kpi(fin.length,TOTAL+'장 완주')+kpi(wait,'다음 카드 기다림')+kpi(chainers,'두 수 앞을 해 본 사람')+kpi(d7,'7일 뒤에도 온 사람')+kpi(reps,'이 카드 이상해요')+'</div>';
   h+='<div class="card"><h2>카드별 첫 선택</h2><p class="klegend"><span><i style="background:var(--good)"></i>정답</span><span><i style="background:#D9A12E"></i>차선</span><span><i style="background:#D0573B"></i>실수</span><span>오른쪽: 정답률 · 신고</span></p><div class="klist">';
   ORDER.forEach(function(id){var n=0,g=0,s=0,m=0,rp=0;
     ps.forEach(function(p){var r=p.cards&&p.cards[id];if(r){n++;if(r.f==='정답')g++;else if(r.f==='차선')s++;else m++;}(p.reports||[]).forEach(function(x){if(x.c===id)rp++;});});
@@ -696,8 +780,11 @@ document.addEventListener('click',function(e){
   if(a==='exit'){
     if(mode==='session'){Log.track('exit',{sid:S.session.sid,i:S.session.i});saveLocal();return goHome();}
     if(mode==='taste'){S.onboarded=true;Log.track('taste_skip');save();return goHome();}
+    if(mode==='chain'){Log.track('chain_exit',{kid:CH_RUN.kid,i:CH_RUN.i});CH_RUN=null;saveLocal();return goHome();}
     return openChapter(backCh);}
   if(a==='taste-start'){S.onboarded=true;Log.track('onboarded');saveLocal();return startSession();}
+  if(a==='chain-start')return startChain();
+  if(a==='chain-next')return chainNext();
   if(a==='chapter')return openChapter(t.getAttribute('data-ch'));
   if(a==='open')return openReview(t.getAttribute('data-card'));
   if(a==='retry')return openCard(cur,'review',-1,false);

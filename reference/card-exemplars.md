@@ -258,24 +258,14 @@
         "by": "me",
         "arc": "normal",
         "bounce": [
-          0.2,
-          0.07
+          0.24,
+          0.08
         ],
         "to": [
-          0.16,
-          0.01
-        ]
-      },
-      {
-        "by": "opp1",
-        "arc": "high",
-        "to": "partner"
-      },
-      {
-        "by": "partner",
-        "arc": "volley",
-        "bounce": "E-CN",
-        "winner": true
+          0.18,
+          -0.03
+        ],
+        "reach": "opp1"
       }
     ]
   },

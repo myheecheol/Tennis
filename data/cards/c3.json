@@ -2453,8 +2453,7 @@
           {
             "by": "partner",
             "arc": "volley",
-            "bounce": "E-RM",
-            "winner": true
+            "to": "opp1"
           }
         ]
       },

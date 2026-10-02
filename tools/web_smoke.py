@@ -48,7 +48,8 @@ function vis(){var r=[];['home','play','done','chapter','stats'].forEach(functio
 function snap(tag){var say=q('#p-say'),t=q('#toast');
   var cap=q('#gs-cap');
   LOG.push({tag:tag,screen:vis(),count:q('#bar-play').hidden?'':q('#scount').textContent,dots:document.querySelectorAll('#sdots i').length,
-    phase:q('#gs').getAttribute('data-phase'),cap:cap.hidden?null:cap.textContent,rev:!q('#gs-rev').hidden,sheet:!q('#p-verdict').hidden,
+    phase:q('#gs').getAttribute('data-phase'),cap:cap.hidden?null:cap.textContent,rev:!q('#gs-rev').hidden,badge:q('#gs-rev').hidden?null:q('#gs-rev').textContent,
+    bridge:q('#gs-bridge').hidden?null:q('#gs-bridge').textContent,chain:q('#c-chain').hidden?null:q('#k-n').textContent,sheet:!q('#p-verdict').hidden,
     title:q('#gs-name').textContent,scene:q('#gs-scene-t').textContent,dock:q('#gs-dock').textContent.slice(0,90),
     head:q('#t-head').textContent,say:say.hidden?null:say.textContent,prog:q('#p-n').textContent,rank:q('#bar-rank-t').textContent,
     rankup:q('#d-rank').hidden?null:q('#d-rank').textContent,tally:q('#s-done').hidden?null:q('#d-tally').textContent,
@@ -200,6 +201,25 @@ def main():
     h, w = last(log, "home"), last(log, "waited")
     check("다 푼 사람 — 기다림 카드", h and h["wait"] and h["prog"].startswith(f"{len(IDS)}/"), h)
     check("다음 카드 기다릴게요 → 안내", w and w["toast"] and "전했어요" in w["toast"], w)
+
+    # 4b) 두 수 앞 — 첫 수가 정답이면 두 번째 수, 아니면 다음 짝 (PRD 결정 #25)
+    log = game("chain", [[150, "g.snap('k0')"], [150, "g.click('[data-act=chain-start]')"], [150, "g.snap('a1')"],
+                         [150, "g.pick()"], [150, "g.click('[data-act=explain]')"], [150, "g.snap('a1v')"],
+                         [150, "g.click('[data-act=chain-next]')"], [150, "g.snap('b1')"],
+                         [150, "g.pick()"], [150, "g.click('[data-act=explain]')"], [150, "g.click('[data-act=chain-next]')"],
+                         [150, "g.snap('a2')"], [150, "g.pick('실수')"], [150, "g.click('[data-act=explain]')"], [150, "g.snap('a2v')"],
+                         [150, "g.click('[data-act=chain-next]')"], [200, "g.snap('done')"], [150, "g.click('[data-act=home]')"],
+                         [150, "g.snap('home2')"]],
+               state([(cid, "정답", None) for cid in IDS[:5]]))
+    h, a1, a1v, b1, a2v, d, h2 = (last(log, t) for t in ("k0", "a1", "a1v", "b1", "a2v", "done", "home2"))
+    check("두 수 앞 — 첫 카드를 푼 짝이 홈에 열린다", h and h["chain"] == "이은 짝 0 / 2", h)
+    check("첫 수 → 정답이면 '두 번째 수 →'", a1 and a1["badge"] == "첫 수" and a1["count"] == "두 수 1 / 2" and a1["dots"] == 4
+          and a1v and "두 번째 수 →" in a1v["dock"], (a1, a1v))
+    check("두 번째 수는 앞 수에서 이어진다", b1 and b1["badge"] == "두 번째 수" and b1["bridge"] == "앞 수에서 이어져요"
+          and b1["title"] == "〈서브 후, 남을까요 나갈까요〉", b1)
+    check("첫 수가 실수면 끊긴다 → 결과 보기", a2v and "정답이어야 이어져요" in a2v["dock"] and "결과 보기" in a2v["dock"], a2v)
+    check("두 수 앞 결과 — 이은 짝 1 · 끊긴 짝 1", d and d["tally"] == "✓ 이은 짝 1✕ 끊긴 짝 1" and not d["err"], d)
+    check("이은 짝이 홈에 남는다", h2 and h2["chain"] and h2["chain"].startswith("이은 짝 1 /"), h2)
 
     # 5) claude.ai 저장소 (가짜)
     log = game("db", [[300, "g.snap('home')"], [150, "g.click('#t-cta')"], [150, "g.pick('차선')"], [300, "g.snap('answered')"],
