@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """페이지를 만든다. 공용 엔진(web/src/court.js · court.css)과 검증된 카드 · 카메라 규격을 각 템플릿에 넣는다.
    index.html — 블루프린트 페이지 (prompts/*.md 의 ```text 블록도 함께)
-   play.html  — Phase 1 검증판 게임 (챕터 정보 · 두 수 앞 짝 · play.config.json 설정도 함께)"""
-import json, re, pathlib
+   play.html  — Phase 1 검증판 게임 (챕터 정보 · 두 수 앞 짝 · 실전 모드의 희철 그림 · play.config.json 설정도 함께)"""
+import base64, json, re, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PROMPTS, WEB = ROOT / "prompts", ROOT / "web"
@@ -105,9 +105,12 @@ chapters = [{"id": ch["id"], "title": ch["title"], "goal": ch["goal"], "free": c
              "total": sum(1 for c in index["cards"] if c["chapter"] == ch["id"])} for ch in index["chapters"]]
 config = json.loads((WEB / "play.config.json").read_text(encoding="utf-8"))
 chains = json.loads((ROOT / "data" / "chains.json").read_text(encoding="utf-8"))
+# 실전 모드의 상대 희철 — 사용자가 준 캐릭터 시트에서 오린 얼굴 여섯 · 전신 (web/assets/heechul/*.jpg)
+heechul = {f.stem: "data:image/jpeg;base64," + base64.b64encode(f.read_bytes()).decode("ascii")
+           for f in sorted((WEB / "assets" / "heechul").glob("*.jpg"))}
 play = page("play.template.html", "play.html",
             (("CARDS_JSON", cards), ("CAMERAS_JSON", cams), ("CHAPTERS_JSON", chapters), ("CONFIG_JSON", config),
-             ("CHAINS_JSON", {"pairs": chains["pairs"]})))
+             ("CHAINS_JSON", {"pairs": chains["pairs"]}), ("HEECHUL_JSON", heechul)))
 print(f"play.html   {len(play):,} bytes  (검증판 · 카드 {len(cards)}장 · 두 수 앞 {len(chains['pairs'])}짝 · 기록 주소 {'있음' if config.get('endpoint') else '없음'})")
 print(f"  카드 {len(cards)}장  {cards[0]['id']} … {cards[-1]['id']}")
 for s in steps:

@@ -44,12 +44,15 @@ PRE = ('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" c
 GAME_PROBE = r"""<script>
 (function(){
 var LOG=[];function q(s){return document.querySelector(s);}
-function vis(){var r=[];['home','play','done','chapter','stats'].forEach(function(n){var el=q('#s-'+n);if(el&&!el.hidden)r.push(n);});return r.join(',');}
+function vis(){var r=[];['home','play','done','chapter','stats','match'].forEach(function(n){var el=q('#s-'+n);if(el&&!el.hidden)r.push(n);});return r.join(',');}
 function snap(tag){var say=q('#p-say'),t=q('#toast');
   var cap=q('#gs-cap');
   LOG.push({tag:tag,screen:vis(),count:q('#bar-play').hidden?'':q('#scount').textContent,dots:document.querySelectorAll('#sdots i').length,
     phase:q('#gs').getAttribute('data-phase'),cap:cap.hidden?null:cap.textContent,rev:!q('#gs-rev').hidden,badge:q('#gs-rev').hidden?null:q('#gs-rev').textContent,
     bridge:q('#gs-bridge').hidden?null:q('#gs-bridge').textContent,chain:q('#c-chain').hidden?null:q('#k-n').textContent,sheet:!q('#p-verdict').hidden,
+    score:q('#mscore').hidden?null:q('#mscore').getAttribute('aria-label'),clock:q('#gs-clock').hidden?null:q('#gs-clock').textContent,
+    mrec:q('#m-rec').textContent,dhead:q('#s-done').hidden?null:q('#d-head').textContent,dxp:q('#s-done').hidden?null:q('#d-xp').textContent,hc:q('#d-hc').hidden?null:q('#d-hc').textContent,reps:q('.rlist')?q('.rlist').textContent:null,
+    lvs:[].map.call(document.querySelectorAll('#ml-lv [aria-pressed=true]'),function(b){return b.getAttribute('data-lv');}).join(','),
     title:q('#gs-name').textContent,scene:q('#gs-scene-t').textContent,dock:q('#gs-dock').textContent.slice(0,90),
     head:q('#t-head').textContent,say:say.hidden?null:say.textContent,prog:q('#p-n').textContent,rank:q('#bar-rank-t').textContent,
     rankup:q('#d-rank').hidden?null:q('#d-rank').textContent,tally:q('#s-done').hidden?null:q('#d-tally').textContent,
@@ -221,14 +224,51 @@ def main():
     check("두 수 앞 결과 — 이은 짝 1 · 끊긴 짝 1", d and d["tally"] == "✓ 이은 짝 1✕ 끊긴 짝 1" and not d["err"], d)
     check("이은 짝이 홈에 남는다", h2 and h2["chain"] and h2["chain"].startswith("이은 짝 1 /"), h2)
 
+    # 4c) 실전 모드 — 희철과 한 게임 (10초 룰 + 랠리, PRD 결정 #26)
+    WIN = "for(var k=0;k<20;k++){if(!g.q('#s-done').hidden)break;g.pick('정답');g.click('[data-act=match-next]');}"
+    LOSE = "for(var k=0;k<20;k++){if(!g.q('#s-done').hidden)break;g.pick('실수');g.click('[data-act=match-next]');}"
+    log = game("match", [[150, "g.snap('h0')"], [150, "g.click('[data-act=match-open]')"], [150, "g.snap('lobby')"],
+                         [150, "g.click('[data-act=match-lv][data-lv=\"1\"]')"], [150, "g.snap('lv')"],
+                         [150, "g.click('[data-act=match-start]')"], [150, "g.snap('ask')"], [150, "g.pick('차선')"], [150, "g.snap('edge')"],
+                         [150, "g.click('[data-act=match-next]')"], [150, WIN], [200, "g.snap('won')"],
+                         [150, "g.click('[data-act=match-start]')"], [150, LOSE], [200, "g.snap('lost')"],
+                         [150, "g.click('[data-act=home]')"], [150, "g.snap('h1')"]],
+               state([(cid, "정답", None) for cid in IDS[:5]]))
+    h0, lb, lv, ak, ed, wn, ls, h1 = (last(log, t) for t in ("h0", "lobby", "lv", "ask", "edge", "won", "lost", "h1"))
+    check("실전 모드 — 처음부터 홈에 있다 · 희철 로비", h0 and h0["mrec"] == "첫 경기" and lb and lb["screen"] == "match" and lb["lvs"] == "5", (h0, lb))
+    check("희철 실력 고르기 — 1부(120장)", lv and lv["lvs"] == "1", lv)
+    check("경기 — 제목 없이 질문까지 · 10초 시계 · 점수판", ak and ak["phase"] == "ask" and ak["clock"] == "10" and ak["score"] == "나 0, 희철 0"
+          and ak["cap"] and len(ak["cap"]) > 10, ak)
+    check("차선 — 랠리가 이어지고 희철이 한 발 앞선다", ed and ed["phase"] == "result" and "희철이 한 발 앞서요" in ed["dock"] and "다음 공" in ed["dock"], ed)
+    check("다 맞히면 희철을 이긴다", wn and wn["screen"] == "done" and wn["dhead"] == "희철을 이겼어요!"
+          and wn["hc"] and "제가 졌어요" in wn["hc"] and not wn["err"], wn)
+    check("다 틀리면 희철에게 진다 — 포인트 0 : 4", ls and ls["dhead"] == "희철에게 졌어요" and ls["hc"] and "다시 붙어요" in ls["hc"]
+          and "포인트 0 : 4" in (ls["dxp"] or ""), ls)
+    check("희철 상대 전적이 홈에 남는다", h1 and h1["mrec"] == "1승 1패", h1)
+    log = game("match10", [[150, "g.click('[data-act=match-open]')"], [150, "g.click('[data-act=match-start]')"],
+                           [5000, "g.snap('t5')"], [5600, "g.snap('to')"], [150, "g.click('[data-act=explain]')"], [150, "g.snap('tv')"]],
+               state([(cid, "정답", None) for cid in IDS[:5]]), budget=30000)
+    t5, to, tv = last(log, "t5"), last(log, "to"), last(log, "tv")
+    check("10초 — 시계가 줄어든다", t5 and t5["clock"] in ("6", "5", "4"), t5)
+    check("10초가 지나면 시간 초과 — 희철 포인트", to and to["say"] and "시간 초과" in to["say"] and to["score"] == "나 0, 희철 15"
+          and "포인트 — 희철" in to["dock"], to)
+    check("시간 초과 해설 — 정답 장면과 이유", tv and tv["sheet"] and not tv["err"], tv)
+    log = game("taste2match", [[150, "g.opt(1)"], [150, "g.tap()"], [150, "g.click('[data-act=taste-match]')"], [150, "g.snap('lb')"]])
+    tm = last(log, "lb")
+    check("처음 온 사람 — 맛보기 뒤 '희철과 실전 →'", tm and tm["screen"] == "match" and not tm["err"], tm)
+
     # 5) claude.ai 저장소 (가짜)
     log = game("db", [[300, "g.snap('home')"], [150, "g.click('#t-cta')"], [150, "g.pick('차선')"], [300, "g.snap('answered')"],
+                      [150, "g.click('[data-act=explain]')"], [150, "g.click('[data-act=report]')"],
+                      [150, "g.q('#rep-note').value='리시버가 늦으면 B 도 맞아요'"], [150, "g.click('#rep-form [type=submit]')"],
                       [150, "g.click('#b-x')"], [150, "g.click('[data-act=stats]')"], [400, "g.snap('stats')"]],
                state([(cid, "정답", None) for cid in IDS[:5]]), mock=DB_MOCK)
     h, a, s = last(log, "home"), last(log, "answered"), last(log, "stats")
     check("저장소 — 불러온 뒤 한 번 동기화, 만든 사람 링크", h and h["writes"] == 1 and h["owner"], h)
     check("저장소 — 답할 때마다 쓴다", a and a["writes"] >= 3, a)
     check("검증 지표 — 참여자 두 명 집계", s and s["stats"] and s["stats"].startswith("2맛보기") and not s["err"], s)
+    check("감수 메모 — 신고에 적은 한 줄이 검증 지표에 모인다", s and s["reps"] and "리시버가 늦으면 B 도 맞아요" in s["reps"]
+          and "그림이 헷갈려요" in s["reps"], s and s["reps"])
 
     # 6) 기록 주소 (가짜 fetch)
     log = game("http", [[150, "g.opt(1)"], [150, "g.tap()"], [150, "g.click('[data-act=taste-start]')"],

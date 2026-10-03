@@ -3,5 +3,6 @@
   "endpoint": "",
   "newPerSession": 5,
   "reviewPerSession": 3,
-  "tasteCard": "C1-24"
+  "tasteCard": "C1-24",
+  "matchSeconds": 10
 }
