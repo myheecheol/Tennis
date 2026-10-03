@@ -188,7 +188,8 @@ v13 부터 참여자가 정한 **닉네임**(8자까지)을 함께 남긴다 —
 
 ### B. 공개 배포 — GitHub Pages + Firebase (v13 · PRD #29)
 
-화면은 **GitHub Pages**(`https://myheecheol.github.io/Tennis/`), 기록은 **Firebase**(Firestore + 익명 로그인)로 받는다.
+화면은 **GitHub Pages**(`https://myheecheol.github.io/tennis/`), 기록은 **Firebase**(Firestore + 익명 로그인)로 받는다.
+주소의 `tennis` 는 저장소 이름이다 — 대소문자까지 그대로 쓰여서, 저장소 이름을 `Tennis` → `tennis` 로 바꿔 소문자 주소로 옮겼다(옛 `/Tennis/` 는 열리지 않는다).
 claude.ai 저장소와 같은 모양 — 참여자마다 문서 하나(`players/<uid>`) — 이라 게임 쪽은 저장소 연결만 다르고, 검증 지표 화면도 그대로 쓴다.
 
 | | 참여자 | 만든 사람 |

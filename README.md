@@ -16,7 +16,7 @@ firebase/    firestore.rules — 공개 배포의 기록(Firestore) 권한: 참�
 ```
 
 **게임 해 보기** → <https://claude.ai/artifact/8UWWX27bebLhTStCb9W59p> (Phase 1 검증판 · 운영법은 `design/08-phase1.md`)
-· 공개 배포: <https://myheecheol.github.io/Tennis/> (GitHub Pages + Firebase — `design/08-phase1.md` §4B, Pages 를 켜면 열린다)
+· 공개 배포: <https://myheecheol.github.io/tennis/> (GitHub Pages + Firebase — `design/08-phase1.md` §4B)
 
 ---
 
