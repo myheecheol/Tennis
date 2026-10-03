@@ -833,14 +833,14 @@ function renderDock(){
     var p=optsOf(cur)[pick],ci=correctIdx(cur),a='';
     if(mode==='session'){var last=S.session.i>=S.session.ids.length-1;a+='<button class="btn primary" data-act="'+(last?'finish':'next')+'">'+(last?'결과 보기':'다음 카드 →')+'</button>';}
     else if(mode==='mreview')a+='<button class="btn primary" data-act="mback">경기 결과로</button>';
-    else if(mode==='taste')a+='<button class="btn primary" data-act="taste-start">오늘의 코트 시작 →</button><button class="btn" data-act="taste-match">'+esc(jo(OPN,'과','와'))+' 실전 →</button>';
+    else if(mode==='taste')a+='<button class="btn primary" data-act="taste-home">메인 화면으로 →</button>';   // 튜토리얼 뒤에는 바로 시작하지 않고 메인에서 고른다
     else if(mode==='chain'){var cr=CH_RUN,go=cr.step===0&&p.v==='정답',endR=cr.i>=cr.pairs.length-1;
       a+='<button class="btn primary" data-act="chain-next">'+(go?'두 번째 수 →':endR?'결과 보기':'다음 랠리 →')+'</button>';}
     else a+='<button class="btn primary" data-act="retry">다시 풀기</button><button class="btn" data-act="back">목록으로</button>';
     if(p.v!=='정답'&&!(mode==='mreview'&&timedOut)){var sc=shown!=null&&shown!==pick;a+='<button class="btn" data-act="scene" data-i="'+(sc?pick:ci)+'">'+(sc?'내 선택 ▶':'정답 장면 ▶')+'</button>';}
     var nx='';   // 다음에 무엇이 오는지 한 줄 — "한 판 더"를 누르게 만드는 자리
     if(mode==='session'){var ss=S.session,n=ss.ids[ss.i+1];nx=n?'다음 · <b>'+esc(BY[n].title)+'</b>':'마지막 카드였어요 — 오늘의 결과를 볼까요?';}
-    else if(mode==='taste')nx='<span class="tut">튜토리얼 끝!</span> 이런 상황이 <b>'+TOTAL+'개</b> 있어요';
+    else if(mode==='taste')nx='<span class="tut">튜토리얼 끝!</span> 메인 화면에서 오늘의 코트 · 실전을 골라요';
     else if(mode==='chain'){var kr=CH_RUN,kA=BY[kr.pairs[kr.i][0]],kn=kr.pairs[kr.i+1];
       if(kr.step===0)nx=(p.v==='정답'?'이어서 두 번째 수 · ':'정답이어야 이어져요 · ')+'<b>'+esc(kA.next.text)+'</b>';
       else nx=kn?'다음 랠리 · <b>'+esc(BY[kn[0]].title)+'</b>':'마지막 수였어요 — 결과를 볼까요?';}
@@ -1162,7 +1162,8 @@ document.addEventListener('click',function(e){
     if(mode==='match'){tmStop();stopAuto();if(M)Log.track('match_exit',{mid:M.mid,s:M.pts.join(':'),n:M.log.length});M=null;saveLocal();return goHome();}
     if(mode==='mreview'){timedOut=false;renderDone();return showScreen('done');}
     return openChapter(backCh);}
-  if(a==='taste-start'){S.onboarded=true;Log.track('onboarded');saveLocal();return startSession();}
+  if(a==='taste-home'){S.onboarded=true;Log.track('onboarded',{to:'home'});save();goHome();try{window.scrollTo(0,0);}catch(err){}
+    return toast('튜토리얼 끝! 여기가 메인 화면이에요.');}
   if(a==='match-open'){stopAuto();return openMatch();}
   if(a==='mreview')return openMatchReview(+t.getAttribute('data-i'));
   if(a==='mback'){timedOut=false;renderDone();return showScreen('done');}
@@ -1171,7 +1172,6 @@ document.addEventListener('click',function(e){
   if(a==='match-lv'){S.match.lv=t.getAttribute('data-lv');saveLocal();return renderMatch();}
   if(a==='match-start')return startMatch();
   if(a==='match-next')return matchNext();
-  if(a==='taste-match'){S.onboarded=true;Log.track('onboarded',{to:'match'});saveLocal();return openMatch();}
   if(a==='chain-start')return startChain();
   if(a==='chain-next')return chainNext();
   if(a==='chapter')return openChapter(t.getAttribute('data-ch'));

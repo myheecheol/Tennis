@@ -217,10 +217,11 @@ def main():
     # 1) 처음 온 사람 — 닉네임을 묻고, 첫 카드는 튜토리얼
     log = game("new", [[150, "g.snap('hello')"], [150, "g.click('#nick-go')"], [150, "g.snap('empty')"], [150, "g.nick('희철')"],
                        [150, "g.snap('t0')"], [150, "g.ask()"], [150, "g.snap('ask')"], [150, "g.opt(0)"], [150, "g.snap('result')"],
-                       [150, "g.tap()"], [150, "g.snap('taste')"], [150, "g.click('[data-act=taste-start]')"], [150, "g.snap('s1')"]] + NEXT * 4 +
+                       [150, "g.tap()"], [150, "g.snap('taste')"], [150, "g.click('[data-act=taste-home]')"], [150, "g.snap('main')"],
+                       [150, "g.click('#t-cta')"], [150, "g.snap('s1')"]] + NEXT * 4 +
                [[120, "g.pick('실수')"], [120, "g.tap()"], [120, "g.click('[data-act=finish]')"], [150, "g.snap('done')"],
                 [150, "g.click('[data-act=home]')"], [150, "g.snap('home')"]])
-    hl, em, s0, a, r, t, s1, d, h = (last(log, k) for k in ("hello", "empty", "t0", "ask", "result", "taste", "s1", "done", "home"))
+    hl, em, s0, a, r, t, mn, s1, d, h = (last(log, k) for k in ("hello", "empty", "t0", "ask", "result", "taste", "main", "s1", "done", "home"))
     c24 = next(c for c in CARDS if c["id"] == "C1-24")
     check("처음 온 사람은 닉네임부터 — '반가워요!' · 튜토리얼 시작 →", hl and hl["screen"] == "hello" and "반가워요" in (hl["hl"] or "")
           and "튜토리얼 시작 →" in (hl["hl"] or ""), hl)
@@ -233,7 +234,10 @@ def main():
           and not r["sheet"] and "해설 보기" in r["dock"] and "튜토리얼 4/4" in r["dock"], r)
     check("코트를 누르면 해설 시트 — '튜토리얼 끝이에요, 희철님'", t and t["phase"] == "verdict" and t["sheet"]
           and "튜토리얼 끝이에요, 희철님" in (t["tut"] or ""), t)
-    check("시작하기 → 오늘의 코트 5장", s1 and s1["count"] == "1 / 5" and s1["dots"] == 5, s1)
+    check("튜토리얼 끝 — '메인 화면으로 →' 하나, 바로 시작하지 않고 메인 화면으로", t and "메인 화면으로 →" in t["dock"]
+          and "실전 →" not in t["dock"] and "오늘의 코트 시작" not in t["dock"] and mn and mn["screen"] == "home"
+          and "메인 화면" in (mn["toast"] or "") and mn["prog"].startswith("0/") and not mn["err"], (t and t["dock"], mn))
+    check("메인 화면에서 시작하기 → 오늘의 코트 5장", s1 and s1["count"] == "1 / 5" and s1["dots"] == 5, s1)
     check("한 판 결과 — 성공 4 · 실패 1", d and d["screen"] == "done" and "성공 4" in d["tally"] and "실패 1" in d["tally"], d)
     check("홈 진도 5장 · 닉네임", h and h["prog"].startswith("5/") and h["nick"] == "희철", h)
     check("오류 없음 (처음 온 사람)", h and not h["err"], h and h["err"])
@@ -379,9 +383,10 @@ def main():
     bk, lt = last(log, "back"), last(log, "later")
     check("숨은 동안 저절로 넘어온 질문 — 돌아온 뒤부터 10초", bk and bk["phase"] == "ask" and bk["clock"] == "10" and lt
           and lt["clock"] in ("8", "7", "6") and not (lt["say"] or "").startswith("⏱"), (bk, lt))
-    log = game("taste2match", [[150, "g.opt(1)"], [150, "g.tap()"], [150, "g.click('[data-act=taste-match]')"], [150, "g.snap('lb')"]], NEWBIE)
+    log = game("taste2match", [[150, "g.opt(1)"], [150, "g.tap()"], [150, "g.click('[data-act=taste-home]')"],
+                               [150, "g.click('[data-act=match-open]')"], [150, "g.snap('lb')"]], NEWBIE)
     tm = last(log, "lb")
-    check("처음 온 사람 — 튜토리얼 뒤 '츄어리와 실전 →'", tm and tm["screen"] == "match" and not tm["err"], tm)
+    check("처음 온 사람 — 튜토리얼 뒤 메인 화면에서 츄어리와 실전으로", tm and tm["screen"] == "match" and not tm["err"], tm)
 
     # 5) claude.ai 저장소 (가짜)
     log = game("db", [[300, "g.snap('home')"], [150, "g.click('#t-cta')"], [150, "g.pick('차선')"], [300, "g.snap('answered')"],
@@ -403,7 +408,7 @@ def main():
     check("기기 오류 — 이벤트로 남고 검증 지표에 '기기 오류 1'", s and s["errs"] == "기기 오류 1", s and (s["errs"], s["err"]))
 
     # 6) 기록 주소 (가짜 fetch)
-    log = game("http", [[150, "g.nick('희철')"], [150, "g.opt(1)"], [150, "g.tap()"], [150, "g.click('[data-act=taste-start]')"],
+    log = game("http", [[150, "g.nick('희철')"], [150, "g.opt(1)"], [150, "g.tap()"], [150, "g.click('[data-act=taste-home]')"], [150, "g.click('#t-cta')"],
                         [150, "g.pick()"], [2200, "g.snap('sent')"]], mock=FETCH_MOCK, config="https://example.invalid/log")
     s = last(log, "sent")
     sent = [e for b in (s or {}).get("sent") or [] for e in b["e"]]
