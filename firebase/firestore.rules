@@ -1,0 +1,33 @@
+rules_version = '2';
+
+// 복식 무브 검증판 — Firestore 보안 규칙 (PRD #29 · design/08-phase1.md §4B)
+//
+// 참여자(보이지 않는 익명 로그인)는 자기 문서 players/<자기 uid> 만 읽고 쓴다.
+// 만든 사람(Google 로그인)만 모든 참여자 문서를 읽는다 — 게임의 '검증 지표 보기'.
+//
+// 붙이는 법: Firebase 콘솔 → Firestore Database → 규칙 탭 → 아래를 통째로 붙여 넣고
+//            OWNER_EMAIL 을 만든 사람의 Google 계정 이메일로 바꾼 뒤 → 게시.
+//            (공개 저장소라 이메일은 여기에 적지 않는다 — 콘솔에서만 바꾼다)
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function owner() {
+      return signedIn()
+        && request.auth.token.email == 'OWNER_EMAIL'
+        && request.auth.token.email_verified == true;
+    }
+
+    match /players/{uid} {
+      // 참여자 — 자기 문서. 문서 하나는 넉넉히 잡아도 수십 KB(최근 이벤트 200개 · 카드 120장)
+      allow read, write: if signedIn() && request.auth.uid == uid;
+      // 만든 사람 — 검증 지표(모든 문서 읽기). 쓰기는 자기 문서만
+      allow read: if owner();
+    }
+
+    // 그 밖의 경로는 모두 막힌다 (규칙에 없으면 거부)
+  }
+}

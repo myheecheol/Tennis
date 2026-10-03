@@ -11,10 +11,12 @@ data/        커리큘럼 인덱스 · 상황 카드 · 카메라 규격 (기계
 tools/       생성기 · 검증기 · 3D 코트 기하(court3d.py) · 웹 스모크 테스트 · 검증판 기록 받기(phase1/)
 web/         play.html — 검증판 게임 (카드 120장 · 닉네임 · 튜토리얼 · 오늘의 코트 · 복습 · 원 포인트 게임! · 실전 모드(츄어리) · 전술 부수 · 기록)
              index.html — 설계 페이지 (카드 플레이어 · 프롬프트 체인) · src/ — 두 페이지가 같이 쓰는 코트 엔진
-site/        index.html — 같은 게임을 문서 뼈대째로 (claude.ai 밖 정적 호스팅용 · build.py 가 만든다)
+site/        index.html — 같은 게임을 문서 뼈대째로 (GitHub Pages 로 올린다 · build.py 가 만든다)
+firebase/    firestore.rules — 공개 배포의 기록(Firestore) 권한: 참여자는 자기 문서만, 만든 사람은 모두 읽기
 ```
 
 **게임 해 보기** → <https://claude.ai/artifact/8UWWX27bebLhTStCb9W59p> (Phase 1 검증판 · 운영법은 `design/08-phase1.md`)
+· 공개 배포: <https://myheecheol.github.io/Tennis/> (GitHub Pages + Firebase — `design/08-phase1.md` §4B, Pages 를 켜면 열린다)
 
 ---
 

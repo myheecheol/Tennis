@@ -1,9 +1,15 @@
 {
-  "_note": "검증판 게임(web/play.html) 설정. build.py 가 페이지에 넣는다. endpoint 는 claude.ai 밖에서 호스팅할 때만 쓴다 — design/08-phase1.md 참고.",
+  "_note": "검증판 게임(web/play.html · site/index.html) 설정. build.py 가 페이지에 넣는다. firebase 는 claude.ai 밖(GitHub Pages)에서 기록을 받는 곳 — Firebase 콘솔 → 프로젝트 설정 → 내 앱(웹)의 firebaseConfig 네 값. 공개돼도 되는 값이고, 보안은 firebase/firestore.rules 가 맡는다. endpoint 는 구글 시트로 받을 때만 — design/08-phase1.md §4.",
   "endpoint": "",
   "newPerSession": 5,
   "reviewPerSession": 3,
   "tasteCard": "C1-24",
   "matchSeconds": 10,
-  "opponent": "츄어리"
+  "opponent": "츄어리",
+  "firebase": {
+    "apiKey": "",
+    "authDomain": "",
+    "projectId": "",
+    "appId": ""
+  }
 }

@@ -387,7 +387,8 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
 
     <button class="linkish" data-act="nick">닉네임 바꾸기 · <span id="h-nick"></span></button>
     <button class="linkish" id="h-stats" data-act="stats" hidden>검증 지표 보기</button>
-    <p class="foot">복식 초보를 위한 검증판이에요. 닉네임과, 어떤 카드에서 무엇을 골랐는지만 모아 카드를 고치는 데 써요. 실명이나 연락처는 모으지 않아요.</p>
+    <button class="linkish" id="h-owner" data-act="owner-login" hidden>만든 사람 로그인 (Google)</button>
+    <p class="foot">복식 초보를 위한 검증판이에요. 닉네임과, 어떤 카드에서 무엇을 골랐는지만 모아 카드를 고치는 데 써요. 실명이나 연락처는 모으지 않아요.<span id="h-where" hidden> 기록은 Google Firebase(서울)에 저장돼요.</span></p>
   </section>
 
   <section class="screen" id="s-play" aria-label="카드" hidden>
@@ -547,9 +548,40 @@ function logErr(m,where){if(ERRN>=5)return;ERRN++;try{Log.track('error',{m:Strin
 window.addEventListener('error',function(e){logErr(e.message,(e.lineno||0)+':'+(e.colno||0));});
 window.addEventListener('unhandledrejection',function(e){var r=e.reason;logErr(r&&r.message||r,'promise');});
 
+/* ── 기록 저장소 — claude.ai 안에서는 claude.ai 저장소, 밖(GitHub Pages)에서는 Firebase (PRD #29).
+   둘 다 참여자마다 문서 하나(players/<id>) — 참여자는 자기 문서만, 만든 사람은 모두 읽는다(규칙: firebase/firestore.rules) ── */
+var FBJS='https://www.gstatic.com/firebasejs/12.19.0/',FBP=null;
+function fbOn(){var f=CFG.firebase;return !!(f&&f.apiKey&&f.projectId);}
+function loadJs(src){return new Promise(function(res,rej){var el=document.createElement('script');el.src=src;el.async=false;
+  el.onload=res;el.onerror=function(){rej(new Error('불러오지 못함 '+src));};document.head.appendChild(el);});}
+function fbReady(){   // SDK 를 받고(처음 한 번) 로그인한다 — 참여자는 보이지 않는 익명 로그인, 만든 사람은 Google 로그인이 남아 있으면 그대로
+  if(FBP)return FBP;
+  var sdk=window.firebase&&window.firebase.firestore?Promise.resolve():loadJs(FBJS+'firebase-app-compat.js')
+    .then(function(){return loadJs(FBJS+'firebase-auth-compat.js');}).then(function(){return loadJs(FBJS+'firebase-firestore-compat.js');});
+  FBP=sdk.then(function(){var fb=window.firebase,app=fb.apps&&fb.apps.length?fb.app():fb.initializeApp(CFG.firebase),auth=app.auth(),fs=app.firestore();
+    try{fs.settings({ignoreUndefinedProperties:true});}catch(e){}   // 비어 있는 칸(undefined)이 있어도 쓰기가 거부되지 않게
+    return new Promise(function(res,rej){var un=auth.onAuthStateChanged(function(u){
+      if(u){un();res({fb:fb,auth:auth,fs:fs});}else auth.signInAnonymously().catch(function(e){un();rej(e);});});});});
+  FBP.catch(function(){FBP=null;});   // 못 받았으면 다음에 다시
+  return FBP;}
+function fbStore(F){   // claude.use('db') · claude.use('user') 와 같은 모양
+  var fs=F.fs,auth=F.auth;function snap(x){return {exists:x.exists,id:x.id,data:function(){return x.data();}};}
+  return [{doc:function(path){var r=fs.doc(path);return {get:function(){return r.get().then(snap);},set:function(d){return r.set(d);}};},
+           collection:function(path){var c=fs.collection(path);return {get:function(){return c.get().then(function(q){return {docs:q.docs.map(snap),size:q.size,empty:q.empty};});}};}},
+          {id:function(){var u=auth.currentUser;return Promise.resolve(u?u.uid:null);},
+           isOwner:function(){var u=auth.currentUser;if(!u||u.isAnonymous)return Promise.resolve(false);   // 만든 사람 = 규칙이 모두 읽기를 허락한 Google 계정
+             return fs.collection('players').limit(1).get().then(function(){return true;},function(){return false;});}}];}
+function ownerLogin(){   // 주소 끝 #owner → Google 로그인 → 검증 지표
+  fbReady().then(function(F){return F.auth.signInWithPopup(new F.fb.auth.GoogleAuthProvider());})
+    .then(function(){Remote.ref=null;Remote.col=null;Remote.owner=false;Remote.start(function(){toast(Remote.owner?'만든 사람으로 로그인했어요.':'로그인은 됐지만 이 계정은 검증 지표를 볼 수 없어요.');});},
+      function(e){toast('로그인하지 못했어요'+(e&&e.code?' ('+e.code+')':'')+'. 팝업을 허용하고 다시 눌러 주세요.');});}
+
 var Remote={ref:null,col:null,busy:false,dirty:false,retried:false,owner:false,
-  start:function(){var cl=window.claude;if(!cl||typeof cl.use!=='function')return;
-    Promise.all([cl.use('db'),cl.use('user')]).then(function(r){var db=r[0],user=r[1];if(!db||!user)return null;
+  start:function(after){var cl=window.claude,src=null;
+    if(cl&&typeof cl.use==='function')src=Promise.all([cl.use('db'),cl.use('user')]);
+    else if(fbOn())src=fbReady().then(fbStore);
+    if(!src)return;
+    src.then(function(r){var db=r[0],user=r[1];if(!db||!user)return null;
       return Promise.all([user.id(),user.isOwner()]).then(function(v){
         if(v[1]){Remote.owner=true;Remote.col=db.collection('players');if(screen==='home')renderHome();}
         if(!v[0])return null;
@@ -559,13 +591,13 @@ var Remote={ref:null,col:null,busy:false,dirty:false,retried:false,owner:false,
           if(ahead){Remote.dirty=true;Remote.flush();}
         });
       });
-    }).catch(function(){Remote.ref=null;});
+    }).catch(function(){Remote.ref=null;}).then(function(){if(after){after();if(screen==='home')renderHome();}});
   },
   push:function(){this.dirty=true;this.flush();},
   flush:function(){var self=this;if(!this.ref||this.busy||!this.dirty)return;this.dirty=false;this.busy=true;
     this.ref.set(docBody()).then(function(){self.busy=false;self.retried=false;self.flush();},function(e){self.busy=false;var code=e&&e.code;
       if(code==='unavailable'&&!self.retried){self.retried=true;self.dirty=true;setTimeout(function(){self.flush();},700+Math.random()*1300);return;}
-      if(code==='resource_exhausted'){self.dirty=true;return;}   // 다음 답에서 다시 쓴다
+      if(code==='resource_exhausted'||code==='resource-exhausted'){self.dirty=true;return;}   // 다음 답에서 다시 쓴다 (Firebase 는 하이픈)
       self.ref=null;});   // 쓸 수 없는 참여자(보기 전용) — 이 브라우저에만 남긴다
   }
 };
@@ -698,6 +730,8 @@ function renderHome(){
     else rows+='<li><div class="ch lock"><span class="n">'+(i+1)+'</span><span class="t"><b>'+esc(ch.title)+'</b><small>'+ch.total+'장 · 준비 중</small></span><span class="c"></span></div></li>';});
   $('ch-rows').innerHTML=rows;
   $('h-stats').hidden=!Remote.owner;
+  $('h-owner').hidden=Remote.owner||!fbOn()||location.hash!=='#owner';   // 만든 사람만 아는 주소(…/#owner)에서만 보인다
+  $('h-where').hidden=!fbOn()||!!(window.claude&&window.claude.use);
 }
 
 /* ── 처음 — 닉네임을 묻고, 첫 카드는 튜토리얼로 ── */
@@ -1121,6 +1155,7 @@ document.addEventListener('click',function(e){
   if(a==='mreview')return openMatchReview(+t.getAttribute('data-i'));
   if(a==='mback'){timedOut=false;renderDone();return showScreen('done');}
   if(a==='nick')return openHello('change');
+  if(a==='owner-login')return ownerLogin();
   if(a==='match-lv'){S.match.lv=t.getAttribute('data-lv');saveLocal();return renderMatch();}
   if(a==='match-start')return startMatch();
   if(a==='match-next')return matchNext();

@@ -12,6 +12,7 @@
     · 실전 모드: 츄어리와 한 게임 — 10초 · 랠리가 이어지면 저절로 다음 공 · 앞 장면에서 이어 온다(순간이동 없음) · 경기 뒤 카드 해설
     · claude.ai 저장소(가짜): 불러오기 · 쓰기 · 만든 사람의 검증 지표
     · 기록 주소(가짜 fetch): 이벤트 묶음 전송
+    · Firebase(가짜 — 규칙 · 빈 칸 · 겹친 배열을 실제처럼 거부): 익명 참여자 문서 · #owner Google 로그인 → 검증 지표 · 설정이 없으면 SDK 를 받지 않는다
   블루프린트(web/index.html)
     · 카드 수 × 보기 3 번 재생 — 결과 배지가 채점과 같은가
 
@@ -71,7 +72,10 @@ function snap(tag){var say=q('#p-say'),t=q('#toast');
     score:q('#mscore').hidden?null:q('#mscore').getAttribute('aria-label'),clock:q('#gs-clock').hidden?null:q('#gs-clock').textContent,
     mrec:q('#m-rec').textContent,hl:q('#s-hello').hidden?null:q('#hl-head').textContent+' | '+q('#nick-go').textContent,nerr:!q('#nick-err').hidden,
     nick:q('#h-nick').textContent,id:q('#p-id').textContent,tapt:q('#gs-tap').textContent,tut:q('.sh-taste')?q('.sh-taste').textContent:null,
-    shows:SHOWS.slice(-3).join(','),links:linkStat(),errs:q('#s-stats').hidden?null:(q('#st-body').textContent.match(/기기 오류 \d+/)||[null])[0],dcards:q('#d-cards').hidden?null:q('#d-cards').textContent.slice(0,120),dhead:q('#s-done').hidden?null:q('#d-head').textContent,dxp:q('#s-done').hidden?null:q('#d-xp').textContent,hc:q('#d-hc').hidden?null:q('#d-hc').textContent,reps:q('.rlist')?q('.rlist').textContent:null,
+    shows:SHOWS.slice(-3).join(','),links:linkStat(),ownerln:!q('#h-owner').hidden,where:!q('#h-where').hidden,
+    fsw:window.__FSW||0,fskeys:window.__FS?Object.keys(window.__FS).sort().join(','):null,fbcfg:window.__FBCFG?window.__FBCFG.projectId:null,
+    fsdoc:window.__FS&&window.__FS['players/anon1']?{nick:window.__FS['players/anon1'].nick,taste:!!window.__FS['players/anon1'].taste,answered:window.__FS['players/anon1'].answered}:null,
+    gst:document.querySelectorAll('script[src*="gstatic"]').length,errs:q('#s-stats').hidden?null:(q('#st-body').textContent.match(/기기 오류 \d+/)||[null])[0],dcards:q('#d-cards').hidden?null:q('#d-cards').textContent.slice(0,120),dhead:q('#s-done').hidden?null:q('#d-head').textContent,dxp:q('#s-done').hidden?null:q('#d-xp').textContent,hc:q('#d-hc').hidden?null:q('#d-hc').textContent,reps:q('.rlist')?q('.rlist').textContent:null,
     lvs:[].map.call(document.querySelectorAll('#ml-lv [aria-pressed=true]'),function(b){return b.getAttribute('data-lv');}).join(','),
     title:q('#gs-name').textContent,scene:q('#gs-scene-t').textContent,dock:q('#gs-dock').textContent.slice(0,90),
     head:q('#t-head').textContent,say:say.hidden?null:say.textContent,prog:q('#p-n').textContent,rank:q('#bar-rank-t').textContent,
@@ -108,6 +112,40 @@ window.claude={use:function(n){return new Promise(function(res){setTimeout(funct
   if(n==='db')res(MOCKDB);else if(n==='user')res({id:function(){return Promise.resolve('u_me');},isOwner:function(){return Promise.resolve(true);}});else res(null);},40);});}};
 </script>"""
 
+# Firebase compat SDK 의 가짜 — 규칙(firebase/firestore.rules)과 같은 권한, 실제 Firestore 처럼 undefined · 겹친 배열을 거부한다
+FB_MOCK = r"""<script>
+window.__FS={'players/u_a':{v:1,answered:30,total:30,taste:{v:'정답'},days:['2026-09-18','2026-09-26'],cards:{'C1-01':{f:'정답',l:'정답',n:1,ms:4000}},reports:[]}};
+window.__FSW=0;window.__FBCFG=null;
+(function(){
+  var user=null,cbs=[],nAnon=0,ignoreUndef=false;
+  function fire(){cbs.slice().forEach(function(cb){setTimeout(function(){cb(user);},0);});}
+  function denied(){var e=new Error('Missing or insufficient permissions.');e.code='permission-denied';return Promise.reject(e);}
+  function bad(v,inArr){if(v===undefined)return ignoreUndef?null:'undefined';
+    if(Array.isArray(v)){if(inArr)return 'nested array';for(var i=0;i<v.length;i++){var r=bad(v[i],true);if(r)return r;}return null;}
+    if(v&&typeof v==='object'){for(var k in v){var r2=bad(v[k],false);if(r2)return r2+' @'+k;}}return null;}
+  function own(p){return !!user&&p.split('/')[1]===user.uid;}
+  function owner(){return !!user&&!user.isAnonymous&&user.email==='owner@example.com';}
+  var auth={onAuthStateChanged:function(cb){cbs.push(cb);setTimeout(function(){cb(user);},0);return function(){var i=cbs.indexOf(cb);if(i>=0)cbs.splice(i,1);};},
+    signInAnonymously:function(){nAnon++;user={uid:'anon'+nAnon,isAnonymous:true,email:null};fire();return Promise.resolve({user:user});},
+    signInWithPopup:function(){user={uid:'g_owner',isAnonymous:false,email:'owner@example.com'};fire();return Promise.resolve({user:user});}};
+  Object.defineProperty(auth,'currentUser',{get:function(){return user;}});
+  var fs={settings:function(o){if(o&&o.ignoreUndefinedProperties)ignoreUndef=true;},
+    doc:function(p){return {get:function(){if(!(own(p)||owner()))return denied();var d=window.__FS[p];
+        return Promise.resolve({exists:!!d,id:p.split('/')[1],data:function(){return d?JSON.parse(JSON.stringify(d)):undefined;}});},
+      set:function(d){if(!own(p))return denied();var b=bad(d,false);
+        if(b){var e=new Error('Unsupported field value: '+b);e.code='invalid-argument';window.__FSBAD=b;return Promise.reject(e);}
+        window.__FSW++;window.__FS[p]=JSON.parse(JSON.stringify(d));return Promise.resolve();}};},
+    collection:function(c){var q={get:function(){if(!owner())return denied();
+        var docs=Object.keys(window.__FS).filter(function(k){return k.indexOf(c+'/')===0;}).map(function(k){var d=window.__FS[k];
+          return {exists:true,id:k.split('/')[1],data:function(){return JSON.parse(JSON.stringify(d));}};});
+        return Promise.resolve({docs:docs,size:docs.length,empty:!docs.length});},limit:function(){return q;}};return q;}};
+  var app={auth:function(){return auth;},firestore:function(){return fs;}};
+  window.firebase={apps:[],initializeApp:function(cfg){window.__FBCFG=cfg;this.apps.push(app);return app;},app:function(){return app;},
+    auth:{GoogleAuthProvider:function(){}},firestore:function(){return fs;}};
+})();
+</script>"""
+FB_CFG = {"firebase": {"apiKey": "test-key", "authDomain": "dmb-test.firebaseapp.com", "projectId": "dmb-test", "appId": "1:1:web:1"}}
+
 FETCH_MOCK = ('<script>window.__SENT=[];window.fetch=function(u,o){var b=JSON.parse(o.body);'
               'window.__SENT.push({mode:o.mode,e:b.events.map(function(x){return x.e;})});return Promise.resolve({});};</script>')
 
@@ -122,12 +160,19 @@ def run(name, page, budget=20000):
     return json.loads(html.unescape(m.group(1))) if m else None
 
 
-def game(name, steps, state=None, mock="", config=None, budget=20000, motion=False):
+def game(name, steps, state=None, mock="", config=None, budget=20000, motion=False, cfg=None, hash=""):
     page = (WEB / "play.html").read_text(encoding="utf-8")
     if config:
         page = page.replace('"endpoint": ""', '"endpoint": "%s"' % config)
+    if cfg:   # play.config.json 칸을 바꿔 넣는다 (예: firebase)
+        m = re.search(r'<script id="config-data" type="application/json">(.*?)</script>', page, re.S)
+        c = json.loads(m.group(1))
+        c.update(cfg)
+        page = page[:m.start(1)] + json.dumps(c, ensure_ascii=False) + page[m.end(1):]
     st = ('try{localStorage.setItem("dmb-game-v1",' + json.dumps(json.dumps(state, ensure_ascii=False)) + ')}catch(e){}'
           if state else 'try{localStorage.removeItem("dmb-game-v1")}catch(e){}')
+    if hash:
+        st += "history.replaceState(null,'','%s');" % hash
     pre = PRE.replace("{REDUCED}", "false" if motion else "true")
     return run(name, pre.replace("{STATE}", st).replace("{MOCK}", mock) + page
                + GAME_PROBE.replace("__STEPS__", json.dumps(steps, ensure_ascii=False)), budget)
@@ -373,6 +418,25 @@ def main():
     check("정적 호스팅용 페이지 — 표준 모드 · UTF-8 · viewport · 미리보기 글", site.startswith("<!doctype html>") and site.count("<body>") == 1
           and "<title>" in head and 'property="og:title"' in head and o.get("mode") == "CSS1Compat" and o.get("cs") == "UTF-8"
           and "width=device-width" in o.get("vp", "") and o.get("title") == "복식 무브" and o.get("hello"), o)
+
+    # 6c) Firebase (GitHub Pages 판, PRD #29) — 가짜 SDK 로. 익명 참여자는 자기 문서만, #owner 에서 Google 로그인하면 검증 지표
+    log = game("fb", [[400, "g.snap('f0')"], [150, "g.opt(0)"], [400, "g.snap('f1')"]], NEWBIE, mock=FB_MOCK, cfg=FB_CFG)
+    f0, f1 = last(log, "f0"), last(log, "f1")
+    check("Firebase — 익명 로그인 · 튜토리얼 답이 참여자 문서에 (빈 칸 · 겹친 배열 없이)", f0 and f0["fbcfg"] == "dmb-test" and f1
+          and f1["fsdoc"] and f1["fsdoc"]["nick"] == "희철" and f1["fsdoc"]["taste"] and f1["fsw"] >= 1 and not f1["err"], (f0, f1))
+    log = game("fbowner", [[400, "g.snap('o0')"], [150, "g.click('[data-act=owner-login]')"], [400, "g.snap('o1')"],
+                           [150, "g.click('[data-act=stats]')"], [400, "g.snap('o2')"]],
+               state([(cid, "정답", None) for cid in IDS[:5]]), mock=FB_MOCK, cfg=FB_CFG, hash="#owner")
+    o0, o1, o2 = last(log, "o0"), last(log, "o1"), last(log, "o2")
+    check("Firebase — 참여자는 남의 기록을 못 본다 · 주소 #owner 에만 '만든 사람 로그인' · 저장 위치 안내", o0 and o0["ownerln"]
+          and not o0["owner"] and o0["where"] and "players/anon1" in (o0["fskeys"] or ""), o0)
+    check("Firebase — Google 로그인한 만든 사람 → 검증 지표에 모든 참여자", o1 and o1["owner"] and not o1["ownerln"]
+          and "만든 사람으로 로그인" in (o1["toast"] or "") and o2 and o2["stats"] and o2["stats"].startswith("3")
+          and "players/g_owner" in (o2["fskeys"] or "") and not o2["err"], (o1, o2))
+    log = game("fboff", [[300, "g.snap('x')"]], state([(cid, "정답", None) for cid in IDS[:5]]), hash="#owner")
+    x = last(log, "x")
+    check("Firebase 설정이 없으면 SDK 를 받지 않는다 · 로그인 링크도 없다", x and x["gst"] == 0 and not x["ownerln"] and not x["where"]
+          and not x["err"], x)
 
     # 7) 블루프린트 — 카드 × 보기 재생 + 공의 길
     page = (WEB / "index.html").read_text(encoding="utf-8")
