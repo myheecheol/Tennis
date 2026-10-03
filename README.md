@@ -9,8 +9,9 @@ reference/   프롬프트에 붙여 넣는 재료 (도메인·좌표계·예시�
 design/      ← 위 체인을 실행해서 나온 결과물
 data/        커리큘럼 인덱스 · 상황 카드 · 카메라 규격 (기계 검증 대상)
 tools/       생성기 · 검증기 · 3D 코트 기하(court3d.py) · 웹 스모크 테스트 · 검증판 기록 받기(phase1/)
-web/         play.html — 검증판 게임 (카드 120장 · 오늘의 코트 · 복습 · 두 수 앞 · 실전 모드(희철) · 전술 부수 · 기록)
+web/         play.html — 검증판 게임 (카드 120장 · 닉네임 · 튜토리얼 · 오늘의 코트 · 복습 · 원 포인트 게임! · 실전 모드(츄어리) · 전술 부수 · 기록)
              index.html — 설계 페이지 (카드 플레이어 · 프롬프트 체인) · src/ — 두 페이지가 같이 쓰는 코트 엔진
+site/        index.html — 같은 게임을 문서 뼈대째로 (claude.ai 밖 정적 호스팅용 · build.py 가 만든다)
 ```
 
 **게임 해 보기** → <https://claude.ai/artifact/8UWWX27bebLhTStCb9W59p> (Phase 1 검증판 · 운영법은 `design/08-phase1.md`)
@@ -29,6 +30,7 @@ web/         play.html — 검증판 게임 (카드 120장 · 오늘의 코트 �
 | STEP 6 기획서 | `design/PRD.md` | ✅ 완료 |
 | STEP 7 검수 | `design/07-review.md` | ✅ 치명 3건 수정 |
 | Phase 1 제작 | `web/play.html` · `design/08-phase1.md` | ✅ 검증판 게임 · 기록 · 검증 지표 화면 |
+| 공개 배포 점검 | `design/10-launch-review.md` | ✅ 바로 고친 것 7 · 배포 전에 꼭 5 · 첫 주 보완 6 · 제안 5 |
 | — | **코치 감수 / 30명 검증** | ⬜ **미착수 — 여기가 진짜 관문** (검증판으로 돌린다) |
 
 ```bash
@@ -54,7 +56,7 @@ bash tools/check.sh   # 전체 검증 + 생성물 갱신 + 웹 스모크 테스�
 
 `cards-index.json` 이 120장의 뼈대(역할·질문유형·난이도·선행·원칙)이고,
 `cards/*.json` 이 완성된 카드입니다. **둘은 항상 일치해야 하며 `tools/check_consistency.py` 가 검사합니다.**
-`chains.json` 은 `두 수 앞` 모드의 짝 목록 — 첫 카드 정답 장면에서 둘째 카드가 정말 이어지는 것만 (같은 검사기가 본다).
+`chains.json` 은 `원 포인트 게임!`(옛 이름 `두 수 앞`) 모드의 짝 목록 — 첫 카드 정답 장면에서 둘째 카드가 정말 이어지는 것만 (같은 검사기가 본다).
 
 카드 한 장의 구조:
 

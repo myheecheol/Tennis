@@ -369,6 +369,47 @@ function buildOutcome(c,oi){
   return T;
 }
 
+/* 이어지기 (실전 · 원 포인트 게임 두 번째 수) — 앞 카드가 끝난 자리에서 이 카드의 시작 자리로 네 사람이 뛰어간다.
+   카드가 바뀌어도 사람과 공이 순간이동하지 않는다. 이어지는 모양은 셋:
+     same — 이 카드의 도입 공이 방금 끝난 우리 공 그 자체다("내 리턴이 깊게 갔어요"). 다시 치지 않는다 — 공은 멈춘 자리에, 사람만 자리로
+     next — 다음 공을 칠 사람에게 흐릿한 공이 이어지고, 그 사람이 도입 공을 친다
+     walk — 공이 없다(새 포인트) — 사람만 걸어서 자리로
+   from = {pos:{me,partner,opp1,opp2}, ball:{pt:[x,y], z, by:'us'|'them'|'none'} | null} */
+function introEnd(c){var f=buildIntro(c).flights[0];if(!f)return null;var q=f.fl.pts[f.fl.pts.length-1];return [q[0]/CW+.5,1-q[1]/CL];}
+function linkKind(c,from){var b=c.setup.ball,fb=from&&from.ball,ie;
+  if(!fb)return 'walk';
+  if(b.arc!=='hold'&&b.from[1]>.5&&fb.by==='us'&&(ie=introEnd(c))&&Math.hypot((ie[0]-fb.pt[0])*CW,(ie[1]-fb.pt[1])*CL)<3.5)return 'same';
+  return 'next';}
+function buildLink(c,from){
+  var TI=buildIntro(c),T=newTL(c),b=straightIntro(c.setup.ball),kind=linkKind(c,from),fb=from.ball,run=.4,lead,sh,rp;
+  PL.forEach(function(k){var a=(from.pos&&from.pos[k])||c.setup[k].xy,e=c.setup[k].xy;T.start[k]=a.slice();
+    if(Math.hypot((a[0]-e[0])*CW,(a[1]-e[1])*CL)>.05)run=Math.max(run,runDur(a,e));});
+  run=Math.min(run,1.3);   // 멀면 조금 빨리 뛴다
+  PL.forEach(function(k){var a=T.start[k],e=c.setup[k].xy;
+    if(Math.hypot((a[0]-e[0])*CW,(a[1]-e[1])*CL)>.05)T.moves.push({who:k,t0:0,t1:run,a:a.slice(),b:e.slice()});});
+  T.kind=kind;lead=run;
+  if(fb)rp=world(fb.pt,fb.z!=null?fb.z:0);
+  if(kind==='same'){   // 공은 멈춘 자리에서 도입 공의 끝자리로 살짝 — 멈추면 도입 공의 길이 그려진다(freeze)
+    var ie=TI.flights[0].fl.pts[TI.flights[0].fl.pts.length-1];
+    T.flights.push({t0:0,t1:run,fl:{pts:[rp,ie],bounce:-1},col:WHITE,hop:true});
+    T.dur=run;return T;}
+  if(fb)T.flights.push({t0:0,t1:.001,fl:{pts:[rp,rp],bounce:-1},col:WHITE,hop:true});   // 다음 공이 날 때까지 공은 앞 장면에서 멈춘 자리에
+  if(fb&&b.arc!=='hold'){   // 공이 도입 공을 칠 사람에게 — 우리 공이면 튀어서, 상대 공이 와 있었으면 우리가 넘겨서
+    var fl=flight({arc:'normal',from:fb.pt,to:b.from,toZ:Z0[b.arc]||.9},{z0:fb.z!=null?fb.z:.9,k:fb.by==='them'?1.05:.55}),
+        fd=clamp(flDur(fl,'normal'),.4,1.1),t0=Math.max(0,run-fd);
+    T.flights.push({t0:t0,t1:t0+fd,fl:fl,col:WHITE,faint:true,link:true});lead=Math.max(run,t0+fd);
+  }
+  sh=lead+.05-.15;   // 도입 공(0.15초에 출발)을 이어 붙인다
+  TI.flights.forEach(function(f){T.flights.push({t0:f.t0+sh,t1:f.t1+sh,fl:f.fl,col:f.col,tag:f.tag,intro:true});});
+  if(TI.hold)T.hold={who:TI.hold.who,t1:1e9};
+  T.dur=Math.max(lead,TI.dur+sh);return T;
+}
+/* 결과 장면이 끝난 모습 — 다음 카드를 이을 때 쓴다 */
+function endOf(T){var e={pos:{},ball:null},f=T.flights[T.flights.length-1];
+  PL.forEach(function(k){e.pos[k]=posAt(T,k,T.dur);});
+  if(f&&!f.intro){var q=f.fl.pts[f.fl.pts.length-1];e.ball={pt:[q[0]/CW+.5,1-q[1]/CL],z:q[2],by:f.team==='us'?'us':f.team==='them'?'them':'none'};}
+  return e;}
+
 function posAt(T,who,t){var p=T.start[who];T.moves.forEach(function(m){if(m.who!==who||t<m.t0)return;var u=clamp((t-m.t0)/Math.max(1e-3,m.t1-m.t0),0,1),k=ease(u);p=[m.a[0]+(m.b[0]-m.a[0])*k,m.a[1]+(m.b[1]-m.a[1])*k];});return p;}
 function ballState(T,t,pos){
   for(var i=T.flights.length-1;i>=0;i--){var f=T.flights[i];
@@ -448,6 +489,7 @@ var FREEZE_SAY='⏸ 지금, 어떻게 할까요?';
 function Stage(svg,sayEl){this.svg=svg;this.sayEl=sayEl;this.anim=null;this.finishNow=null;this.bg=null;this.dyn=null;}
 Stage.prototype.stop=function(){if(this.anim)cancelAnimationFrame(this.anim);this.anim=null;this.finishNow=null;};
 Stage.prototype.busy=function(){return !!this.finishNow;};
+Stage.prototype.endState=function(){return this.lastEnd||null;};
 Stage.prototype.skip=function(){if(this.finishNow)this.finishNow();};
 Stage.prototype.say=function(kind,text,sub){var el=this.sayEl;el.className='p-say '+kind;el.innerHTML=text+(sub?' <small>'+esc(sub)+'</small>':'');el.hidden=false;
   if(!REDUCED){el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');}};
@@ -469,8 +511,8 @@ Stage.prototype.run=function(T,ctx,onEnd){
 };
 /* 카드 한 장을 무대에 올린다.
    o.view 'top'|'me' · o.pick 고른 보기(-1 = 아직) · o.shown 보여 줄 보기(정답 장면 보기) ·
-   o.mode 'intro'(도입 재생 후 멈춤) | 'out'(결과 재생) | 'replay'(도입+결과) | 'still'(끝 장면만) |
-          'pose'(도입 직전 — 선수만 서 있고 공은 아직. 제목 화면 뒤에 깔린다)
+   o.mode 'intro'(도입 재생 후 멈춤) | 'link'(o.from 에서 이어 와 도입 후 멈춤 — 실전 · 원 포인트 게임 두 번째 수) | 'out'(결과 재생) | 'replay'(도입+결과) | 'still'(끝 장면만) |
+          'pose'(도입 직전 — 선수만 서 있고 공은 아직. 제목 화면 뒤에 깔린다. o.from 이 있으면 그 모습에서)
    o.freezeSay 멈출 때 배지 글 — false 면 배지 없이 멈춘다(페이지가 질문을 직접 띄울 때) · o.onFreeze 멈춘 뒤 부른다
    done(res) — 결과 장면이 끝났을 때. res = {v: 정답|차선|실수, caption, zone} */
 Stage.prototype.show=function(c,o,done){
@@ -482,13 +524,16 @@ Stage.prototype.show=function(c,o,done){
   var corZone=optsOf(c)[correctIdx(c)].zone,ctx={c:c,cam:cam,isMe:isMe,correct:corZone,follow:isMe&&pick>=0,camKey:camKey(c.setup.me.xy)};
   var TI=buildIntro(c);
   if(pick<0){
-    if(o.mode==='pose'){this.paint(TI,0,false,ctx);return;}
+    if(o.mode==='pose'){this.paint(o.from?buildLink(c,o.from):TI,0,false,ctx);return;}   // o.from — 앞 카드가 끝난 모습 그대로 제목 뒤에 선다
     var fz={c:c,cam:cam,isMe:isMe,freeze:true};
     var freeze=function(){self.paint(TI,TI.dur,true,fz);if(o.freezeSay!==false)self.say('',o.freezeSay||FREEZE_SAY);if(o.onFreeze)o.onFreeze();};
-    if(o.mode==='still')freeze();else this.run(TI,ctx,freeze);
+    if(o.mode==='still')freeze();
+    else if(o.mode==='link'&&o.from)this.run(buildLink(c,o.from),ctx,freeze);   // 앞 카드에서 이어서
+    else this.run(TI,ctx,freeze);
     return;
   }
   var si=o.shown!=null?o.shown:pick,TO=buildOutcome(c,si);
+  this.lastEnd=endOf(TO);   // 지금 코트에 보이는 장면의 끝 모습 — 다음 카드가 여기서 이어진다(정답 장면을 보고 있었다면 그 장면에서)
   var end=function(){var s=SAY[TO.res.v];self.say(s[0],(si!==pick?'정답이면 ':'')+s[1],TO.res.caption);if(done)done(TO.res);};
   if(o.mode==='still'){this.paint(TO,TO.dur,true,ctx);end();return;}
   if(o.mode==='replay'){this.run(TI,ctx,function(){self.run(TO,ctx,end);});return;}
@@ -496,6 +541,7 @@ Stage.prototype.show=function(c,o,done){
 };
 
 return {init:init,Stage:Stage,KEYS:KEYS,optsOf:optsOf,correctIdx:correctIdx,esc:esc,clamp:clamp,
-        _tl:{intro:buildIntro,outcome:buildOutcome},   // 시험용 — 공의 길 검사(tools/web_smoke.py)
+        linkKind:linkKind,introEnd:introEnd,
+        _tl:{intro:buildIntro,outcome:buildOutcome,link:buildLink,end:endOf,pos:posAt},   // 시험용 — 공의 길 · 이어지기 검사(tools/web_smoke.py)
         reduced:function(){return REDUCED;}};
 })();

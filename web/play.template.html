@@ -27,7 +27,7 @@ html,body{min-height:100%}
 .sdots i{flex:1;height:7px;border-radius:4px;background:#DDE7CF}
 .sdots i.cur{background:var(--ink)}
 .sdots i.정답{background:var(--good)} .sdots i.차선{background:#D9A12E} .sdots i.실수{background:#D0573B}
-.sdots b{flex:none;width:7px}   /* 두 수 앞 — 짝 사이 */
+.sdots b{flex:none;width:7px}   /* 원 포인트 게임 — 랠리 사이 */
 .sdots i.cut{background:repeating-linear-gradient(135deg,#C9D3BC 0 3px,#EEF3E6 3px 6px)}   /* 첫 수에서 끊긴 두 번째 수 */
 .scount{flex:none;font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 
@@ -82,7 +82,7 @@ html,body{min-height:100%}
 .wait .cta{background:var(--optic);color:var(--night)}
 .wait .done-mark{font-family:var(--f-display);font-weight:800;color:var(--optic)}
 
-/* 두 수 앞 */
+/* 원 포인트 게임! (짝 이어 풀기) */
 .chain-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
 .chain-n{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
 .k-head{display:flex;align-items:center;gap:10px}
@@ -91,7 +91,7 @@ html,body{min-height:100%}
 .k-link b{width:18px;height:2px;background:var(--night)}
 .k-cta{align-self:flex-start;font-family:var(--f-display);font-weight:800;font-size:14.5px;padding:10px 16px;border-radius:12px}   /* 오늘의 코트 다음 자리 — 버튼은 한 단계 낮게 */
 
-/* 실전 모드 — 희철과 한 게임. 희철 쪽은 상대 마커와 같은 남색 */
+/* 실전 모드 — 츄어리와 한 게임. 상대 쪽은 상대 마커와 같은 남색 */
 .match-card{background:linear-gradient(135deg,#1C2858 0%,#26357F 62%,#33449F 100%);color:#EEF1FF;border-color:#26357F}
 .match-card .eyebrow{color:#B9C4F5}
 .match-card h2{color:#fff;font-size:18px}
@@ -101,8 +101,9 @@ html,body{min-height:100%}
 .mc-rec{margin-left:auto;align-self:flex-start;font-family:var(--f-mono);font-size:12px;color:#D5DBFA;white-space:nowrap}
 .match-card .k-cta{background:var(--optic);border-color:var(--optic);color:var(--night)}
 .match-card .k-cta:hover{background:#EEFF7A;border-color:#EEFF7A;color:var(--night)}
-.hc-hero{display:grid;grid-template-columns:clamp(118px,34vw,190px) minmax(0,1fr);gap:14px;align-items:end;padding:14px 16px 0;border-radius:20px;overflow:hidden;background:#F6F7F2;border:1px solid var(--rule)}
-.hc-hero img{width:100%;height:auto;display:block;mix-blend-mode:multiply}
+.hc-hero{display:grid;grid-template-columns:clamp(118px,34vw,190px) minmax(0,1fr);gap:14px;align-items:end;padding:14px 16px 0;border-radius:20px;overflow:hidden;
+  background:radial-gradient(120% 90% at 20% 100%,#E3E8FA 0%,#F4F6FD 55%,#FBFCFF 100%);border:1px solid var(--rule)}
+.hc-hero img{width:100%;height:auto;display:block}
 .hc-say{padding-bottom:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
 .hc-say b{font-family:var(--f-display);font-weight:900;font-size:clamp(26px,7vw,34px);letter-spacing:-.02em;color:var(--opp);line-height:1.1}
 .hc-say .q{font-family:var(--f-display);font-weight:800;font-size:16px;line-height:1.45;color:var(--ink)}
@@ -117,7 +118,11 @@ html,body{min-height:100%}
 .lv button:focus-visible{outline:2px solid var(--opp);outline-offset:2px}
 .rules ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px;font-size:14px;line-height:1.55}
 .rules b{font-family:var(--f-display)}
-/* 경기 중 — 윗줄 점수판 · 10초 시계 · 희철 한마디 */
+/* 경기 중 — 윗줄 점수판 · 10초 시계 · 상대 한마디 · 랠리가 이어지는 동안의 막대 */
+.gs-auto{height:4px;border-radius:2px;background:rgba(255,255,255,.14);overflow:hidden}
+.gs-auto i{display:block;height:100%;width:0;background:#9FB0F0;animation:autofill var(--auto,1.7s) linear forwards}
+@keyframes autofill{to{width:100%}}
+@media (prefers-reduced-motion:reduce){.gs-auto i{animation:none;width:100%}}
 .mscore{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;min-width:0;font-family:var(--f-display)}
 .ms-side{display:flex;align-items:center;gap:4px}
 .ms-side small{font-size:12px;font-weight:800;color:var(--ink-2);white-space:nowrap}
@@ -144,9 +149,20 @@ html,body{min-height:100%}
 .hc-end img{flex:none;width:64px;height:64px;border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 0 0 3px #fff}
 .hc-end b{font-family:var(--f-display);font-weight:900;color:#fff}
 .hc-end p{font-family:var(--f-display);font-weight:800;font-size:15px;line-height:1.45;margin-top:2px}
+/* 처음 — 닉네임 */
+.hello-card{display:flex;flex-direction:column;gap:12px;padding:22px 18px;border-radius:20px;background:var(--surface);border:1px solid var(--rule);box-shadow:var(--shadow)}
+.hello-av{width:88px;height:88px;border-radius:50%;object-fit:cover;background:#EEF1FF;box-shadow:0 0 0 3px var(--opp)}
+.hello-card h1{font-family:var(--f-display);font-weight:900;font-size:clamp(22px,6vw,28px);letter-spacing:-.02em;line-height:1.3}
+.nick-form{display:flex;flex-direction:column;gap:6px}
+.nick-l{font-size:13px;font-weight:700;color:var(--ink-2)}
+.nick-row{display:flex;gap:8px;flex-wrap:wrap}
+.nick-row input{flex:1;min-width:150px;font:inherit;font-size:17px;font-weight:600;padding:11px 14px;border-radius:12px;border:1.5px solid var(--rule-2);background:var(--surface);color:var(--ink)}
+.nick-row input:focus{outline:2px solid var(--greenery-deep);outline-offset:1px;border-color:var(--greenery-deep)}
+.nick-err{font-size:13px;color:var(--bad);font-weight:700}
+.tut{font-family:var(--f-display);font-weight:800;color:var(--optic)}
 /* 신고 · 감수 메모 */
 .rep-note{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600}
-.rep-note textarea{font:inherit;font-weight:400;font-size:14px;padding:8px 10px;border-radius:9px;border:1px solid var(--rule-2);background:var(--surface);resize:vertical;min-height:52px}
+.rep-note textarea{font:inherit;font-weight:400;font-size:16px;padding:8px 10px;border-radius:9px;border:1px solid var(--rule-2);background:var(--surface);resize:vertical;min-height:52px}
 .rlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:13px;line-height:1.5}
 .rlist li{padding:8px 10px;border-radius:10px;background:var(--sunk)}
 .rlist .rid{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-2)}
@@ -302,6 +318,20 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
 </header>
 
 <main class="app">
+  <section class="screen" id="s-hello" aria-label="시작" hidden>
+    <div class="hello-card">
+      <img class="hello-av" data-op="smile" alt="">
+      <p class="eyebrow">복식 무브 · 복식 전술 게임</p>
+      <h1 id="hl-head"></h1>
+      <form class="nick-form" id="nick-form" autocomplete="off" novalidate>
+        <label class="nick-l" for="nick-in">닉네임</label>
+        <div class="nick-row"><input id="nick-in" name="nick" maxlength="8" placeholder="8자까지" autocomplete="nickname" enterkeyhint="go"><button class="cta" type="submit" id="nick-go"></button></div>
+        <p class="nick-err" id="nick-err" role="alert" hidden>닉네임을 한 글자 이상 적어 주세요.</p>
+      </form>
+      <p class="note">닉네임은 점수판과 기록에 함께 남아요. 실명이 아니어도 돼요.</p>
+    </div>
+  </section>
+
   <section class="screen" id="s-home" aria-label="홈" hidden>
     <div class="today" id="today">
       <div class="today-text">
@@ -317,9 +347,9 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
     </div>
 
     <div class="card match-card" id="c-match">
-      <div class="mc-top"><img data-hc="cap" alt=""><div><p class="eyebrow">실전 모드 · 10초 룰</p><h2>희철과 한 게임</h2></div><span class="mc-rec" id="m-rec"></span></div>
-      <p class="note">카드마다 10초 안에 골라요. 랠리가 이어지고, 포인트를 따서 희철을 이겨요.</p>
-      <button class="btn primary k-cta" data-act="match-open">희철과 붙기 →</button>
+      <div class="mc-top"><img data-op="cap" alt=""><div><p class="eyebrow">실전 모드 · 10초 룰</p><h2 data-ot="vs"></h2></div><span class="mc-rec" id="m-rec"></span></div>
+      <p class="note" data-ot="pitch"></p>
+      <button class="btn primary k-cta" data-act="match-open" data-ot="go"></button>
     </div>
 
     <div class="card wait" id="c-wait" hidden>
@@ -329,10 +359,10 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
     </div>
 
     <div class="card" id="c-chain" hidden>
-      <div class="chain-top"><p class="eyebrow">두 수 앞</p><span class="chain-n" id="k-n"></span></div>
-      <h2 class="k-head"><span class="k-link" aria-hidden="true"><i></i><b></b><i></i></span>첫 수가 맞아야 다음 수가 와요</h2>
+      <div class="chain-top"><p class="eyebrow">원 포인트 게임!</p><span class="chain-n" id="k-n"></span></div>
+      <h2 class="k-head"><span class="k-link" aria-hidden="true"><i></i><b></b><i></i></span>랠리가 이어지는 한 게임 도전</h2>
       <p class="note" id="k-body"></p>
-      <button class="btn primary k-cta" data-act="chain-start">두 수 앞 시작 →</button>
+      <button class="btn primary k-cta" data-act="chain-start">원 포인트 게임 시작 →</button>
     </div>
 
     <div class="card" id="c-prog">
@@ -355,8 +385,9 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
       <ul class="chs" id="ch-rows"></ul>
     </div>
 
+    <button class="linkish" data-act="nick">닉네임 바꾸기 · <span id="h-nick"></span></button>
     <button class="linkish" id="h-stats" data-act="stats" hidden>검증 지표 보기</button>
-    <p class="foot">복식 초보를 위한 검증판이에요. 어떤 카드에서 무엇을 골랐는지만 모아 카드를 고치는 데 써요. 이름이나 연락처는 모으지 않아요.</p>
+    <p class="foot">복식 초보를 위한 검증판이에요. 닉네임과, 어떤 카드에서 무엇을 골랐는지만 모아 카드를 고치는 데 써요. 실명이나 연락처는 모으지 않아요.</p>
   </section>
 
   <section class="screen" id="s-play" aria-label="카드" hidden>
@@ -372,9 +403,9 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
           <span class="kick" id="gs-kick"><span class="role" id="gs-role"></span><span id="p-id"></span><span class="rev" id="gs-rev" hidden>복습</span></span>
           <span class="bridge" id="gs-bridge" hidden></span>
           <b id="gs-name"></b>
-          <span class="tap">화면을 누르면 시작해요</span>
+          <span class="tap" id="gs-tap"></span>
         </div>
-        <div class="gs-scene" id="gs-scene" aria-hidden="true"><p id="gs-scene-t" aria-live="polite"></p><span class="tap">누르면 질문이 나와요</span></div>
+        <div class="gs-scene" id="gs-scene" aria-hidden="true"><p id="gs-scene-t" aria-live="polite"></p><span class="tap" id="gs-tap2"></span></div>
         <div class="gs-sheet" id="p-verdict" hidden></div>
       </div>
       <div class="gs-dock" id="gs-dock"></div>
@@ -386,7 +417,8 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
     <h1 id="d-head">오늘의 코트 끝!</h1>
     <div class="tally" id="d-tally"></div>
     <p class="xp" id="d-xp"></p>
-    <div class="hc-end" id="d-hc" hidden><img id="d-hc-img" alt=""><div><b>희철</b><p id="d-hc-say"></p></div></div>
+    <div class="hc-end" id="d-hc" hidden><img id="d-hc-img" alt=""><div><b data-ot="name"></b><p id="d-hc-say"></p></div></div>
+    <div class="card" id="d-cards" hidden><h2 id="d-cards-h"></h2><ol class="clist" id="d-cards-l"></ol></div>
     <div class="card">
       <p class="eyebrow">오늘 기억할 한 줄</p>
       <p class="coach" id="d-coach"></p>
@@ -408,19 +440,19 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
   <section class="screen" id="s-match" aria-label="실전 모드" hidden>
     <div class="ch-head">
       <button class="x" data-act="home" aria-label="홈으로">‹</button>
-      <div><p class="eyebrow">실전 모드 · 10초 룰</p><h2>희철과 한 게임</h2></div>
+      <div><p class="eyebrow">실전 모드 · 10초 룰</p><h2 data-ot="vs"></h2></div>
     </div>
     <div class="hc-hero">
-      <img data-hc="body" alt="희철 — 흰 셔츠와 모자 차림으로 라켓을 든 상대 선수">
-      <div class="hc-say"><b>희철</b><p class="q" id="ml-hello"></p><span class="rec" id="ml-rec"></span></div>
+      <img data-op="body" data-ot-alt="alt" alt="">
+      <div class="hc-say"><b data-ot="name"></b><p class="q" id="ml-hello"></p><span class="rec" id="ml-rec"></span></div>
     </div>
-    <div class="card"><h2>희철의 실력</h2><div class="lv" id="ml-lv" role="group" aria-label="희철의 실력"></div></div>
+    <div class="card"><h2 data-ot="lvh"></h2><div class="lv" id="ml-lv" role="group" data-ot-label="lvh"></div></div>
     <div class="card rules">
       <h2>규칙</h2>
       <ol>
-        <li>카드마다 <b>10초</b> 안에 골라요. 늦으면 그 포인트는 희철 거예요.</li>
-        <li>정답이면 내가 <b>한 발 앞서고</b>, 차선이면 한 발 밀려요. 두 발 먼저 앞서면 포인트예요.</li>
-        <li>끝내는 정답은 바로 내 포인트, 실수는 바로 희철 포인트예요.</li>
+        <li>카드마다 <b>10초</b> 안에 골라요. 늦으면 그 포인트는 <span data-ot="name"></span> 거예요.</li>
+        <li>랠리는 끊기지 않고 이어져요. 정답이면 <b>한 발 앞서고</b>, 차선이면 한 발 밀려요. 두 발 먼저 앞서면 포인트예요.</li>
+        <li>끝내는 정답은 바로 내 포인트, 실수는 바로 <span data-ot="name"></span> 포인트예요.</li>
         <li><b>4포인트</b>를 먼저 따면 게임이에요. 40 : 40 이면 듀스 — 두 포인트 차이가 나야 끝나요.</li>
       </ol>
     </div>
@@ -444,7 +476,7 @@ button.crow:focus-visible{outline:2px solid var(--greenery-deep);outline-offset:
 <script id="chapter-data" type="application/json">/*CHAPTERS_JSON*/</script>
 <script id="config-data" type="application/json">/*CONFIG_JSON*/</script>
 <script id="chain-data" type="application/json">/*CHAINS_JSON*/</script>
-<script id="hc-data" type="application/json">/*HEECHUL_JSON*/</script>
+<script id="opp-data" type="application/json">/*OPPONENT_JSON*/</script>
 <script>/*COURT_JS*/</script>
 <script>
 (function(){
@@ -455,21 +487,27 @@ Court.init(JSON.parse($('cam-data').textContent));
 var KEYS=Court.KEYS,optsOf=Court.optsOf,correctIdx=Court.correctIdx,esc=Court.esc;
 var BY={},ORDER=[];CARDS.forEach(function(c){BY[c.id]=c;ORDER.push(c.id);});
 var TOTAL=ORDER.length,TASTE=BY[CFG.tasteCard]?CFG.tasteCard:ORDER[ORDER.length-1];
-/* 두 수 앞 — 진짜로 이어지는 카드 짝(data/chains.json). 첫 수가 정답이어야 두 번째 수가 온다 (PRD 결정 #25) */
+/* 원 포인트 게임!(옛 이름 두 수 앞) — 진짜로 이어지는 카드 짝(data/chains.json). 첫 수가 정답이어야 두 번째 수가 온다 (PRD 결정 #25) */
 var CHAINS=JSON.parse($('chain-data').textContent).pairs.filter(function(p){return BY[p[0]]&&BY[p[1]];}),CH_ROUND=3,CH_RUN=null;
 var XP={정답:10,차선:4,실수:0},IV={실수:[1,3,7,21],차선:[3,14]};
 var VERD={정답:'✓ 정답',차선:'△ 차선',실수:'✕ 실수'},MARK={정답:'✓',차선:'△',실수:'✕'};
 var RANKS=['신인부','5부','4부','3부','2부','1부'],WEEK=['일','월','화','수','목','금','토'];
 var RANK_SAY=['','네 역할의 자리를 알아요','세 번째 공까지 봐요','네트를 잡아요','밀려도 안 무너져요','상대를 읽어요'];   // 게임 설계 §4
 var REASONS=['전술이 틀린 것 같아요','다른 답도 맞는 것 같아요','그림이 헷갈려요','글이 어려워요'];
-/* 실전 모드 — 희철과 한 게임 (10초 룰 + 랠리 · PRD 결정 #26) */
-var HC=JSON.parse($('hc-data').textContent),MSEC=(CFG.matchSeconds||10)*1000,M=null,timedOut=false;
-var LV=[{id:'5',name:'5부 희철',sub:'1~2챕터 상황 · 처음이라면',chs:'C1 C2',rally:'C1 C2 C3'},
-        {id:'3',name:'3부 희철',sub:'1~4챕터 상황',chs:'C1 C2 C3 C4',rally:'C1 C2 C3 C4'},
-        {id:'1',name:'1부 희철',sub:'120장 전체 · 감수용',chs:'C1 C2 C3 C4 C5',rally:'C1 C2 C3 C4 C5'}];
-var HC_SAY={hello:'10초 안에 못 고르면 제 포인트예요.',pt:['이 포인트는 제 거예요.','망설이면 제가 먼저 가요.','한 발 빨랐네요.'],
-  time:['10초면 저는 벌써 쳤어요.','생각이 길면 공이 지나가요.'],lose:['좋은 수였어요.','이번엔 당했어요.','다음 공은 안 놓쳐요.'],
-  hcWon:'실전은 생각보다 빨라요. 다시 붙어요.',hcLost:'오늘은 제가 졌어요. 한 게임 더 해요!'};
+/* 실전 모드 — 상대와 한 게임 (10초 룰 + 랠리 · PRD 결정 #26 #27). 상대 이름은 play.config.json 의 opponent */
+var OPI=JSON.parse($('opp-data').textContent),OPN=CFG.opponent||'츄어리',MSEC=(CFG.matchSeconds||10)*1000,M=null,timedOut=false,LINK=null,AUTO=null,AUTO_MS=1700;
+function jo(w,a,b){var c=w.charCodeAt(w.length-1)-0xAC00;return w+((c>=0&&c<11172&&c%28)?a:b);}   // 받침이 있으면 a(이·을·과), 없으면 b(가·를·와)
+var OT={name:OPN,vs:jo(OPN,'과','와')+' 한 게임',go:jo(OPN,'과','와')+' 붙기 →',lvh:OPN+'의 실력',alt:OPN+' — 흰 셔츠와 모자 차림으로 라켓을 든 상대 선수',
+  pitch:'카드마다 10초 안에 골라요. 랠리가 끊기지 않고 이어지고, 포인트를 따서 '+jo(OPN,'을','를')+' 이겨요.'};
+var LV=[{id:'5',name:'5부 '+OPN,sub:'1~2챕터 상황 · 처음이라면',chs:'C1 C2',rally:'C1 C2 C3'},
+        {id:'3',name:'3부 '+OPN,sub:'1~4챕터 상황',chs:'C1 C2 C3 C4',rally:'C1 C2 C3 C4'},
+        {id:'1',name:'1부 '+OPN,sub:'120장 전체 · 감수용',chs:'C1 C2 C3 C4 C5',rally:'C1 C2 C3 C4 C5'}];
+var OPP_SAY={hello:'{n}10초 안에 못 고르면 제 포인트예요.',pt:['이 포인트는 제 거예요.','망설이면 제가 먼저 가요.','{n}한 발 늦었어요.'],
+  time:['{n}10초면 저는 벌써 쳤어요.','생각이 길면 공이 지나가요.'],lose:['좋은 수였어요.','{n}이번엔 당했어요.','다음 공은 안 놓쳐요.'],
+  won:'실전은 생각보다 빨라요. {n}다시 붙어요.',lost:'오늘은 제가 졌어요. {n}한 게임 더 해요!'};
+function line(t){return t.replace('{n}',S.nick?S.nick+'님, ':'');}   // 상대가 닉네임을 부른다
+function nk(){return S.nick||'나';}
+function subj(w){return w==='나'?'내가':jo(w,'이','가');}
 
 /* ═════════ 날짜 ═════════ */
 function ymd(d){d=d||new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);}
@@ -481,7 +519,7 @@ function rid(){var s='';for(var i=0;i<12;i++)s+='abcdefghijklmnopqrstuvwxyz01234
 /* ═════════ 저장 — 이 브라우저에 ═════════ */
 var KEY='dmb-game-v1';
 function fresh(){return {v:1,uid:rid(),created:iso(),opens:0,onboarded:false,taste:null,cards:{},xp:0,days:[],sessions:0,
-  rank:'신인부',rankUp:null,session:null,reports:[],wait:null,ev:[],pairs:{},chainRuns:0,match:{n:0,w:0,l:0,lv:'5',at:null,by:{}}};}
+  rank:'신인부',rankUp:null,session:null,reports:[],wait:null,ev:[],pairs:{},chainRuns:0,match:{n:0,w:0,l:0,lv:'5',at:null,by:{}},nick:''};}
 var S=(function(){try{var s=JSON.parse(localStorage.getItem(KEY)||'null');   // 예전 판에서 저장한 기록이면 없는 칸을 채운다
   if(s&&s.v===1&&s.cards){var f=fresh();for(var k in f)if(!(k in s))s[k]=f[k];return s;}}catch(e){}return fresh();})();
 if(S.session&&S.session.ids.some(function(id){return !BY[id];}))S.session=null;   // 카드가 바뀌었으면 하던 판은 버린다
@@ -503,6 +541,11 @@ var Log={q:[],tm:null,
     }catch(err){this.q=batch.concat(this.q);}}
 };
 window.addEventListener('pagehide',function(){Log.flush(true);});
+// 참여자 기기에서 난 오류도 기록에 — 한 번 연 동안 다섯 개까지 (공개 테스트에서 폰마다 다른 문제를 찾으려고)
+var ERRN=0;
+function logErr(m,where){if(ERRN>=5)return;ERRN++;try{Log.track('error',{m:String(m||'').slice(0,160),at:where||'',sc:screen,ph:phase,c:cur&&cur.id});save();}catch(e){}}
+window.addEventListener('error',function(e){logErr(e.message,(e.lineno||0)+':'+(e.colno||0));});
+window.addEventListener('unhandledrejection',function(e){var r=e.reason;logErr(r&&r.message||r,'promise');});
 
 var Remote={ref:null,col:null,busy:false,dirty:false,retried:false,owner:false,
   start:function(){var cl=window.claude;if(!cl||typeof cl.use!=='function')return;
@@ -530,7 +573,7 @@ function cardDoc(r){return {f:r.f,l:r.l,n:r.n,ms:r.ms,o:r.o,at:r.at,due:r.due||n
 function docBody(){var cards={};Object.keys(S.cards).forEach(function(id){if(BY[id])cards[id]=cardDoc(S.cards[id]);});
   return {v:1,first:S.created,last:iso(),days:S.days.slice(-120),sessions:S.sessions,xp:S.xp,rank:S.rank,onboarded:S.onboarded,
     taste:S.taste,cards:cards,answered:answeredIds().length,total:TOTAL,reports:S.reports.slice(-100),wait:S.wait,ev:S.ev.slice(-200),
-    chainRuns:S.chainRuns,pairs:S.pairs,match:S.match};}
+    chainRuns:S.chainRuns,pairs:S.pairs,match:S.match,nick:S.nick||''};}
 /* 다른 기기에서 푼 기록을 합친다. 이 브라우저에만 있는 기록이 있으면 true */
 function mergeRemote(d){
   if(!d||!d.cards)return answeredIds().length>0||!!S.taste;
@@ -550,6 +593,7 @@ function mergeRemote(d){
   if((d.chainRuns||0)>S.chainRuns){S.chainRuns=d.chainRuns;changed=true;}else if(S.chainRuns>(d.chainRuns||0))ahead=true;
   var dp=d.pairs||{};Object.keys(dp).forEach(function(k){var l=S.pairs[k];if(!l||(dp[k].at||'')>(l.at||'')){S.pairs[k]=dp[k];changed=true;}});
   Object.keys(S.pairs).forEach(function(k){if(!dp[k]||(S.pairs[k].at||'')>(dp[k].at||''))ahead=true;});
+  if(d.nick&&!S.nick){S.nick=d.nick;changed=true;}else if(S.nick&&d.nick!==S.nick)ahead=true;
   var dmt=d.match;if(dmt&&(dmt.n||0)>(S.match.n||0)){S.match=dmt;if(!S.match.by)S.match.by={};changed=true;}else if((S.match.n||0)>((dmt&&dmt.n)||0))ahead=true;
   S.rank=rankKeep();
   if(changed){saveLocal();if(screen==='home')renderHome();}
@@ -592,7 +636,7 @@ function record(id,v,o,ms,isReview){
 /* ═════════ 화면 ═════════ */
 var screen='home';
 var stage=new Court.Stage($('stage'),$('p-say')),preview=new Court.Stage($('preview'),document.createElement('div'));
-function showScreen(name){screen=name;['home','play','done','chapter','stats','match'].forEach(function(n){$('s-'+n).hidden=n!==name;});
+function showScreen(name){screen=name;['home','play','done','chapter','stats','match','hello'].forEach(function(n){$('s-'+n).hidden=n!==name;});
   $('bar-rank-t').textContent=S.rank;
   $('bar-home').hidden=name==='play';$('bar-play').hidden=name!=='play';
   if(name!=='play'){stage.stop();tmStop();}if(name!=='home')preview.stop();
@@ -604,7 +648,8 @@ function goHome(){renderHome();showScreen('home');}
 function renderHome(){
   var done=answeredIds(),rev=dueIds(CFG.reviewPerSession),nw=newIds(CFG.newPerSession),ss=S.session,now=new Date(),first=null;
   $('bar-rank-t').textContent=S.rank;
-  $('t-eye').textContent='오늘의 코트 · '+(now.getMonth()+1)+'월 '+now.getDate()+'일 ('+WEEK[now.getDay()]+')';
+  $('t-eye').textContent=(S.nick?S.nick+'님의 ':'')+'오늘의 코트 · '+(now.getMonth()+1)+'월 '+now.getDate()+'일 ('+WEEK[now.getDay()]+')';
+  $('h-nick').textContent=S.nick||'없음';
   var cta=$('t-cta');cta.hidden=false;
   if(ss){first=ss.ids[ss.i];$('t-head').innerHTML='하던 코트가<br>남았어요';
     $('t-sub').textContent=(ss.i+1)+'번째 카드부터 이어서 해요. 모두 '+ss.ids.length+'장이에요.';cta.textContent='이어서 하기';}
@@ -638,15 +683,15 @@ function renderHome(){
   // 다 풀었을 때
   var all=done.length>=TOTAL,w=$('c-wait');w.hidden=!all;
   if(all){$('w-head').textContent=TOTAL+'장을 모두 풀었어요';
-    $('w-body').textContent='다음은 새 상황 카드와 10초 룰이에요. 그동안 두 수 앞으로 이어 풀어 보세요. 기다린다고 알려 주시면 우선순위를 정하는 데 써요.';
+    $('w-body').textContent='다음은 새 상황 카드예요. 그동안 실전 모드와 원 포인트 게임으로 감각을 지켜요. 기다린다고 알려 주시면 우선순위를 정하는 데 써요.';
     $('w-act').innerHTML=S.wait?'<p class="done-mark">기다린다고 전했어요 ✓ 새 카드는 이 링크에 올라와요.</p>':'<button class="cta" data-act="wait">다음 카드 기다릴게요</button>';}
   // 실전 모드 — 처음부터 열려 있다 (감수도 여기서)
   $('m-rec').textContent=S.match.n?S.match.w+'승 '+S.match.l+'패':'첫 경기';
-  // 두 수 앞 — 첫 카드를 풀어 본 짝부터 열린다
+  // 원 포인트 게임! — 첫 카드를 풀어 본 짝부터 열린다
   var pool=chainPool();$('c-chain').hidden=!pool.length;
   if(pool.length){var okN=pool.filter(function(q){var x=S.pairs[pairKey(q)];return x&&x.ok;}).length;
-    $('k-n').textContent='이은 짝 '+okN+' / '+pool.length;
-    $('k-body').textContent='푼 카드의 정답 장면에서 이어지는 다음 상황이에요. 첫 수가 정답이어야 두 번째 수가 와요. 한 판 '+Math.min(CH_ROUND,pool.length)+'짝 · 약 2분.';}
+    $('k-n').textContent='이은 랠리 '+okN+' / '+pool.length;
+    $('k-body').textContent='푼 카드의 정답 장면에서 랠리가 이어져요. 첫 수가 정답이어야 두 번째 수가 와요. 한 판 '+Math.min(CH_ROUND,pool.length)+'랠리 · 약 2분.';}
   // 챕터
   var rows='';CHS.forEach(function(ch,i){var ids=chIds(ch.id),d=ids.filter(function(id){return S.cards[id];}).length;
     if(ids.length)rows+='<li><button class="ch" data-act="chapter" data-ch="'+ch.id+'"><span class="n">'+(i+1)+'</span><span class="t"><b>'+esc(ch.title)+'</b><small>'+d+'/'+ids.length+'장 풀었어요'+(ids.length<ch.total?' · 나머지 '+(ch.total-ids.length)+'장은 준비 중':'')+'</small></span><span class="c go" aria-hidden="true">›</span></button></li>';
@@ -655,6 +700,19 @@ function renderHome(){
   $('h-stats').hidden=!Remote.owner;
 }
 
+/* ── 처음 — 닉네임을 묻고, 첫 카드는 튜토리얼로 ── */
+var HELLO='first';
+function openHello(kind){HELLO=kind;   // first: 처음 온 사람 → 튜토리얼 · ask: 기록은 있는데 닉네임이 없다 · change: 홈에서 바꾸기
+  $('hl-head').innerHTML=kind==='first'?'반가워요!<br>코트에서 뭐라고 부를까요?':kind==='change'?'닉네임을 바꿀까요?':'코트에서 뭐라고 부를까요?';
+  $('nick-go').textContent=kind==='first'?'튜토리얼 시작 →':kind==='change'?'바꾸기':'확인';
+  $('nick-in').value=S.nick||'';$('nick-err').hidden=true;showScreen('hello');
+  try{if(kind!=='first')$('nick-in').focus();}catch(e){}}
+function saveNick(){var v=Array.from(($('nick-in').value||'').replace(/[\u0000-\u001f<>&"]/g,'').replace(/\s+/g,' ').trim()).slice(0,8).join('').trim();   // 글자 단위로 8자(이모지가 반으로 잘리지 않게)
+  if(!v){$('nick-err').hidden=false;try{$('nick-in').focus();}catch(e){}return;}
+  var first=!S.nick;S.nick=v;Log.track('nick',{first:first?1:0});save();
+  if(HELLO==='first')return openCard(BY[TASTE],'taste',-1,false);
+  goHome();}
+
 /* ── 카드 한 장 — 코트 한 화면에서 다 본다. 누를 때만 넘어간다 ──
    제목(어둡게) → 도입 공 → 상황 글 → 질문 · 단서 · 보기 → 결과 재생 → 결과 → 해설이 코트 위로 올라온다.
    공이 나는 중에 누르면 그 장면의 끝으로 간다. 시점은 중계 하나 (PRD 결정 #20). */
@@ -662,27 +720,33 @@ var mode=null,cur=null,pick=-1,revealed=false,shown=null,openedAt=0,repOpen=fals
 var phase='',sheetOpen=true,REDUCED=Court.reduced();
 function openCard(c,m,p,rev){
   mode=m;cur=c;pick=p;revealed=!!rev;shown=null;repOpen=false;sheetOpen=true;
-  var tag=m==='session'&&S.session.rev[S.session.i]?'복습':m==='chain'?(CH_RUN.step?'두 번째 수':'첫 수'):'',
-      br=m==='chain'&&CH_RUN.step?'앞 수에서 이어져요':'';
+  var tag=m==='session'&&S.session.rev[S.session.i]?'복습':m==='chain'?(CH_RUN.step?'두 번째 수':'첫 수'):m==='taste'?'튜토리얼':'',
+      br=m==='chain'&&CH_RUN.step?(serveIntro(c)?'같은 포인트 · 서브 순간으로 돌아가요':'앞 수에서 이어져요'):'';
   $('gs-role').textContent=c.myRole;$('p-id').textContent=c.id;$('gs-rev').textContent=tag;$('gs-rev').hidden=!tag;
   $('gs-bridge').textContent=br;$('gs-bridge').hidden=!br;
+  $('gs-tap').textContent=m==='taste'?'튜토리얼 1/4 · 화면을 누르면 공이 날아와요':'화면을 누르면 시작해요';
+  $('gs-tap2').textContent=m==='taste'?'튜토리얼 2/4 · 상황을 읽고 누르세요':'누르면 질문이 나와요';
   $('gs-name').textContent='〈'+c.title+'〉';$('gs-scene-t').textContent='';$('gs').setAttribute('data-mode',m);
   showScreen('play');renderBar();
-  if(p>=0){stage.show(c,{pick:p,mode:'still'},explain);return;}   // 이미 푼 카드 — 결과 장면과 해설
+  if(p>=0){stage.show(c,{pick:p,mode:'still'},m==='mreview'&&timedOut?function(){stage.say('lose','⏱ 시간 초과','정답은 이 장면이에요');explain();}:explain);return;}   // 이미 푼 카드 — 결과 장면과 해설
+  if(m!=='match'&&m!=='chain')LINK=null;
   if(m==='match')return startIntro();   // 실전 — 제목 없이 바로 공이 난다. 상황 글은 공이 나는 동안 위에
-  setPhase('title');stage.show(c,{pick:-1,mode:'pose'});
+  setPhase('title');stage.show(c,{pick:-1,mode:'pose',from:LINK});   // 원 포인트 게임 두 번째 수 — 첫 수가 끝난 모습 그대로
 }
-function startIntro(){setPhase('intro');stage.show(cur,{pick:-1,mode:'intro',freezeSay:false,onFreeze:onFrozen});}
+function startIntro(){var lk=mode==='match'||mode==='chain'?LINK:null;LINK=null;setPhase('intro');   // 실전 · 두 번째 수 — 앞 카드가 끝난 모습에서 이어 온다
+  stage.show(cur,{pick:-1,mode:lk?'link':'intro',from:lk,freezeSay:false,onFreeze:onFrozen});}
 function onFrozen(){if(phase==='intro'){if(mode==='match')ask();else setPhase('scene');}}
 function ask(){if(pick>=0||phase==='ask')return;setPhase('ask');openedAt=performance.now();if(mode==='match')tmStart();}
 function advance(){
   if(phase==='title')return startIntro();
   if(phase==='intro'||phase==='out')return stage.skip();
   if(phase==='scene')return ask();
-  if(phase==='result')return explain();
+  if(phase==='result'){if(mode==='match'&&AUTO)return matchNext();return explain();}   // 랠리가 이어지는 중이면 바로 다음 공
 }
 function onReveal(){revealed=true;   // 결과 배지와 코트를 먼저 — 누르면 해설
-  if(mode==='match'&&M){applyPending();if(timedOut)stage.say('lose','⏱ 시간 초과','정답은 이 장면이에요');renderBar();}
+  if(mode==='match'&&M){var fresh=!!M.pending;applyPending();if(timedOut)stage.say('lose','⏱ 시간 초과','정답은 이 장면이에요');renderBar();setPhase('result');
+    if(fresh&&M.last&&!M.last.who&&!M.over){AUTO=setTimeout(function(){AUTO=null;if(mode==='match'&&M&&phase==='result')matchNext();},AUTO_MS);renderDock();}   // 랠리가 이어진다 — 누르지 않아도 다음 공
+    return;}
   setPhase('result');}
 function explain(){revealed=true;sheetOpen=true;setPhase('verdict');}
 function setPhase(p){phase=p;$('gs').setAttribute('data-phase',p);$('gs-title').setAttribute('aria-hidden',p==='title'?'false':'true');
@@ -693,16 +757,17 @@ function renderBar(){
   var x=$('b-x'),h='';
   if(mode==='session'){var ss=S.session;ss.ids.forEach(function(id,i){var r=ss.res[i];h+='<i class="'+(r?r.v:'')+(i===ss.i?' cur':'')+'"></i>';});
     $('scount').textContent=(ss.i+1)+' / '+ss.ids.length;x.textContent='✕';x.setAttribute('aria-label','오늘의 코트 나가기');}
-  else if(mode==='taste'){$('scount').textContent='맛보기 · 1분';x.textContent='✕';x.setAttribute('aria-label','맛보기 건너뛰기');}
+  else if(mode==='taste'){$('scount').textContent='튜토리얼 · 1분';x.textContent='✕';x.setAttribute('aria-label','튜토리얼 건너뛰기');}
   else if(mode==='chain'){var r=CH_RUN;r.pairs.forEach(function(q,k){var v=r.res[k];
       h+=(k?'<b></b>':'')+'<i class="'+(v[0]||'')+(k===r.i&&r.step===0?' cur':'')+'"></i>'
         +'<i class="'+(v[1]||(v[0]&&v[0]!=='정답'?'cut':''))+(k===r.i&&r.step===1?' cur':'')+'"></i>';});
-    $('scount').textContent='두 수 '+(r.i+1)+' / '+r.pairs.length;x.textContent='✕';x.setAttribute('aria-label','두 수 앞 나가기');}
-  else if(mode==='match'){var sp=scorePair(),r2=M.rally,pip=function(n,cls){return '<span class="pips '+cls+'" title="'+(cls==='me'?'나':'희철')+'의 기세"><i'+(n>=1?' class="on"':'')+'></i><i'+(n>=2?' class="on"':'')+'></i></span>';};
-    $('mscore').innerHTML='<span class="ms-side">'+pip(r2.me,'me')+'<small>나</small><b class="ms-n">'+sp[0]+'</b></span><span class="ms-mid">'+(isDeuce()?'듀스':':')+'</span>'
-      +'<span class="ms-side hc"><b class="ms-n">'+sp[1]+'</b><small>희철</small><img class="hc-av" alt="" src="'+HC[hcFace()]+'">'+pip(r2.hc,'hc')+'</span>';
-    $('mscore').setAttribute('aria-label','나 '+sp[0]+', 희철 '+sp[1]);
-    $('scount').textContent=M.serve==='me'?'우리 서브':'희철 서브';x.textContent='✕';x.setAttribute('aria-label','실전 나가기');}
+    $('scount').textContent='랠리 '+(r.i+1)+' / '+r.pairs.length;x.textContent='✕';x.setAttribute('aria-label','원 포인트 게임 나가기');}
+  else if(mode==='match'){var sp=scorePair(),r2=M.rally,pip=function(n,cls){return '<span class="pips '+cls+'" title="'+esc(cls==='me'?nk():OPN)+'의 기세"><i'+(n>=1?' class="on"':'')+'></i><i'+(n>=2?' class="on"':'')+'></i></span>';};
+    $('mscore').innerHTML='<span class="ms-side">'+pip(r2.me,'me')+'<small>'+esc(nk().slice(0,5))+'</small><b class="ms-n">'+sp[0]+'</b></span><span class="ms-mid">'+(isDeuce()?'듀스':':')+'</span>'
+      +'<span class="ms-side hc"><b class="ms-n">'+sp[1]+'</b><small>'+esc(OPN)+'</small><img class="hc-av" alt="" src="'+OPI[oppFace()]+'">'+pip(r2.hc,'hc')+'</span>';
+    $('mscore').setAttribute('aria-label',nk()+' '+sp[0]+', '+OPN+' '+sp[1]);
+    $('scount').textContent=M.serve==='me'?'우리 서브':OPN+' 서브';x.textContent='✕';x.setAttribute('aria-label','실전 나가기');}
+  else if(mode==='mreview'){$('scount').textContent=cur.id+' 다시 보기';x.textContent='‹';x.setAttribute('aria-label','경기 결과로');}
   else{$('scount').textContent=cur.id+' 다시 보기';x.textContent='‹';x.setAttribute('aria-label','목록으로');}
   $('sdots').innerHTML=h;$('sdots').hidden=mode==='match';$('mscore').hidden=mode!=='match';
 }
@@ -717,33 +782,34 @@ function renderCap(){
 function renderDock(){
   var d=$('gs-dock'),h='';
   if(mode==='match'&&M&&(phase==='result'||phase==='verdict')&&pick>=0){   // 실전 — 포인트 상황 한 줄 + 다음 공
-    var L=M.last||{},line,btn=M.over?'경기 결과 →':(L.who?'다음 포인트 →':'다음 공 →');
-    if(L.who)line='<img class="hc-mini" alt="" src="'+HC[M.over?(L.who==='hc'?'shout':'serious'):(L.who==='hc'?'smile':'serious')]+'"><span><b>'+(M.over?'게임':'포인트')+' — '+(L.who==='me'?'나!':'희철')+'</b> · '
-      +esc(scoreLabel())+' · 희철 “'+esc(L.say)+'”</span>';
-    else line='<span>랠리 계속 · <b>'+(L.dme?'내가 한 발 앞서요':'희철이 한 발 앞서요')+'</b> — 두 발이면 포인트</span>';
-    var ma='<button class="btn primary" data-act="match-next">'+btn+'</button>';
-    if(phase==='result')ma+='<button class="btn" data-act="explain">해설 ▴</button>';
-    else if(!timedOut&&optsOf(cur)[pick].v!=='정답'){var msc=shown!=null&&shown!==pick;ma+='<button class="btn" data-act="scene" data-i="'+(msc?pick:correctIdx(cur))+'">'+(msc?'내 선택 ▶':'정답 장면 ▶')+'</button>';}
-    d.innerHTML='<p class="gs-next mline">'+line+'</p><div class="gs-acts">'+ma+'</div>';return;
+    var L=M.last||{},line,btn=M.over?'경기 결과 →':(L.who?'다음 포인트 →':'다음 공 →'),rolling=!L.who&&!M.over&&phase==='result'&&AUTO;
+    if(L.who)line='<img class="hc-mini" alt="" src="'+OPI[M.over?(L.who==='hc'?'shout':'serious'):(L.who==='hc'?'smile':'serious')]+'"><span><b>'+(M.over?'게임':'포인트')+' — '+esc(L.who==='me'?nk()+'!':OPN)+'</b> · '
+      +esc(scoreLabel())+' · '+esc(OPN)+' “'+esc(L.say)+'”</span>';
+    else line='<span>랠리 계속 · <b>'+esc(subj(L.dme?nk():OPN))+' 한 발 앞서요</b> — 두 발이면 포인트</span>';
+    var ma=rolling?'<button class="btn" data-act="explain">잠깐, 해설 볼게요</button>'   // 랠리가 이어지는 중 — 저절로 다음 공
+      :'<button class="btn primary" data-act="match-next">'+btn+'</button>'+(phase==='result'?'<button class="btn" data-act="explain">해설 ▴</button>':'');
+    if(phase==='verdict'&&!timedOut&&optsOf(cur)[pick].v!=='정답'){var msc=shown!=null&&shown!==pick;ma+='<button class="btn" data-act="scene" data-i="'+(msc?pick:correctIdx(cur))+'">'+(msc?'내 선택 ▶':'정답 장면 ▶')+'</button>';}
+    d.innerHTML='<p class="gs-next mline">'+line+'</p>'+(rolling?'<div class="gs-auto" style="--auto:'+AUTO_MS/1000+'s"><i></i></div>':'')+'<div class="gs-acts">'+ma+'</div>';return;
   }
   if(phase==='result'&&pick>=0){   // 결과를 보는 동안 — 무엇을 봤는지 한 줄과 해설 버튼
     var si=shown!=null?shown:pick,so=optsOf(cur)[si];
-    h='<p class="gs-next">'+(si!==pick?'정답 장면':'내 선택')+' · <b>'+KEYS[si]+' '+esc(so.short)+'</b></p>'
+    h='<p class="gs-next">'+(mode==='taste'?'<span class="tut">튜토리얼 4/4</span> · 고른 대로 공과 사람이 움직였어요':(si!==pick?'정답 장면':'내 선택')+' · <b>'+KEYS[si]+' '+esc(so.short)+'</b>')+'</p>'
       +'<div class="gs-acts"><button class="btn primary" data-act="explain">해설 보기 ▴</button></div>';
   }else if(phase==='verdict'&&pick>=0){
     var p=optsOf(cur)[pick],ci=correctIdx(cur),a='';
     if(mode==='session'){var last=S.session.i>=S.session.ids.length-1;a+='<button class="btn primary" data-act="'+(last?'finish':'next')+'">'+(last?'결과 보기':'다음 카드 →')+'</button>';}
-    else if(mode==='taste')a+='<button class="btn primary" data-act="taste-start">시작하기 →</button><button class="btn" data-act="taste-match">희철과 실전 →</button>';
+    else if(mode==='mreview')a+='<button class="btn primary" data-act="mback">경기 결과로</button>';
+    else if(mode==='taste')a+='<button class="btn primary" data-act="taste-start">오늘의 코트 시작 →</button><button class="btn" data-act="taste-match">'+esc(jo(OPN,'과','와'))+' 실전 →</button>';
     else if(mode==='chain'){var cr=CH_RUN,go=cr.step===0&&p.v==='정답',endR=cr.i>=cr.pairs.length-1;
-      a+='<button class="btn primary" data-act="chain-next">'+(go?'두 번째 수 →':endR?'결과 보기':'다음 두 수 →')+'</button>';}
+      a+='<button class="btn primary" data-act="chain-next">'+(go?'두 번째 수 →':endR?'결과 보기':'다음 랠리 →')+'</button>';}
     else a+='<button class="btn primary" data-act="retry">다시 풀기</button><button class="btn" data-act="back">목록으로</button>';
-    if(p.v!=='정답'){var sc=shown!=null&&shown!==pick;a+='<button class="btn" data-act="scene" data-i="'+(sc?pick:ci)+'">'+(sc?'내 선택 ▶':'정답 장면 ▶')+'</button>';}
+    if(p.v!=='정답'&&!(mode==='mreview'&&timedOut)){var sc=shown!=null&&shown!==pick;a+='<button class="btn" data-act="scene" data-i="'+(sc?pick:ci)+'">'+(sc?'내 선택 ▶':'정답 장면 ▶')+'</button>';}
     var nx='';   // 다음에 무엇이 오는지 한 줄 — "한 판 더"를 누르게 만드는 자리
     if(mode==='session'){var ss=S.session,n=ss.ids[ss.i+1];nx=n?'다음 · <b>'+esc(BY[n].title)+'</b>':'마지막 카드였어요 — 오늘의 결과를 볼까요?';}
-    else if(mode==='taste')nx='이런 상황이 <b>'+TOTAL+'개</b> 있어요 · 하루 몇 장씩';
+    else if(mode==='taste')nx='<span class="tut">튜토리얼 끝!</span> 이런 상황이 <b>'+TOTAL+'개</b> 있어요';
     else if(mode==='chain'){var kr=CH_RUN,kA=BY[kr.pairs[kr.i][0]],kn=kr.pairs[kr.i+1];
       if(kr.step===0)nx=(p.v==='정답'?'이어서 두 번째 수 · ':'정답이어야 이어져요 · ')+'<b>'+esc(kA.next.text)+'</b>';
-      else nx=kn?'다음 두 수 · <b>'+esc(BY[kn[0]].title)+'</b>':'마지막 수였어요 — 결과를 볼까요?';}
+      else nx=kn?'다음 랠리 · <b>'+esc(BY[kn[0]].title)+'</b>':'마지막 수였어요 — 결과를 볼까요?';}
     h=(nx?'<p class="gs-next">'+nx+'</p>':'')+'<div class="gs-acts">'+a+'</div>';
   }else{
     var on=phase==='ask'&&pick<0;
@@ -751,7 +817,7 @@ function renderDock(){
       h+='<button class="'+cls+'" data-opt="'+i+'"'+(on?'':' disabled')+'><span class="k">'+KEYS[i]+'</span><span class="t">'+esc(o.short)+'</span></button>';});
     h=(mode==='match'&&phase==='ask'?'<div class="gs-timer" id="tm-wrap"><i id="tm-bar"></i></div>':'')
       +'<p class="gs-cue"><b>단서</b><span>'+esc(cur.cue)+'</span></p>'
-      +(mode==='taste'&&pick<0?'<p class="gs-cue hint">코트의 A·B·C 나 아래 보기를 눌러 답하세요</p>':'')
+      +(mode==='taste'&&pick<0&&phase==='ask'?'<p class="gs-cue hint"><span class="tut">튜토리얼 3/4</span>&nbsp;코트의 A·B·C 나 아래 보기를 눌러 답하세요</p>':'')
       +'<div class="gs-opts" id="p-opts">'+h+'</div>';
   }
   d.innerHTML=h;
@@ -766,11 +832,11 @@ function renderSheet(){
   var c=cur,opts=optsOf(c),p=opts[pick],ci=correctIdx(c),a=opts[ci];
   var h='<button class="sh-handle" data-act="sheet" aria-expanded="'+sheetOpen+'">'+(sheetOpen?'코트 보기 ▾':'해설 보기 ▴')+'</button>';
   if(sheetOpen){
-    if(mode==='match'&&timedOut)h+='<div class="sh-body"><div class="vline"><span class="badge 실수">⏱ 시간 초과</span><span>10초 안에 고르지 못했어요. 코트의 장면이 정답이에요.</span></div>';
+    if((mode==='match'||mode==='mreview')&&timedOut)h+='<div class="sh-body"><div class="vline"><span class="badge 실수">⏱ 시간 초과</span><span>10초 안에 고르지 못했어요. 코트의 장면이 정답이에요.</span></div>';
     else h+='<div class="sh-body"><div class="vline"><span class="badge '+p.v+'">'+VERD[p.v]+'</span><span><b>'+esc(p.short)+'</b> — '+esc(p.why)+'</span></div>';
-    if(p.v!=='정답'||(mode==='match'&&timedOut))h+='<div class="vline"><span class="badge 정답">정답</span><span><b>'+esc(a.short)+'</b> — '+esc(a.why)+'</span></div>';
+    if(p.v!=='정답'||((mode==='match'||mode==='mreview')&&timedOut))h+='<div class="vline"><span class="badge 정답">정답</span><span><b>'+esc(a.short)+'</b> — '+esc(a.why)+'</span></div>';
     h+='<p class="coach">“'+esc(c.coachLine)+'”</p>';
-    if(mode==='taste')h+='<p class="sh-taste">이런 상황이 '+TOTAL+'개 있어요. 하루 몇 장씩, 코트에서 바로 떠오르게 연습해요.</p>';
+    if(mode==='taste')h+='<p class="sh-taste">튜토리얼 끝이에요'+(S.nick?', '+esc(S.nick)+'님':'')+'. 이런 상황이 '+TOTAL+'개 있어요. 하루 몇 장씩, 코트에서 바로 떠오르게 연습해요.</p>';
     else h+=repOpen?reportForm():'<button class="report" data-act="report">이 카드 이상해요</button>';
     h+='</div>';
   }
@@ -803,13 +869,14 @@ function finishSession(){
   S.sessions++;Log.track('session_end',{sid:ss.sid,n:ss.res.length,g:cnt.정답,s:cnt.차선,m:cnt.실수});
   lastSum={cnt:cnt,xp:ss.xp,res:ss.res.slice()};S.session=null;save();renderDone();showScreen('done');
 }
-/* ── 실전 모드 — 희철과 한 게임 ──
+/* ── 실전 모드 — 상대(OPN)와 한 게임 ──
    카드마다 10초. 정답이면 한 발 앞서고 차선이면 한 발 밀린다 — 두 발 먼저 앞서면 포인트.
-   끝내는 정답(장면이 위너로 끝난다)은 바로 내 포인트, 실수 · 시간 초과는 바로 희철 포인트.
-   4포인트 먼저 = 게임 (40:40 은 듀스, 두 포인트 차이). 포인트 첫 카드는 서브 쪽에 맞춰 서브 · 리턴 상황,
-   그다음은 랠리 상황 — 정답에서 진짜로 이어지는 카드(두 수 앞 짝)가 있으면 그 카드, 밀리면 4챕터(밀릴 때), 앞서면 3 · 5챕터 */
+   끝내는 정답(장면이 위너로 끝난다)은 바로 내 포인트, 실수 · 시간 초과는 바로 상대 포인트.
+   4포인트 먼저 = 게임 (40:40 은 듀스, 두 포인트 차이). 포인트 첫 카드는 서브 쪽에 맞춰 서브 · 리턴 상황, 그다음은 랠리 상황.
+   랠리는 끊기지 않는다 (PRD #27): 다음 카드는 앞 장면이 끝난 모습과 가장 가까운 시작 모습을 고르고(진짜로 이어지는 짝이 있으면 그 카드),
+   엔진이 사람을 뛰어가게 하고 공을 다음 타자에게 보내 이어 붙인다. 랠리가 이어지면 누르지 않아도 다음 공이 온다 */
 var TM={dl:0,left:0,id:null,paused:0};
-function tmStart(){tmStop();TM.left=MSEC;TM.dl=performance.now()+MSEC;TM.paused=0;paintTimer();TM.id=setInterval(tmTick,100);}
+function tmStart(){tmStop();TM.left=MSEC;TM.dl=performance.now()+MSEC;TM.paused=document.hidden?performance.now():0;paintTimer();TM.id=setInterval(tmTick,100);}   // 숨은 채로 질문이 떴으면(저절로 넘어간 뒤 다른 앱에) 돌아올 때부터 센다
 function tmStop(){if(TM.id)clearInterval(TM.id);TM.id=null;}
 function tmTick(){if(document.hidden)return;TM.left=Math.max(0,TM.dl-performance.now());paintTimer();if(TM.left<=0){tmStop();timeUp();}}
 document.addEventListener('visibilitychange',function(){if(!TM.id)return;   // 다른 앱에 가 있는 동안은 시계를 세운다
@@ -822,22 +889,37 @@ function timeUp(){
   var c=cur,ci=correctIdx(c);timedOut=true;pick=ci;revealed=false;   // 고른 보기 없이 — 정답 장면을 보여 준다
   matchAnswer(c,'시간',-1,MSEC);renderBar();setPhase('out');stage.show(c,{pick:ci,mode:'out'},onReveal);
 }
+function stopAuto(){if(AUTO){clearTimeout(AUTO);AUTO=null;}}
 function lvOf(id){for(var i=0;i<LV.length;i++)if(LV[i].id===id)return LV[i];return LV[0];}
 function inCh(id,list){return list.split(' ').indexOf(id.slice(0,2))>=0;}
-function poolOf(kind,lv){return ORDER.filter(function(id){var ph=BY[id].phase,ch=id.slice(0,2);
+function poolOf(kind,lv){return ORDER.filter(function(id){var ph=BY[id].phase;
   if(kind==='serve')return inCh(id,lv.chs)&&(ph==='서브'||ph==='서브+1');
   if(kind==='ret')return inCh(id,lv.chs)&&(ph==='리턴'||ph==='리턴+1');
-  var r=(ph==='랠리'||ph==='마무리')&&inCh(id,lv.rally);
-  return kind==='def'?r&&ch==='C4':kind==='att'?r&&(ch==='C3'||ch==='C5'):r;});}
+  return (ph==='랠리'||ph==='마무리')&&inCh(id,lv.rally);});}
 function rnd(a){return a[Math.floor(Math.random()*a.length)];}
 var NEXT_OF={};CHAINS.forEach(function(q){NEXT_OF[q[0]]=q[1];});
+function serveIntro(c){var a=c.setup.ball.arc;return a==='serve'||a==='serve2'||a==='hold';}   // 서브 순간의 카드 — 앞 장면에서 이어지지 않고 같은 포인트의 서브로 돌아간다
 function endsWon(c){var l=c.answer.play[c.answer.play.length-1],us=l.by==='me'||l.by==='partner';return l.call?!us:!!(l.winner&&us);}
-function matchPick(){
-  var r=M.rally,pv=r.prev,lv=lvOf(M.lv),kinds,k,fr;
-  if(pv&&pv.v==='정답'&&NEXT_OF[pv.id]&&!M.used[NEXT_OF[pv.id]]&&inCh(NEXT_OF[pv.id],lv.rally+' '+lv.chs))return NEXT_OF[pv.id];
-  kinds=r.n===0?[M.serve==='me'?'serve':'ret','rally']:pv&&pv.v==='차선'?['def','rally']:pv&&pv.v==='정답'?['att','rally']:['rally'];
-  for(k=0;k<kinds.length;k++){fr=poolOf(kinds[k],lv).filter(function(id){return !M.used[id];});if(fr.length)return rnd(fr);}
-  M.used={};return rnd(poolOf(kinds[0],lv).concat(poolOf('rally',lv)));   // 다 썼으면 처음부터
+/* 이어 붙이기 비용 — 앞 장면이 끝난 모습 E 와 이 카드의 시작 모습이 얼마나 다른가 (미터).
+   나는 덜 뛸수록, 도입 공을 칠 상대는 공이 떨어진 곳 가까이 있을수록 좋다. 우리 편이 치는 도입 공은 앞 장면과 겹친다 */
+function linkCost(c,E){
+  var st=c.setup,b=st.ball,dm=function(a,q){return Math.hypot((a[0]-q[0])*10.97,(a[1]-q[1])*23.77);};
+  var k=dm(E.pos.me,st.me.xy)*1.5+dm(E.pos.partner,st.partner.xy)
+       +(dm(E.pos.opp1,st.opp1.xy)+dm(E.pos.opp2,st.opp2.xy))*.8;   // 1번 · 2번은 바뀌지 않는다 — 자리를 맞바꾸면 코트를 가로질러 뛴다
+  if(E.ball&&b.arc!=='hold'){   // 공 — 상대가 칠 공이면 공이 멈춘 곳 가까이에서, 우리 쪽 도입 공은 방금 친 우리 공 그 자체일 때만(same)
+    if(b.from[1]>.5)k+=Court.linkKind(c,E)==='same'?dm(E.ball.pt,Court.introEnd(c))*.6:25;
+    else if(E.ball.by==='us')k+=dm(E.ball.pt,b.from)*.6;}
+  return k;
+}
+function matchPick(E){
+  var r=M.rally,pv=r.prev,lv=lvOf(M.lv),kind=r.n===0?(M.serve==='me'?'serve':'ret'):'rally',pool;
+  if(pv&&pv.v==='정답'&&NEXT_OF[pv.id]&&!M.used[NEXT_OF[pv.id]]&&!serveIntro(BY[NEXT_OF[pv.id]]))return NEXT_OF[pv.id];   // 정답 장면에서 진짜로 이어지는 다음 수(랠리 중에 서브로 돌아가지는 않는다)
+  pool=poolOf(kind,lv).filter(function(id){return !M.used[id];});
+  if(!pool.length){M.used={};pool=poolOf(kind,lv);}   // 다 썼으면 처음부터
+  if(!E)return rnd(pool);
+  var pref=pv&&pv.v==='차선'?'C4':pv&&pv.v==='정답'?'C3 C5':'';   // 밀렸으면 '밀릴 때', 앞섰으면 네트 · 상대 읽기
+  var sc=pool.map(function(id){var k=linkCost(BY[id],E);if(pref&&inCh(id,pref))k-=1.5;return [k,id];}).sort(function(a,b){return a[0]-b[0];});
+  return rnd(sc.filter(function(x,i){return i<3&&x[0]<=sc[0][0]+2;}))[1];   // 가장 잘 이어지는 카드 — 거의 같게 이어지는 게 더 있으면(셋까지) 그중 하나
 }
 function matchAnswer(c,v,o,ms){
   var r=M.rally,pd={v:v,who:null,why:'',dme:0,dhc:0};
@@ -845,14 +927,14 @@ function matchAnswer(c,v,o,ms){
   else if(v==='실수'){pd.who='hc';pd.why='miss';}
   else if(v==='정답'){if(endsWon(c)){pd.who='me';pd.why='winner';}else{pd.dme=1;if(r.me+1>=2){pd.who='me';pd.why='edge';}}}
   else{pd.dhc=1;if(r.hc+1>=2){pd.who='hc';pd.why='edge';}}
-  M.log.push({id:c.id,v:v,ms:ms});M.pending=pd;r.prev={id:c.id,v:v};markDay();
+  M.log.push({id:c.id,v:v,ms:ms,o:o});M.pending=pd;r.prev={id:c.id,v:v};markDay();
   Log.track('match_answer',{mid:M.mid,c:c.id,v:v,o:o,ms:ms});
 }
 function applyPending(){   // 장면이 끝난 뒤에 점수를 바꾼다
   var pd=M.pending;if(!pd)return;M.pending=null;var r=M.rally;r.me+=pd.dme;r.hc+=pd.dhc;M.last=pd;
   if(!pd.who)return;
   M.pts[pd.who==='me'?0:1]++;if(gameOver())M.over=true;
-  pd.say=pd.who==='hc'?rnd(pd.why==='time'?HC_SAY.time:HC_SAY.pt):rnd(HC_SAY.lose);
+  pd.say=line(pd.who==='hc'?rnd(pd.why==='time'?OPP_SAY.time:OPP_SAY.pt):rnd(OPP_SAY.lose));
   Log.track('match_point',{mid:M.mid,w:pd.who,why:pd.why,s:M.pts.join(':')});
   M.rally={n:0,me:0,hc:0,prev:null};
 }
@@ -864,23 +946,27 @@ function scorePair(){var a=M.pts[0],b=M.pts[1],T=['0','15','30','40'],t=function
   return [t(a),t(b)];}
 function scoreLabel(){var a=M.pts[0],b=M.pts[1],sp=scorePair();
   if(gameOver())return '포인트 '+a+' : '+b;
-  if(a>=3&&b>=3)return a===b?'듀스':'어드밴티지 '+(a>b?'나':'희철');
+  if(a>=3&&b>=3)return a===b?'듀스':'어드밴티지 '+(a>b?nk():OPN);
   return sp[0]+' : '+sp[1];}
-function hcFace(){var L=M&&M.last;if(M&&M.rally.hc===1&&!(L&&L.who))return 'intense';if(L&&L.who)return L.who==='hc'?'smile':'serious';return 'cap';}
+function oppFace(){var L=M&&M.last;if(M&&M.rally.hc===1&&!(L&&L.who))return 'intense';if(L&&L.who)return L.who==='hc'?'smile':'serious';return 'cap';}
+function recText(){return S.match.n?OPN+' 상대 '+S.match.w+'승 '+S.match.l+'패':'아직 붙어 본 적 없어요';}
 function openMatch(){renderMatch();showScreen('match');}
 function renderMatch(){
   var cur2=S.match.lv||'5',by=S.match.by||{};
-  $('ml-hello').textContent='“'+HC_SAY.hello+'”';
-  $('ml-rec').textContent=S.match.n?'희철 상대 '+S.match.w+'승 '+S.match.l+'패':'아직 붙어 본 적 없어요';
-  $('ml-lv').innerHTML=LV.map(function(x){var r=by[x.id];return '<button type="button" data-act="match-lv" data-lv="'+x.id+'" aria-pressed="'+(x.id===cur2)+'"><b>'+x.name+'</b><small>'+x.sub+(r?' · '+r[0]+'승 '+r[1]+'패':'')+'</small></button>';}).join('');
+  $('ml-hello').textContent='“'+line(OPP_SAY.hello)+'”';$('ml-rec').textContent=recText();
+  $('ml-lv').innerHTML=LV.map(function(x){var r=by[x.id];return '<button type="button" data-act="match-lv" data-lv="'+x.id+'" aria-pressed="'+(x.id===cur2)+'"><b>'+esc(x.name)+'</b><small>'+x.sub+(r?' · '+r[0]+'승 '+r[1]+'패':'')+'</small></button>';}).join('');
 }
 function startMatch(){
-  var lv=lvOf(S.match.lv||'5').id;
+  var lv=lvOf(S.match.lv||'5').id;stopAuto();
   M={mid:'m'+Date.now().toString(36),lv:lv,serve:Math.random()<.5?'me':'hc',pts:[0,0],rally:{n:0,me:0,hc:0,prev:null},used:{},log:[],pending:null,over:false,last:null};
-  Log.track('match_start',{mid:M.mid,lv:lv,sv:M.serve});saveLocal();openMatchCard();
+  Log.track('match_start',{mid:M.mid,lv:lv,sv:M.serve});saveLocal();openMatchCard(false);
 }
-function openMatchCard(){var id=matchPick();M.used[id]=1;M.rally.n++;timedOut=false;openCard(BY[id],'match',-1,false);}
-function matchNext(){if(!M)return goHome();if(M.over)return finishMatch();openMatchCard();}
+function openMatchCard(link){
+  var E=link?stage.endState():null;
+  if(E&&M.rally.n===0)E={pos:E.pos,ball:null};   // 새 포인트 — 공은 서버에게, 사람만 걸어서 자리로
+  var id=matchPick(E);M.used[id]=1;M.rally.n++;timedOut=false;LINK=E;openCard(BY[id],'match',-1,false);
+}
+function matchNext(){stopAuto();if(!M)return goHome();if(M.over)return finishMatch();openMatchCard(true);}
 function finishMatch(){
   var won=M.pts[0]>M.pts[1],cnt={정답:0,차선:0,실수:0,시간:0},ms=0,n=0,by=S.match.by||(S.match.by={}),r=by[M.lv]||(by[M.lv]=[0,0]);
   M.log.forEach(function(x){cnt[x.v]++;if(x.v!=='시간'){ms+=x.ms;n++;}});
@@ -889,18 +975,25 @@ function finishMatch(){
   lastSum={kind:'match',m:M,won:won,cnt:cnt,avg:n?ms/n:0};M=null;save();renderDone();showScreen('done');
 }
 function renderMatchDone(sm){
-  var m=sm.m,c=sm.cnt,miss=null;
-  $('d-eye').textContent='실전 모드 · '+lvOf(m.lv).name;$('d-head').textContent=sm.won?'희철을 이겼어요!':'희철에게 졌어요';
+  var m=sm.m,c=sm.cnt,miss=null,who=S.nick?S.nick+'님':'';
+  $('d-eye').textContent='실전 모드 · '+lvOf(m.lv).name;
+  $('d-head').textContent=sm.won?(who?who+'이 ':'')+jo(OPN,'을','를')+' 이겼어요!':(who?who+', ':'')+OPN+'에게 졌어요';
   $('d-tally').innerHTML='<span class="정답">✓ 정답 '+c.정답+'</span><span class="차선">△ 차선 '+c.차선+'</span><span class="실수">✕ 실수 '+c.실수+'</span>'+(c.시간?'<span class="실수">⏱ 시간 초과 '+c.시간+'</span>':'');
-  $('d-xp').textContent='포인트 '+m.pts[0]+' : '+m.pts[1]+' · 평균 '+(sm.avg/1000).toFixed(1)+'초에 골랐어요 · 희철 상대 '+S.match.w+'승 '+S.match.l+'패';
-  $('d-hc').hidden=false;$('d-hc-img').src=HC[sm.won?'serious':'shout'];$('d-hc-say').textContent='“'+(sm.won?HC_SAY.hcLost:HC_SAY.hcWon)+'”';
+  $('d-xp').textContent='포인트 '+m.pts[0]+' : '+m.pts[1]+' · 평균 '+(sm.avg/1000).toFixed(1)+'초에 골랐어요 · '+recText();
+  $('d-hc').hidden=false;$('d-hc-img').src=OPI[sm.won?'serious':'shout'];$('d-hc-say').textContent='“'+line(sm.won?OPP_SAY.lost:OPP_SAY.won)+'”';
   m.log.forEach(function(x){if(!miss&&x.v!=='정답')miss=x.id;});   // 처음 놓친 카드의 한 줄
   var cc=BY[miss||m.log[m.log.length-1].id];$('d-coach').textContent='“'+cc.coachLine+'”';$('d-from').textContent=cc.id+' · '+cc.title;
+  // 이번 게임의 카드 — 랠리는 멈추지 않고 이어졌으니, 해설과 '이 카드 이상해요'는 여기서
+  var MK2={정답:'✓',차선:'△',실수:'✕',시간:'⏱'},CL={정답:'정답',차선:'차선',실수:'실수',시간:'실수'};
+  $('d-cards').hidden=false;$('d-cards-h').textContent='이번 게임의 카드 '+m.log.length+'장 — 눌러서 해설';
+  $('d-cards-l').innerHTML=m.log.map(function(x,k){var cd=BY[x.id];
+    return '<li><button class="crow" data-act="mreview" data-i="'+k+'"><span class="st '+CL[x.v]+'">'+MK2[x.v]+'</span><span class="ct"><b>'+esc(cd.title)+'</b><small>'+x.id+' · '+esc(cd.myRole)+(x.v==='시간'?' · 시간 초과':'')+'</small></span><span class="go">해설</span></button></li>';}).join('');
   $('d-rank').hidden=true;
-  $('d-acts').innerHTML='<button class="cta" data-act="match-start">한 게임 더</button><button class="btn" data-act="match-open">희철 실력 바꾸기</button><button class="btn" data-act="home">홈으로</button>';
+  $('d-acts').innerHTML='<button class="cta" data-act="match-start">한 게임 더</button><button class="btn" data-act="match-open">'+esc(OPN)+' 실력 바꾸기</button><button class="btn" data-act="home">홈으로</button>';
 }
+function openMatchReview(k){var x=lastSum.m.log[k],c=BY[x.id];timedOut=x.v==='시간';openCard(c,'mreview',x.o>=0?x.o:correctIdx(c),true);}
 
-/* ── 두 수 앞 한 판 — 짝 셋. 첫 수가 정답이면 두 번째 수, 아니면 다음 짝 ── */
+/* ── 원 포인트 게임! 한 판 — 랠리(짝) 셋. 첫 수가 정답이면 두 번째 수, 아니면 다음 랠리 ── */
 function pairKey(q){return q[0]+'>'+q[1];}
 function chainPool(){return CHAINS.filter(function(q){return S.cards[q[0]];});}   // 첫 카드를 풀어 본 짝
 function chainPick(){   // 아직 못 이은 짝 → 오래전에 한 짝 → 커리큘럼 순. 한 판에 같은 카드는 한 번만
@@ -914,7 +1007,7 @@ function startChain(){
   CH_RUN={kid:'k'+Date.now().toString(36),pairs:ps,i:0,step:0,res:ps.map(function(){return [null,null];}),xp:0};
   Log.track('chain_start',{kid:CH_RUN.kid,n:ps.length});openChainCard();
 }
-function openChainCard(){var r=CH_RUN;openCard(BY[r.pairs[r.i][r.step]],'chain',-1,false);}
+function openChainCard(){var r=CH_RUN,c=BY[r.pairs[r.i][r.step]];LINK=r.step&&!serveIntro(c)?stage.endState():null;openCard(c,'chain',-1,false);}   // 두 번째 수는 첫 수의 정답 장면에서 이어진다(서브로 돌아가는 수는 새로)
 function chainNext(){
   var r=CH_RUN;if(!r)return goHome();
   if(r.step===0&&r.res[r.i][0]==='정답'){r.step=1;return openChainCard();}
@@ -931,8 +1024,8 @@ function rankUpNote(){var rk=$('d-rank');
   else rk.hidden=true;}
 function renderChainDone(sm){
   var r=sm.run,n=r.pairs.length,pick=null;
-  $('d-eye').textContent='두 수 앞';$('d-head').textContent=sm.ok===n?'두 수를 모두 이었어요!':'두 수 앞 끝!';
-  $('d-tally').innerHTML='<span class="정답">✓ 이은 짝 '+sm.ok+'</span><span class="실수">✕ 끊긴 짝 '+(n-sm.ok)+'</span>';
+  $('d-eye').textContent='원 포인트 게임!';$('d-head').textContent=sm.ok===n?'랠리를 모두 이었어요!':'원 포인트 게임 끝!';
+  $('d-tally').innerHTML='<span class="정답">✓ 이은 랠리 '+sm.ok+'</span><span class="실수">✕ 끊긴 랠리 '+(n-sm.ok)+'</span>';
   $('d-xp').textContent='경험치 +'+sm.xp+' · 모두 '+S.xp;
   r.res.forEach(function(v,k){if(pick)return;if(v[0]!=='정답')pick=r.pairs[k][0];else if(v[1]!=='정답')pick=r.pairs[k][1];});   // 처음 끊긴 수의 한 줄
   var c=BY[pick||r.pairs[n-1][1]];$('d-coach').textContent='“'+c.coachLine+'”';$('d-from').textContent=c.id+' · '+c.title;
@@ -940,7 +1033,7 @@ function renderChainDone(sm){
   $('d-acts').innerHTML=(chainPick().length?'<button class="cta" data-act="chain-start">한 판 더</button>':'')+'<button class="btn" data-act="home">홈으로</button>';
 }
 function renderDone(){
-  var sm=lastSum,cnt=sm.cnt;$('d-hc').hidden=true;
+  var sm=lastSum,cnt=sm.cnt;$('d-hc').hidden=true;$('d-cards').hidden=true;
   if(sm.kind==='match')return renderMatchDone(sm);
   if(sm.kind==='chain')return renderChainDone(sm);
   $('d-eye').textContent='오늘의 코트';
@@ -981,13 +1074,17 @@ function renderStats(ps){
   var rate=st.length?Math.round(m30.length/st.length*100):0,more=st.filter(function(p){return p.answered>Math.min(30,TOTAL);}).length,
       chainers=ps.filter(function(p){return (p.chainRuns||0)>0;}).length,
       matchers=ps.filter(function(p){return p.match&&p.match.n>0;}).length,beat=ps.filter(function(p){return p.match&&p.match.w>0;}).length;
-  var h='<div class="kpis">'+kpi(tasted,'맛보기를 푼 사람')+kpi(st.length,'오늘의 코트를 시작한 사람')+kpi(rate+'%','30장까지 푼 사람 · 목표 60%',st.length&&rate>=60)
-      +kpi(more,'30장 넘게 계속 푼 사람 · 목표 3명',more>=3)+kpi(fin.length,TOTAL+'장 완주')+kpi(wait,'다음 카드 기다림')+kpi(chainers,'두 수 앞을 해 본 사람')+kpi(matchers,'실전 모드를 해 본 사람')+kpi(beat,'희철을 이긴 사람')+kpi(d7,'7일 뒤에도 온 사람')+kpi(reps,'이 카드 이상해요')+'</div>';
-  var reps=[];ps.forEach(function(p){(p.reports||[]).forEach(function(x){reps.push(x);});});   // 신고 · 감수 메모 — 새것부터
+  var h='<div class="kpis">'+kpi(tasted,'튜토리얼을 푼 사람')+kpi(st.length,'오늘의 코트를 시작한 사람')+kpi(rate+'%','30장까지 푼 사람 · 목표 60%',st.length&&rate>=60)
+      +kpi(more,'30장 넘게 계속 푼 사람 · 목표 3명',more>=3)+kpi(fin.length,TOTAL+'장 완주')+kpi(wait,'다음 카드 기다림')+kpi(chainers,'원 포인트 게임을 해 본 사람')+kpi(matchers,'실전 모드를 해 본 사람')+kpi(beat,jo(OPN,'을','를')+' 이긴 사람')+kpi(d7,'7일 뒤에도 온 사람')+kpi(reps,'이 카드 이상해요')+'</div>';
+  var reps=[];ps.forEach(function(p){(p.reports||[]).forEach(function(x){reps.push({c:x.c,r:x.r,n:x.n,at:x.at,who:p.nick||''});});});   // 신고 · 감수 메모 — 새것부터, 쓴 사람 닉네임과
   reps.sort(function(a,b){return (b.at||'')>(a.at||'')?1:-1;});
   h+='<div class="card"><h2>신고 · 감수 메모 '+reps.length+'</h2>'+(reps.length?'<ul class="rlist">'+reps.slice(0,80).map(function(x){var rc=BY[x.c];
-      return '<li><span class="rid">'+esc(x.c)+'</span> '+esc(rc?rc.title:'')+'<br><span class="rr">'+esc(x.r||'')+'</span>'+(x.n?' — '+esc(x.n):'')+' <small>'+esc((x.at||'').slice(0,10))+'</small></li>';}).join('')+'</ul>'
+      return '<li><span class="rid">'+esc(x.c)+'</span> '+esc(rc?rc.title:'')+'<br><span class="rr">'+esc(x.r||'')+'</span>'+(x.n?' — '+esc(x.n):'')+' <small>'+esc((x.at||'').slice(0,10))+(x.who?' · '+esc(x.who):'')+'</small></li>';}).join('')+'</ul>'
     :'<p class="note">아직 없어요. 해설의 \'이 카드 이상해요\'로 모여요.</p>')+'</div>';
+  var errs=[];ps.forEach(function(p){(p.ev||[]).forEach(function(x){if(x.e==='error')errs.push({m:x.m,at:x.at,t:x.t,c:x.c,sc:x.sc,who:p.nick||''});});});   // 참여자 기기의 오류(최근 이벤트 안)
+  if(errs.length){errs.sort(function(a,b){return (b.t||'')>(a.t||'')?1:-1;});
+    h+='<div class="card"><h2>기기 오류 '+errs.length+'</h2><ul class="rlist">'+errs.slice(0,30).map(function(x){
+      return '<li><span class="rr">'+esc(x.m||'')+'</span> <small>'+esc((x.t||'').slice(0,10))+' · '+esc(x.sc||'')+(x.c?' · '+esc(x.c):'')+(x.at?' · '+esc(x.at):'')+(x.who?' · '+esc(x.who):'')+'</small></li>';}).join('')+'</ul></div>';}
   h+='<div class="card"><h2>카드별 첫 선택</h2><p class="klegend"><span><i style="background:var(--good)"></i>정답</span><span><i style="background:#D9A12E"></i>차선</span><span><i style="background:#D0573B"></i>실수</span><span>오른쪽: 정답률 · 신고</span></p><div class="klist">';
   ORDER.forEach(function(id){var n=0,g=0,s=0,m=0,rp=0;
     ps.forEach(function(p){var r=p.cards&&p.cards[id];if(r){n++;if(r.f==='정답')g++;else if(r.f==='차선')s++;else m++;}(p.reports||[]).forEach(function(x){if(x.c===id)rp++;});});
@@ -1016,10 +1113,14 @@ document.addEventListener('click',function(e){
     if(mode==='session'){Log.track('exit',{sid:S.session.sid,i:S.session.i});saveLocal();return goHome();}
     if(mode==='taste'){S.onboarded=true;Log.track('taste_skip');save();return goHome();}
     if(mode==='chain'){Log.track('chain_exit',{kid:CH_RUN.kid,i:CH_RUN.i});CH_RUN=null;saveLocal();return goHome();}
-    if(mode==='match'){tmStop();if(M)Log.track('match_exit',{mid:M.mid,s:M.pts.join(':'),n:M.log.length});M=null;saveLocal();return goHome();}
+    if(mode==='match'){tmStop();stopAuto();if(M)Log.track('match_exit',{mid:M.mid,s:M.pts.join(':'),n:M.log.length});M=null;saveLocal();return goHome();}
+    if(mode==='mreview'){timedOut=false;renderDone();return showScreen('done');}
     return openChapter(backCh);}
   if(a==='taste-start'){S.onboarded=true;Log.track('onboarded');saveLocal();return startSession();}
-  if(a==='match-open')return openMatch();
+  if(a==='match-open'){stopAuto();return openMatch();}
+  if(a==='mreview')return openMatchReview(+t.getAttribute('data-i'));
+  if(a==='mback'){timedOut=false;renderDone();return showScreen('done');}
+  if(a==='nick')return openHello('change');
   if(a==='match-lv'){S.match.lv=t.getAttribute('data-lv');saveLocal();return renderMatch();}
   if(a==='match-start')return startMatch();
   if(a==='match-next')return matchNext();
@@ -1030,7 +1131,7 @@ document.addEventListener('click',function(e){
   if(a==='open')return openReview(t.getAttribute('data-card'));
   if(a==='retry')return openCard(cur,'review',-1,false);
   if(a==='back')return openChapter(backCh);
-  if(a==='explain')return explain();
+  if(a==='explain'){stopAuto();return explain();}
   if(a==='sheet'){sheetOpen=!sheetOpen;return renderSheet();}
   if(a==='scene'){shown=+t.getAttribute('data-i');Log.track('scene',{c:cur.id});setPhase('out');
     return stage.show(cur,{pick:pick,shown:shown,mode:'out'},onReveal);}
@@ -1040,6 +1141,7 @@ document.addEventListener('click',function(e){
   if(a==='stats')return showStats();
 });
 document.addEventListener('submit',function(e){
+  if(e.target&&e.target.id==='nick-form'){e.preventDefault();return saveNick();}
   if(!e.target||e.target.id!=='rep-form')return;e.preventDefault();
   var sel=e.target.querySelector('input[name="rep"]:checked'),r=REASONS[sel?+sel.value:0],nt=(($('rep-note')||{}).value||'').trim().slice(0,140),rec={c:cur.id,r:r,at:iso()};
   if(nt)rec.n=nt;   // 감수 메모 — 왜 그렇게 보는지 한 줄
@@ -1058,9 +1160,14 @@ document.addEventListener('keydown',function(e){
 });
 
 /* ═════════ 시작 ═════════ */
-Array.prototype.forEach.call(document.querySelectorAll('img[data-hc]'),function(im){im.src=HC[im.getAttribute('data-hc')]||'';});
+Array.prototype.forEach.call(document.querySelectorAll('img[data-op]'),function(im){im.src=OPI[im.getAttribute('data-op')]||'';});   // 상대 그림 · 이름
+Array.prototype.forEach.call(document.querySelectorAll('[data-ot]'),function(el){el.textContent=OT[el.getAttribute('data-ot')];});
+Array.prototype.forEach.call(document.querySelectorAll('[data-ot-alt]'),function(el){el.alt=OT[el.getAttribute('data-ot-alt')];});
+Array.prototype.forEach.call(document.querySelectorAll('[data-ot-label]'),function(el){el.setAttribute('aria-label',OT[el.getAttribute('data-ot-label')]);});
 S.opens=(S.opens||0)+1;S.rank=rankKeep();Log.track('open',{n:S.opens});saveLocal();
-if(!S.onboarded&&!S.taste&&!answeredIds().length)openCard(BY[TASTE],'taste',-1,false);
+var NEWBIE=!S.onboarded&&!S.taste&&!answeredIds().length;
+if(!S.nick)openHello(NEWBIE?'first':'ask');   // 닉네임부터 — 처음 온 사람은 이어서 튜토리얼
+else if(NEWBIE)openCard(BY[TASTE],'taste',-1,false);
 else goHome();
 Remote.start();
 })();

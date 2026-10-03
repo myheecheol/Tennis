@@ -8,10 +8,11 @@
  *   2) 이 파일 내용을 그대로 붙여 넣고 저장한다
  *   3) 배포 → 새 배포 → 유형: 웹 앱 → 실행: 나 → 액세스 권한: 모든 사용자 → 배포
  *   4) 나온 웹 앱 주소(https://script.google.com/macros/s/…/exec)를 web/play.config.json 의 endpoint 에 넣고
- *      python3 web/build.py 로 web/play.html 을 다시 만든다
+ *      python3 web/build.py 로 다시 만든다 — 정적 호스팅에는 site/index.html(문서 뼈대째)을 올린다
  *
  * 게임이 보내는 몸통: {"u": "p_…(브라우저마다 무작위 익명 id)", "events": [{"t": ISO 시각, "e": 이벤트, …}]}
- * 이벤트 종류와 칸의 뜻도 design/08-phase1.md 에 있다. 이름이나 연락처는 오지 않는다.
+ * 이벤트 종류와 칸의 뜻도 design/08-phase1.md 에 있다. 이름이나 연락처, 닉네임은 오지 않는다.
+ * 알려진 칸 밖의 것(실전 모드의 점수, 기기 오류 error 의 m · at · sc 등)은 '나머지' 칸에 JSON 으로 남는다.
  */
 var HEAD = ['받은 시각', '참여자', '시각', '이벤트', '카드', '결과', '보기', '걸린 ms', '복습', '세션', '나머지'];
 var KNOWN = ['t', 'e', 'c', 'v', 'o', 'ms', 'rev', 'sid'];

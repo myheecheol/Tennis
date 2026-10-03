@@ -4,5 +4,6 @@
   "newPerSession": 5,
   "reviewPerSession": 3,
   "tasteCard": "C1-24",
-  "matchSeconds": 10
+  "matchSeconds": 10,
+  "opponent": "츄어리"
 }

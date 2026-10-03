@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """페이지를 만든다. 공용 엔진(web/src/court.js · court.css)과 검증된 카드 · 카메라 규격을 각 템플릿에 넣는다.
    index.html — 블루프린트 페이지 (prompts/*.md 의 ```text 블록도 함께)
-   play.html  — Phase 1 검증판 게임 (챕터 정보 · 두 수 앞 짝 · 실전 모드의 희철 그림 · play.config.json 설정도 함께)"""
+   play.html  — Phase 1 검증판 게임 (챕터 정보 · 원 포인트 게임 짝 · 실전 모드의 상대 그림 · play.config.json 설정도 함께)
+   site/index.html — 같은 게임을 문서 뼈대(doctype · charset · viewport · 미리보기 글)째로. claude.ai 밖 정적 호스팅용
+                     (claude.ai 는 게시할 때 뼈대를 씌우므로 play.html 은 조각으로 둔다 — design/08-phase1.md §4B)"""
 import base64, json, re, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -105,13 +107,29 @@ chapters = [{"id": ch["id"], "title": ch["title"], "goal": ch["goal"], "free": c
              "total": sum(1 for c in index["cards"] if c["chapter"] == ch["id"])} for ch in index["chapters"]]
 config = json.loads((WEB / "play.config.json").read_text(encoding="utf-8"))
 chains = json.loads((ROOT / "data" / "chains.json").read_text(encoding="utf-8"))
-# 실전 모드의 상대 희철 — 사용자가 준 캐릭터 시트에서 오린 얼굴 여섯 · 전신 (web/assets/heechul/*.jpg)
-heechul = {f.stem: "data:image/jpeg;base64," + base64.b64encode(f.read_bytes()).decode("ascii")
-           for f in sorted((WEB / "assets" / "heechul").glob("*.jpg"))}
+# 실전 모드의 상대(이름은 play.config.json 의 opponent) — 사용자가 준 캐릭터 시트에서 배경 없이 오린 얼굴 다섯 · 전신
+opponent = {f.stem: "data:image/webp;base64," + base64.b64encode(f.read_bytes()).decode("ascii")
+            for f in sorted((WEB / "assets" / "opponent").glob("*.webp"))}
 play = page("play.template.html", "play.html",
             (("CARDS_JSON", cards), ("CAMERAS_JSON", cams), ("CHAPTERS_JSON", chapters), ("CONFIG_JSON", config),
-             ("CHAINS_JSON", {"pairs": chains["pairs"]}), ("HEECHUL_JSON", heechul)))
-print(f"play.html   {len(play):,} bytes  (검증판 · 카드 {len(cards)}장 · 두 수 앞 {len(chains['pairs'])}짝 · 기록 주소 {'있음' if config.get('endpoint') else '없음'})")
+             ("CHAINS_JSON", {"pairs": chains["pairs"]}), ("OPPONENT_JSON", opponent)))
+print(f"play.html   {len(play):,} bytes  (검증판 · 카드 {len(cards)}장 · 원 포인트 게임 {len(chains['pairs'])}짝 · 기록 주소 {'있음' if config.get('endpoint') else '없음'})")
+
+# 정적 호스팅용 — 뼈대가 없으면 폰에서 데스크톱 폭(980px)으로 작게 그려지고, 서버가 charset 을 안 주면 한글이 깨진다
+DESC = "복식 테니스 초보를 위한 전술 게임 — 공이 멈추면 고르고, 고른 대로 공과 사람이 움직여요. 츄어리와 10초 실전도."
+ICON = ("data:image/svg+xml," "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='%23D7F23C'/%3E"
+        "%3Cpath d='M9 18c13 6 13 22 0 28M55 18c-13 6-13 22 0 28' fill='none' stroke='%23fff' stroke-width='4'/%3E%3C/svg%3E")
+cut = play.index("</style>") + len("</style>")
+site = ('<!doctype html>\n<html lang="ko">\n<head>\n<meta charset="utf-8">\n'
+        '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
+        f'<meta name="description" content="{DESC}">\n<meta property="og:type" content="website">\n'
+        f'<meta property="og:title" content="복식 무브">\n<meta property="og:description" content="{DESC}">\n'
+        '<meta name="theme-color" content="#F3F8EA">\n<meta name="format-detection" content="telephone=no">\n'
+        f'<link rel="icon" href="{ICON}">\n'
+        + play[:cut] + "\n</head>\n<body>\n" + play[cut:] + "\n</body>\n</html>\n")
+(ROOT / "site").mkdir(exist_ok=True)
+(ROOT / "site" / "index.html").write_text(site, encoding="utf-8")
+print(f"site/index.html {len(site):,} bytes  (정적 호스팅용 — 문서 뼈대 · 미리보기 글 포함)")
 print(f"  카드 {len(cards)}장  {cards[0]['id']} … {cards[-1]['id']}")
 for s in steps:
     print(f"  {s['no']:<7} {s['title']:<22} blocks={len(s['blocks'])}  "
