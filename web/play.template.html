@@ -1098,8 +1098,20 @@ function kpi(n,label,ok){return '<div class="kpi'+(ok?' ok':'')+'"><b>'+n+'</b><
 function showStats(){showScreen('stats');var b=$('st-body');
   if(!Remote.col){b.innerHTML='<p class="note">기록 저장소에 연결되지 않았어요.</p>';return;}
   b.innerHTML='<p class="note">불러오는 중이에요…</p>';
-  Remote.col.get().then(function(q){renderStats(q.docs.map(function(d){return d.data();}).filter(Boolean));},
+  Remote.col.get().then(function(q){renderStats(q.docs.map(function(d){return d.data();}).filter(Boolean).map(cleanDoc));},
     function(){b.innerHTML='<p class="note">기록을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.</p>';});}
+/* 남이 쓴 문서 — 공개 배포에서는 누구나 자기 문서를 쓸 수 있다. 모양이 틀려도 검증 지표가 깨지지 않게 쓰는 칸만 골라 다듬는다 */
+function cleanDoc(d){
+  var o=d&&typeof d==='object'?d:{};
+  function str(v){return typeof v==='string'?v:v==null?'':String(v);}
+  function arr(v){return Array.isArray(v)?v:[];}
+  function obj(v){return v&&typeof v==='object'&&!Array.isArray(v)?v:{};}
+  function num(v){return typeof v==='number'&&isFinite(v)?v:0;}
+  var cards={},m=obj(o.match);Object.keys(obj(o.cards)).forEach(function(id){cards[id]={f:str(obj(o.cards[id]).f)};});
+  return {answered:num(o.answered),wait:o.wait?str(o.wait):null,taste:o.taste?1:null,cards:cards,nick:str(o.nick).slice(0,20),
+    days:arr(o.days).filter(function(x){return typeof x==='string';}),chainRuns:num(o.chainRuns),match:{n:num(m.n),w:num(m.w)},
+    reports:arr(o.reports).map(function(x){x=obj(x);return {c:str(x.c),r:str(x.r),n:str(x.n).slice(0,300),at:str(x.at)};}),
+    ev:arr(o.ev).map(function(x){x=obj(x);return {e:str(x.e),m:str(x.m).slice(0,300),at:str(x.at),t:str(x.t),c:str(x.c),sc:str(x.sc)};})};}
 function renderStats(ps){
   var st=ps.filter(function(p){return (p.answered||0)>0;}),m30=st.filter(function(p){return p.answered>=Math.min(30,TOTAL);}),fin=st.filter(function(p){return p.answered>=TOTAL;}),
       wait=ps.filter(function(p){return p.wait;}).length,reps=0,tasted=ps.filter(function(p){return p.taste;}).length;

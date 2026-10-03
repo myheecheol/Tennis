@@ -7,9 +7,9 @@
   "matchSeconds": 10,
   "opponent": "츄어리",
   "firebase": {
-    "apiKey": "",
-    "authDomain": "",
-    "projectId": "",
-    "appId": ""
+    "apiKey": "AIzaSyB_GeyjyLotRyfHrcaUEDi1om7wmj79QO4",
+    "authDomain": "tennis-a0b0e.firebaseapp.com",
+    "projectId": "tennis-a0b0e",
+    "appId": "1:39755145742:web:e2dd94de432c722519d25f"
   }
 }

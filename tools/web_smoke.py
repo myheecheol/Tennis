@@ -114,7 +114,9 @@ window.claude={use:function(n){return new Promise(function(res){setTimeout(funct
 
 # Firebase compat SDK 의 가짜 — 규칙(firebase/firestore.rules)과 같은 권한, 실제 Firestore 처럼 undefined · 겹친 배열을 거부한다
 FB_MOCK = r"""<script>
-window.__FS={'players/u_a':{v:1,answered:30,total:30,taste:{v:'정답'},days:['2026-09-18','2026-09-26'],cards:{'C1-01':{f:'정답',l:'정답',n:1,ms:4000}},reports:[]}};
+window.__FS={'players/u_a':{v:1,answered:30,total:30,taste:{v:'정답'},days:['2026-09-18','2026-09-26'],cards:{'C1-01':{f:'정답',l:'정답',n:1,ms:4000}},reports:[]},
+  // 누군가 엉터리로 쓴 문서 — 검증 지표가 깨지면 안 된다 (글자 대신 숫자 · 배열 대신 글자 · 태그)
+  'players/z_bad':{answered:'many',days:'x',reports:[{c:5,r:{},n:'<img src=x onerror=alert(1)>',at:20260101},7],ev:'nope',cards:[1,2],match:'x',nick:{a:1}}};
 window.__FSW=0;window.__FBCFG=null;
 (function(){
   var user=null,cbs=[],nAnon=0,ignoreUndef=false;
@@ -145,6 +147,7 @@ window.__FSW=0;window.__FBCFG=null;
 })();
 </script>"""
 FB_CFG = {"firebase": {"apiKey": "test-key", "authDomain": "dmb-test.firebaseapp.com", "projectId": "dmb-test", "appId": "1:1:web:1"}}
+FB_OFF = {"firebase": {"apiKey": "", "authDomain": "", "projectId": "", "appId": ""}}   # 시험은 기본으로 Firebase 를 끈다 (망에 기대지 않게)
 
 FETCH_MOCK = ('<script>window.__SENT=[];window.fetch=function(u,o){var b=JSON.parse(o.body);'
               'window.__SENT.push({mode:o.mode,e:b.events.map(function(x){return x.e;})});return Promise.resolve({});};</script>')
@@ -164,11 +167,11 @@ def game(name, steps, state=None, mock="", config=None, budget=20000, motion=Fal
     page = (WEB / "play.html").read_text(encoding="utf-8")
     if config:
         page = page.replace('"endpoint": ""', '"endpoint": "%s"' % config)
-    if cfg:   # play.config.json 칸을 바꿔 넣는다 (예: firebase)
-        m = re.search(r'<script id="config-data" type="application/json">(.*?)</script>', page, re.S)
-        c = json.loads(m.group(1))
-        c.update(cfg)
-        page = page[:m.start(1)] + json.dumps(c, ensure_ascii=False) + page[m.end(1):]
+    m = re.search(r'<script id="config-data" type="application/json">(.*?)</script>', page, re.S)
+    c = json.loads(m.group(1))   # play.config.json 칸을 바꿔 넣는다 — firebase 는 시험이 고른 것만 켠다
+    c.update(FB_OFF)
+    c.update(cfg or {})
+    page = page[:m.start(1)] + json.dumps(c, ensure_ascii=False) + page[m.end(1):]
     st = ('try{localStorage.setItem("dmb-game-v1",' + json.dumps(json.dumps(state, ensure_ascii=False)) + ')}catch(e){}'
           if state else 'try{localStorage.removeItem("dmb-game-v1")}catch(e){}')
     if hash:
@@ -431,12 +434,17 @@ def main():
     check("Firebase — 참여자는 남의 기록을 못 본다 · 주소 #owner 에만 '만든 사람 로그인' · 저장 위치 안내", o0 and o0["ownerln"]
           and not o0["owner"] and o0["where"] and "players/anon1" in (o0["fskeys"] or ""), o0)
     check("Firebase — Google 로그인한 만든 사람 → 검증 지표에 모든 참여자", o1 and o1["owner"] and not o1["ownerln"]
-          and "만든 사람으로 로그인" in (o1["toast"] or "") and o2 and o2["stats"] and o2["stats"].startswith("3")
+          and "만든 사람으로 로그인" in (o1["toast"] or "") and o2 and o2["stats"] and o2["stats"].startswith("3") and "<img" in (o2["reps"] or "")
           and "players/g_owner" in (o2["fskeys"] or "") and not o2["err"], (o1, o2))
     log = game("fboff", [[300, "g.snap('x')"]], state([(cid, "정답", None) for cid in IDS[:5]]), hash="#owner")
     x = last(log, "x")
     check("Firebase 설정이 없으면 SDK 를 받지 않는다 · 로그인 링크도 없다", x and x["gst"] == 0 and not x["ownerln"] and not x["where"]
           and not x["err"], x)
+    # 설정은 있는데 SDK 를 못 받는 망(가짜 없음 — 이 시험 환경은 바깥 망이 막혀 있거나, 열려 있어도 가짜 프로젝트라 로그인이 거부된다)
+    log = game("fbnet", [[300, "g.opt(0)"], [300, "g.tap()"], [300, "g.snap('n')"]], NEWBIE, cfg=FB_CFG)
+    n = last(log, "n")
+    check("Firebase 에 못 닿아도 게임은 그대로 — 오류 없이 이 브라우저에만 남는다", n and n["gst"] >= 1 and n["phase"] == "verdict"
+          and n["sheet"] and not n["err"], n)
 
     # 7) 블루프린트 — 카드 × 보기 재생 + 공의 길
     page = (WEB / "index.html").read_text(encoding="utf-8")
